@@ -1,14 +1,13 @@
 # ---- Server page for emissions dashboard -------------------------------------
 server <- function(input, output, session) {
   
-  # define palette
-  blue_palette <- colorRamp(c("#3C7B85", "#76F3FF","yellow"))( (1:256)/256) 
-  pink_palette <- colorRamp(c("maroon","hotpink","lightpink","white"))( (1:256)/256) 
+  # ---- Define color palettes ----
+  blue_palette <- colorRamp(c("#12232B","#20404F","#4C9EA6","#67D6E0", "#76F3FF","#A9F2FF","#DAF3FF", "white"))( (1:256)/256) 
+  pink_palette <- colorRamp(c("#4D1C26","#7D3650","#D15494","#FF67B5","#FF89C8","#FFAED1", "#FFECE5", "white"))( (1:256)/256) 
   
-  # ---- Set current view ----
+  # ---- Set initial view ----
   current_view <- reactiveVal(list(zoom = 3, location = c(0, 0)))
-  loading <- reactiveVal(FALSE)
-  
+  loading <- reactiveVal(TRUE)
   # ---- Instantly toggle visibility of country select input ----
   observeEvent(input$show_all_countries, {
     if (input$show_all_countries) {
@@ -64,7 +63,7 @@ server <- function(input, output, session) {
           layer_id = "all_countries",
           fill_colour = "emissions_co2_mt",
           palette = blue_palette,
-          fill_opacity = 0.2,
+          fill_opacity = 0.5,
           tooltip = "emissions_co2_mt",
           update_view = FALSE
         )

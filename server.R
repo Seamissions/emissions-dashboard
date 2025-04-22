@@ -8,6 +8,7 @@ server <- function(input, output, session) {
   # ---- Set initial view ----
   current_view <- reactiveVal(list(zoom = 3, location = c(0, 0)))
   loading <- reactiveVal(TRUE)
+  
   # ---- Instantly toggle visibility of country select input ----
   observeEvent(input$show_all_countries, {
     if (input$show_all_countries) {

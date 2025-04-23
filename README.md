@@ -1,5 +1,7 @@
 # Seafood Emissions Dashboard
 
+**Link to dashboard:***: [https://emlab-ucsb.shinyapps.io/emissions-dashboard/](https://emlab-ucsb.shinyapps.io/emissions-dashboard/)
+
 **Client:** [EmLab](https://github.com/emlab-ucsb)
 
 **Authors & Contributors:**

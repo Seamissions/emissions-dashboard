@@ -20,21 +20,25 @@ library(sf)
 library(viridis)
 library(RColorBrewer) # for colors
 library(rsconnect)
+library(pryr)
+
+
 
 # ---- Load data ---------------------------------------------------------------
-
+#MEDS/capstone/emissions-dashboard/
 # --- Load emissions data ----
-nb_emissions <- readRDS(here::here("data","nb_emissions_small.rds"))  |> 
+nb_emissions <- readRDS("data/nb_emissions.rds")  |> 
+  filter(emissions_co2_mt >= 200,
+         year == 2016)
+
+country_emissions <-  readRDS("data/country_emissions.rds") |> 
   filter(emissions_co2_mt >= 200)
 
-country_emissions <- readRDS(here::here("data","country_emissions_small.rds")) |> 
-  filter(emissions_co2_mt >= 200)
-
-all_emissions <- readRDS(here::here("data","all_emissions_small.rds"))  |> 
+all_emissions <- readRDS("data/all_emissions.rds") |> 
   filter(emissions_co2_mt >= 200)
 
 # --- Load background data ----
-fao_regions <- st_read(here::here("data","fao_region_shapefile","World_Fao_Zones.shp")) |>
+fao_regions <- st_read(here::here("data/fao_region_shapefile","World_Fao_Zones.shp")) |>
   st_transform(4326)
 
 fao_borders <- st_cast(fao_regions, "MULTILINESTRING")

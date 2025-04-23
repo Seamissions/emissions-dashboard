@@ -1,0 +1,52 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r}
+# load libraries
+library(tidyverse)
+library(here)
+library(knitr)
+library(kableExtra)
+```
+
+```{r}
+# load library
+fao_emissions <- read_csv(here::here("MEDS/capstone/emissions-dashboard/data/full_emissions_fao_species.csv"))
+```
+
+```{r}
+# Explore data
+print(unique(fao_emissions$name_en))
+```
+
+
+```{r}
+# Calc top species
+top_species <- fao_emissions |>
+  group_by(name_en) |>
+  summarize(sum_emissions = sum(total_co2_mt, na.rm = TRUE)) |>
+  arrange(desc(sum_emissions)) |>
+  head(20)
+```
+
+```{r}
+# Calc top major groups
+top_groups <- fao_emissions |>
+  group_by(major_group) |>
+  summarize(sum_emissions = sum(total_co2_mt, na.rm = TRUE)) |>
+  arrange(desc(sum_emissions)) |>
+  head(20)
+```
+
+```{r}
+# Calc top countries
+top_flags <- fao_emissions |>
+  group_by(flag) |>
+  summarize(sum_emissions = sum(total_co2_mt, na.rm = TRUE)) |>
+  arrange(desc(sum_emissions))
+```
+

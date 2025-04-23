@@ -1,12 +1,12 @@
 # ---- UI ----------------------------------------------------------------------
 
-# ---- header -------------------------------------------------
+# ---- header ------------------------------------------------------------------
 header <- dashboardHeader(
-  title = "Seamissions Dashboard",
+  title = "Seamissions Dashboard 2",
   titleWidth = 320
-)
+) # END dashboard header
 
-# ---- dashboard sidebar -------------------------------------
+# ---- dashboard sidebar -------------------------------------------------------
 sidebar <- dashboardSidebar(
   useShinyjs(),
   width = 400,
@@ -15,17 +15,16 @@ sidebar <- dashboardSidebar(
     tags$h4(
       icon("ship"),
       "Emissions Data",
-      style = "margin-top: 25px; margin-left: 10px; font-weight: bold;"
-    )
-  ),
+      style = "margin-top: 25px; margin-left: 10px; font-weight: bold;") # END tags$h4
+  ), # END tags$div
   
   # ---- all emissions switch ----
+  
   materialSwitch(
     inputId = "show_all_countries",
     label = "Broadcasting Emissions",
-    value = FALSE,
-    status = "info"
-  ),
+    value = TRUE,
+    status = "info"), # END material switch for all countries
   
   # ---- Country picker input (hidden by default) ----
   hidden(
@@ -38,37 +37,36 @@ sidebar <- dashboardSidebar(
         `max-options` = 1,
         `max-options-text` = "You can only select 1 country",
         `actions-box` = TRUE,
-        `live-search` = TRUE
-      )
-    )
-  ),
+        `live-search` = TRUE) # END options list
+    ) # END pickerInput
+  ), # END hidden
   
   # ---- switch to show non-broadcasting emissions ----
   materialSwitch(
     inputId = "show_non_broadcasting",
     label = "Non-Broadcasting Emissions",
     value = FALSE,
-    status = "primary"
-  ),
+    status = "primary"), # END material switch for nb emissions
   
   tags$div(
     tags$h4(
       icon("layer-group"),
       "Other Layers",
-      style = "margin-top: 25px; margin-left: 10px; font-weight: bold;"
-    )
-  ),
+      style = "margin-top: 25px;
+      margin-left: 10px;
+      font-weight: bold;") # END tags$H4
+  ), # END tags$div
   
   # ---- FAO zones switch ----
   materialSwitch(
     inputId = "show_fao_zones",
     label = "FAO Zones",
     value = FALSE,
-    status = "info"
-  )
-)
+    status = "info") # material switch
+  
+) # END dashboard sidebar
 
-# ---- dashboard body ----------------------------------------
+# ---- dashboard body ----------------------------------------------------------
 body <- dashboardBody(
   tabsetPanel(
     # ---- map tab --------------------------------------------
@@ -80,8 +78,7 @@ body <- dashboardBody(
         id = "map-container",
         style = "position: relative; height: 90vh;",
         mapdeckOutput("emissions_map", height = "100%"),
-        uiOutput("loading_ui")
-      ),
+        uiOutput("loading_ui")), # END div
       
       # ---- basemap toggle ----
       absolutePanel(
@@ -98,9 +95,8 @@ body <- dashboardBody(
           offLabel = "Light",
           onStatus = "info",
           offStatus = "info",
-          inline = TRUE
-        )
-      ),
+          inline = TRUE) # END switch input
+      ), # END absolute panel
       
       # ---- year slider ----
       absolutePanel(
@@ -117,19 +113,17 @@ body <- dashboardBody(
           value = year_max,
           step = 1,
           sep = "",
-          animate = TRUE
-        )
-      )
-    ),
+          animate = TRUE) # END slider input
+      ) # END absolute panel
+    ), # END emissions tab panel
     
     # ---- about tab -----------------------------------------
     tabPanel(
       title = "About",
       value = "About",
-      "About content here"
-    )
-  )
-)
+      "About content here") # END about tab panel 
+  ) # END tabset panel
+) # END dashboard body
 
-# ---- combine all in dashboardPage ---------------------------
+# ---- combine all in dashboardPage --------------------------------------------
 dashboardPage(header, sidebar, body)

@@ -2,8 +2,8 @@
 server <- function(input, output, session) {
   
   # ---- Define color palettes ----
-  blue_palette <- colorRamp(c("#12232B","#20404F","#4C9EA6","#67D6E0", "#76F3FF","#A9F2FF","#DAF3FF", "white"))( (1:256)/256) 
-  pink_palette <- colorRamp(c("#4D1C26","#7D3650","#D15494","#FF67B5","#FF89C8","#FFAED1", "#FFECE5", "white"))( (1:256)/256) 
+  blue_palette <- colorRamp(c("#12232B","#20404F","#4C9EA6","#67D6E0", "#76F3FF","#A9F2FF","#DAF3FF", "white"))((1:256)/256)
+  pink_palette <- colorRamp(c("#4D1C26","#7D3650","#D15494","#FF67B5","#FF89C8","#FFAED1", "#FFECE5", "white"))((1:256)/256)
   
   # ---- Set initial view ----
   current_view <- reactiveVal(list(zoom = 3, location = c(0, 0)))
@@ -74,15 +74,18 @@ server <- function(input, output, session) {
       }, delay = 0.75)
     } else {
       mapdeck_update(map_id = "emissions_map") %>%
-        clear_polygon(layer_id = "all_countries")  %>%
+        clear_polygon(layer_id = "all_countries") %>%
         clear_polygon(layer_id = "country_layer")
     }
   })
   
-  # ---- Non-broadcasting emissions layer ----
+  # ---- Non-broadcasting emissions layer (lazy load) ----
   observe({
     if (input$show_non_broadcasting) {
       loading(TRUE)
+      
+      nb_emissions <- readRDS("data/nb_emissions.rds") %>%
+        filter(emissions_co2_mt >= 200, year == 2016)
       
       mapdeck_update(map_id = "emissions_map") %>%
         add_polygon(
@@ -232,5 +235,4 @@ server <- function(input, output, session) {
   })
   
 }  # end server function
-
 

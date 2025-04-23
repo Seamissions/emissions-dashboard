@@ -9,7 +9,6 @@ library(shinydashboard)
 library(shinyWidgets)
 library(shinyjs)
 library(later) # to delay loader
-
 library(tidyverse)
 library(shinycssloaders)
 library(mapdeck)
@@ -23,10 +22,11 @@ library(rsconnect)
 library(pryr)
 
 
-
 # ---- Load data ---------------------------------------------------------------
+
 #MEDS/capstone/emissions-dashboard/
-# --- Load emissions data ----
+
+# --- Load emissions data ---- (as .rds)
 nb_emissions <- readRDS("data/nb_emissions.rds")  |> 
   filter(emissions_co2_mt >= 200,
          year == 2016)

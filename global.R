@@ -8,6 +8,7 @@ library(shiny)
 library(shinydashboard)
 library(shinyWidgets)
 library(shinyjs)
+library(bs4Dash)
 library(later) # to delay loader
 library(tidyverse)
 library(shinycssloaders)

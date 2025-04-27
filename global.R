@@ -7,6 +7,7 @@ source("config.R")
 library(shiny)
 library(shinydashboard)
 library(shinyWidgets)
+library(shinyjs)
 library(bs4Dash)
 library(bslib)
 library(later) # to delay loader

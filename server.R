@@ -2,6 +2,14 @@
 
 server <- function(input, output, session) {
   
+  # ---- Set up home page ------------------------------------------------------
+  
+  observeEvent(input$explore_map, {
+    updateNavbarPage(session, "navbarPage", selected = "Emissions Map")
+  })
+  
+  # ---- Set up map viewer -----------------------------------------------------
+  
   # ---- Define color palettes ----
   blue_palette <- colorRamp(c("#20404F", "#4C9EA6", "#67D6E0", "#76F3FF", "#A9F2FF", "#DAF3FF", "white"))((1:256) / 256)
   pink_palette <- colorRamp(c("#7D3650", "#D15494", "#FF67B5", "#FF89C8", "#FFAED1", "#FFECE5", "white"))((1:256) / 256)
@@ -195,22 +203,6 @@ server <- function(input, output, session) {
     })
   })
   
-  # ---- Re-render map when basemap style changes ----
-  observeEvent(input$basemap_style, {
-    style_choice <- if (input$basemap_style) {
-      "mapbox://styles/mapbox/dark-v10"
-    } else {
-      "mapbox://styles/mapbox/light-v10"
-    }
-    output$emissions_map <- renderMapdeck({
-      mapdeck(
-        token = MAPBOX_TOKEN,
-        style = style_choice,
-        zoom = current_view()$zoom,
-        location = current_view()$location
-      )
-    })
-  })
   
 } # END server function
 

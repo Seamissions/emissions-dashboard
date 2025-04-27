@@ -31,10 +31,19 @@ ui <- navbarPage(
                  column(
                    width = 6,
                    div(
-                     style = "position: relative; height: 300px; background-color: #031021; border-radius: 8px; overflow: hidden; margin-bottom: 20px;",
+                     style = "position: relative;
+                     height: 300px;
+                     background-color:#031021;
+                     border-radius: 8px;
+                     overflow: hidden;
+                     margin-bottom: 20px;",
+                     
                      img(
                        src = "images/map-preview.png",
-                       style = "width: 100%; height: 100%; object-fit: cover; opacity: 0.4;"
+                       style = "width: 100%;
+                       height: 100%;
+                       object-fit: cover;
+                       opacity: 0.4;"
                      ),
                      div(
                        style = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);",
@@ -95,9 +104,14 @@ ui <- navbarPage(
                    
                    # ---- Sidebar Controls ----
                    materialSwitch("show_all_countries", "Broadcasting Emissions", value = TRUE, status = "info"),
-                   hidden(pickerInput("country_select", "Filter To A Country (Flag)", choices = country_flags, multiple = TRUE,
-                                      options = list(`max-options` = 1, `max-options-text` = "You can only select 1 country",
-                                                     `actions-box` = TRUE, `live-search` = TRUE))),
+                   hidden(pickerInput("country_select",
+                                      "Filter To A Country (Flag)",
+                                      choices = country_flags,
+                                      multiple = FALSE,
+                                      options = list(`live-search` = TRUE,
+                                                     container = NULL) # END list
+                                      ) # END pickerInput
+                          ), # END hidden
                    materialSwitch("show_non_broadcasting", "Non-Broadcasting Emissions", value = FALSE, status = "primary"),
                    materialSwitch("show_fao_zones", "FAO Zones", value = FALSE, status = "info")
                ), # END sidebar panel

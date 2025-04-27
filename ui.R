@@ -1,17 +1,19 @@
 # ---- ui.R ---------------------------------------------------------
+source("theme.R")
 
 ui <- navbarPage(
   title = "Seamissions Explorer",
   windowTitle = "Seamissions Explorer",
   id = "navbarPage",  # Added navbarPage id
+  theme = my_theme,
   
   # ---- home page ----
   tabPanel("Home",
            
            # ---- hero section ----
-           div(style = "background-image: url('www/ocean_background.jpg');
+           div(style = "background-image: url('images/home-image.jpg');
                     background-size: cover; background-position: center;
-                    padding: 150px 0; text-align: center; color: white;",
+                    padding: 150px 0; text-align: center; color: #e8fffd;",
                h1("Illuminating Global Fishing Emissions"),
                h4("Connecting data to action for sustainable oceans."),
                actionButton("explore_map", "Explore Emissions Map", class = "btn-primary btn-lg")
@@ -66,14 +68,12 @@ ui <- navbarPage(
                    
                    # ---- sidebar controls ----
                    materialSwitch("show_all_countries", "Broadcasting Emissions", value = TRUE, status = "info"),
-                   hidden(sliderInput("opacity_all_countries", NULL, min = 0, max = 100, value = 0, step = 5, width = "150px")), # Broadcasting transparency slider
                    hidden(pickerInput("country_select", "Filter To A Country (Flag)", choices = country_flags, multiple = TRUE,
                                       options = list(`max-options` = 1, `max-options-text` = "You can only select 1 country", 
                                                      `actions-box` = TRUE, `live-search` = TRUE))), # END picker input # END picker input
                    materialSwitch("show_non_broadcasting", "Non-Broadcasting Emissions", value = FALSE, status = "primary"),
-                   hidden(sliderInput("opacity_non_broadcasting", NULL, min = 0, max = 100, value = 0, step = 5, width = "150px")), # Non-broadcasting transparency slider
                    materialSwitch("show_fao_zones", "FAO Zones", value = FALSE, status = "info"),
-                   hidden(sliderInput("opacity_fao_zones", NULL, min = 0, max = 100, value = 0, step = 5, width = "150px")) # FAO zones transparency slider
+                   
                ), # END sidebar panel
                
                # ---- toggle button outside when sidebar collapsed ----

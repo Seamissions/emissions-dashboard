@@ -37,7 +37,7 @@ server <- function(input, output, session) {
               layer_id = "all_countries",
               fill_colour = "emissions_co2_mt",
               palette = blue_palette,
-              fill_opacity = (100 - input$opacity_non_broadcasting) / 100,
+              fill_opacity = 0.5,
               tooltip = "emissions_co2_mt",
               update_view = FALSE
             )
@@ -90,33 +90,11 @@ server <- function(input, output, session) {
     }
   }) # END renderUI
   
-  # ---- Show/hide transparency sliders ----
-  observeEvent(input$show_all_countries, {
-    if (input$show_all_countries) {
-      shinyjs::show("opacity_all_countries")
-    } else {
-      shinyjs::hide("opacity_all_countries")
-    }
-  }) # END observe - toggle opacity slider all countries
   
-  observeEvent(input$show_non_broadcasting, {
-    if (input$show_non_broadcasting) {
-      shinyjs::show("opacity_non_broadcasting")
-    } else {
-      shinyjs::hide("opacity_non_broadcasting")
-    }
-  }) # END observe - toggle opacity slider non broadcasting
   
-  observeEvent(input$show_fao_zones, {
-    if (input$show_fao_zones) {
-      shinyjs::show("opacity_fao_zones")
-    } else {
-      shinyjs::hide("opacity_fao_zones")
-    }
-  }) # END observe - toggle opacity slider FAO zones
   
-  # ---- All country emissions layer ----
   observe({
+    req(input$show_all_countries)
     if (input$show_all_countries) {
       loading(TRUE)
       
@@ -126,7 +104,7 @@ server <- function(input, output, session) {
           layer_id = "all_countries",
           fill_colour = "emissions_co2_mt",
           palette = blue_palette,
-          fill_opacity = (100 - input$opacity_all_countries) / 100,
+          fill_opacity = 0.5,
           tooltip = "emissions_co2_mt",
           update_view = FALSE) # END add_polygon - all countries
       
@@ -142,8 +120,9 @@ server <- function(input, output, session) {
     }
   }) # END observe - all country emissions layer
   
-  # ---- Non-broadcasting emissions layer (lazy load) ----
+  
   observe({
+    req(input$show_non_broadcasting)
     if (input$show_non_broadcasting) {
       loading(TRUE)
       
@@ -156,7 +135,7 @@ server <- function(input, output, session) {
           layer_id = "non_broadcasting_layer",
           fill_colour = "emissions_co2_mt",
           palette = pink_palette,
-          fill_opacity = (100 - input$opacity_all_countries) / 100,
+          fill_opacity = 0.5,
           tooltip = "emissions_co2_mt",
           update_view = FALSE) # END add_polygon - nb emissions
       
@@ -212,7 +191,7 @@ server <- function(input, output, session) {
             layer_id = "country_layer",
             fill_colour = "emissions_co2_mt",
             palette = blue_palette,
-            fill_opacity = (100 - input$opacity_all_countries) / 100,
+            fill_opacity = 0.5,
             tooltip = "emissions_co2_mt",
             update_view = FALSE
           )
@@ -227,15 +206,16 @@ server <- function(input, output, session) {
     loading(FALSE)
   }) # END observeEvent - add country emissions
   
-  # ---- FAO Zones layer ----
+  
   observe({
+    req(input$show_fao_zones)
     if (input$show_fao_zones) {
       mapdeck_update(map_id = "emissions_map") %>%
         add_polygon(
           data = fao_regions,
           layer_id = "fao_layer",
           fill_colour = "plasma",
-          fill_opacity = (100 - input$opacity_fao_zones) / 100,
+          fill_opacity = 0.5,
           tooltip = "zone",
           update_view = FALSE) %>%
         add_path(
@@ -296,6 +276,5 @@ server <- function(input, output, session) {
   }) # END observeEvent - basemap style
   
 } # END server function
-
 
 

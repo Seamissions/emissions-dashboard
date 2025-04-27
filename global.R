@@ -40,7 +40,7 @@ fao_regions <- st_read(here::here("data/fao_region_shapefile","World_Fao_Zones.s
 fao_borders <- st_cast(fao_regions, "MULTILINESTRING")
 
 # Color palette for FAO zones
-m <- grDevices::colorRamp(c("yellow"))( (1:256)/256 )
+m <- grDevices::colorRamp(c("#DA8D03"))( (1:256)/256 )
 
 # Precompute values used in UI
 country_flags <- sort(unique(country_emissions$flag))

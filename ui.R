@@ -104,15 +104,27 @@ ui <- navbarPage(
                    
                    # ---- Sidebar Controls ----
                    materialSwitch("show_all_countries", "Broadcasting Emissions", value = TRUE, status = "info"),
+                   
+                   hidden(div(id = "broadcasting_legend",
+                              tags$div(style = "background: linear-gradient(to right, #20404F, #DAF3FF); height: 20px; border: 1px solid #ccc;"),
+                              tags$p("INSERT VALUES HERE")
+                   )),
+                   
                    hidden(pickerInput("country_select",
                                       "Filter To A Country (Flag)",
                                       choices = country_flags,
                                       multiple = FALSE,
                                       options = list(`live-search` = TRUE,
-                                                     container = NULL) # END list
-                                      ) # END pickerInput
-                          ), # END hidden
+                                                     container = NULL)
+                   )),
+                   
                    materialSwitch("show_non_broadcasting", "Non-Broadcasting Emissions", value = FALSE, status = "primary"),
+                   
+                   hidden(div(id = "non_broadcasting_legend",
+                              tags$div(style = "background: linear-gradient(to right, #7D3650, #FFECE5); height: 20px; border: 1px solid #ccc;"),
+                              tags$p("INSERT VALUES HERE")
+                   )),
+                   
                    materialSwitch("show_fao_zones", "FAO Zones", value = FALSE, status = "info")
                ), # END sidebar panel
                
@@ -150,7 +162,7 @@ ui <- navbarPage(
                                          sep = "",
                                          width = "100%",
                                          ticks = TRUE,
-                                         animate = animationOptions(interval = 3000, loop = FALSE)) # END sliderInput-year
+                                         animate = animationOptions(interval = 3000, loop = FALSE))
                ) # END absolutePanel - year
            ) # END map container
   ), # END emissions map tab
@@ -172,6 +184,4 @@ ui <- navbarPage(
            ) # END hero section
   ) # END about tab
 ) # END navbarPage
-
-
 

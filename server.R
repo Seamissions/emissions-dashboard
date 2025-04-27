@@ -30,6 +30,23 @@ server <- function(input, output, session) {
     shinyjs::hide("toggle_sidebar_outside")
   })
   
+  # ---- Toggle legends visibility ----
+  observe({
+    if (input$show_all_countries) {
+      shinyjs::show("broadcasting_legend")
+    } else {
+      shinyjs::hide("broadcasting_legend")
+    }
+  })
+  
+  observe({
+    if (input$show_non_broadcasting) {
+      shinyjs::show("non_broadcasting_legend")
+    } else {
+      shinyjs::hide("non_broadcasting_legend")
+    }
+  })
+  
   # ---- Reset sidebar visibility on tab switch ----
   observe({
     if (input$navbarPage == "Emissions Map") {
@@ -203,8 +220,8 @@ server <- function(input, output, session) {
     })
   })
   
-  
 } # END server function
+
 
 
 

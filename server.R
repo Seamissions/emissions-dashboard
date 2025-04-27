@@ -3,15 +3,15 @@
 server <- function(input, output, session) {
   
   # ---- Define color palettes ----
-  blue_palette <- colorRamp(c("#20404F","#4C9EA6","#67D6E0", "#76F3FF","#A9F2FF","#DAF3FF", "white"))((1:256)/256)
-  pink_palette <- colorRamp(c("#7D3650","#D15494","#FF67B5","#FF89C8","#FFAED1", "#FFECE5", "white"))((1:256)/256)
+  blue_palette <- colorRamp(c("#20404F", "#4C9EA6", "#67D6E0", "#76F3FF", "#A9F2FF", "#DAF3FF", "white"))((1:256) / 256)
+  pink_palette <- colorRamp(c("#7D3650", "#D15494", "#FF67B5", "#FF89C8", "#FFAED1", "#FFECE5", "white"))((1:256) / 256)
   
   # ---- Set initial view ----
   first_time <- reactiveVal(TRUE)  # Track if first time entering map tab
   current_view <- reactiveVal(list(zoom = 3, location = c(0, 0)))
   loading <- reactiveVal(TRUE)
   
-  # ---- sidebar toggle logic ----
+  # ---- Sidebar toggle logic ----
   observeEvent(input$toggle_sidebar, {
     shinyjs::hide("sidebar-panel")
     shinyjs::show("toggle_sidebar_outside")
@@ -62,11 +62,6 @@ server <- function(input, output, session) {
   country_filtered <- reactive({
     req(input$country_select)
     req(input$year_slider_input)
-    
-    # Lazy load country_emissions
-    country_emissions <- readRDS("data/country_emissions.rds") |> 
-      filter(emissions_co2_mt >= 200)
-    
     country_emissions[
       country_emissions$flag == input$country_select &
         country_emissions$year == input$year_slider_input,
@@ -128,11 +123,8 @@ server <- function(input, output, session) {
   observe({
     if (input$show_non_broadcasting) {
       loading(TRUE)
-      
-      # Lazy load nb_emissions
       nb_emissions <- readRDS("data/nb_emissions.rds") |> 
         filter(emissions_co2_mt >= 200)
-      
       mapdeck_update(map_id = "emissions_map") %>%
         add_polygon(
           layer_id = "non_broadcasting_layer",
@@ -203,16 +195,6 @@ server <- function(input, output, session) {
     })
   })
   
-  # ---- Initial render ----
-  output$emissions_map <- renderMapdeck({
-    mapdeck(
-      token = MAPBOX_TOKEN,
-      style = "mapbox://styles/mapbox/dark-v10",
-      zoom = current_view()$zoom,
-      location = current_view()$location
-    )
-  })
-  
   # ---- Re-render map when basemap style changes ----
   observeEvent(input$basemap_style, {
     style_choice <- if (input$basemap_style) {
@@ -229,9 +211,8 @@ server <- function(input, output, session) {
       )
     })
   })
+  
 } # END server function
-
-
 
 
 

@@ -48,7 +48,7 @@ ui <- navbarPage(
                    div(
                      style = "position: relative; height: 300px; background-color: #031021; border-radius: 8px; overflow: hidden; margin-bottom: 20px;",
                      img(
-                       src = "images/seafood-preview.png",
+                       src = "images/map-preview.png",
                        style = "width: 100%; height: 100%; object-fit: cover; opacity: 0.4;"
                      ),
                      div(

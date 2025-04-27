@@ -5,6 +5,6 @@ account: emlab-ucsb
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 14544879
-bundleId: 10185904
+bundleId: 10185982
 url: https://emlab-ucsb.shinyapps.io/emissions-dashboard/
 version: 1

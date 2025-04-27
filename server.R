@@ -257,23 +257,7 @@ server <- function(input, output, session) {
     )
   }) # END renderMapdeck - initial render
   
-  # ---- Re-render map when basemap style changes ----
-  observeEvent(input$basemap_style, {
-    style_choice <- if (input$basemap_style) {
-      "mapbox://styles/mapbox/dark-v10"
-    } else {
-      "mapbox://styles/mapbox/light-v10"
-    }
-    
-    output$emissions_map <- renderMapdeck({
-      mapdeck(
-        token = MAPBOX_TOKEN,
-        style = style_choice,
-        zoom = current_view()$zoom,
-        location = current_view()$location
-      )
-    })
-  }) # END observeEvent - basemap style
+  
   
 } # END server function
 

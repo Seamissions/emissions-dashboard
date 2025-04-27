@@ -84,7 +84,7 @@ ui <- navbarPage(
                  top: 0;
                  left: 0;
                  height: 100%;
-                 width: 350px;
+                 width: px;
                  background-color: #f9f9f9;
                  padding: 15px;
                  border-right: 0px solid #ccc;
@@ -103,12 +103,24 @@ ui <- navbarPage(
                    ),
                    
                    # ---- Sidebar Controls ----
-                   materialSwitch("show_all_countries", "Broadcasting Emissions", value = TRUE, status = "info"),
+                   div(
+                     style = "font-size: 18px;
+                     font-weight: bold;
+                     width: 100%;",
+                     materialSwitch("show_all_countries",
+                                    "AIS Broadcasting Emissions",
+                                    value = TRUE,
+                                    status = "info")
+                   ),
                    
                    hidden(div(id = "broadcasting_legend",
-                              tags$div(style = "background: linear-gradient(to right, #20404F, #DAF3FF); height: 20px; border: 1px solid #ccc;"),
-                              tags$p("INSERT VALUES HERE")
+                              tags$div(style = "background: linear-gradient(to right, #20404F, #DAF3FF);
+                                       height: 20px;
+                                       border: 1px solid #ccc;
+                                       width: 60%;"),
+                              tags$p("REPLACE WITH VALUES")
                    )),
+                   
                    
                    hidden(pickerInput("country_select",
                                       "Filter To A Country (Flag)",
@@ -118,12 +130,27 @@ ui <- navbarPage(
                                                      container = NULL)
                    )),
                    
-                   materialSwitch("show_non_broadcasting", "Non-Broadcasting Emissions", value = FALSE, status = "primary"),
+                   tags$hr(),
+                   
+                   div(
+                     style = "font-size: 18px;
+                     font-weight: bold;
+                     width: 100%;",
+                     materialSwitch("show_non_broadcasting",
+                                    "Non-Broadcasting Emissions",
+                                    value = FALSE,
+                                    status = "warning")
+                   ),
                    
                    hidden(div(id = "non_broadcasting_legend",
-                              tags$div(style = "background: linear-gradient(to right, #7D3650, #FFECE5); height: 20px; border: 1px solid #ccc;"),
-                              tags$p("INSERT VALUES HERE")
+                              tags$div(style = "background: linear-gradient(to right, #7D3650, #FFECE5);
+                                       height: 20px;
+                                       border: 1px solid #ccc;
+                                       width: 60%;"),
+                              tags$p("REPLACE WITH VALUES")
                    )),
+                   
+                   tags$hr(),
                    
                    materialSwitch("show_fao_zones", "FAO Zones", value = FALSE, status = "info")
                ), # END sidebar panel
@@ -184,4 +211,5 @@ ui <- navbarPage(
            ) # END hero section
   ) # END about tab
 ) # END navbarPage
+
 

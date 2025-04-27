@@ -7,7 +7,7 @@ seamissions_theme <- bs_theme(
   fg = "#053762",       # Foreground (text) color
   primary = "#08C4E5",  # Primary color
   secondary = "#DA8D03", # Orange for buttons
-  base_font = font_google("Inter"),       # Base font
+  base_font = font_google("Roboto"),       # Base font
   heading_font = font_google("Roboto"), # Heading font
   navbar_bg = "#f9f9f9"
 )
@@ -17,14 +17,14 @@ seamissions_theme <- bs_theme(
 seamissions_theme <- bs_add_rules(seamissions_theme, "
   /* Style the pickerInput button (the bar) */
   .bootstrap-select .btn {
-    background-color: #053762;  /* Dark blue bar */
+    background-color: white;  /* Dark blue bar */
     color: orange;              /* Selected text (orange) */
     border: 1px solid #08C4E5;
   }
 
   /* Placeholder text when no selection */
   .bootstrap-select .btn .filter-option {
-    color: #f9f9f9;  /* White placeholder text */
+    color: #053762;  /* Dark blue placeholder text */
   }
 
   /* Dropdown menu background */

@@ -13,21 +13,20 @@ ui <- navbarPage(
            # ---- Hero Section ----
            div(
              style = "
-        background-image: url('images/home-image.jpg');
         background-size: cover;
         background-position: center;
         padding: 100px 0;
         text-align: center;
         color: #e8fffd;
       ",
-             h1("Seamissions Global Fishing Emissions Explorer"),
-             h4("Connecting data to action for sustainable oceans.")
+             h1("Welcome to the Seamissions Global Fishing Emissions Explorer"),
+             h5("Check out our tools to look at global fishing activity and seafood-related emissions."),
            ), # END hero section
            
-           # ---- Teaser Sections ----
-           div(style = "margin-top: 10px;",
+           # ---- Tools Overview Sections ----
+           div(style = "margin-top: 5px;",
                fluidRow(
-                 # Emissions Map Teaser
+                 # Emissions Map Tool
                  column(
                    width = 6,
                    div(
@@ -47,22 +46,28 @@ ui <- navbarPage(
                      ),
                      div(
                        style = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);",
-                       actionButton("explore_map", "Fishing Vessel Emissions Map", class = "btn-primary btn-lg")
+                       actionButton("explore_map",
+                                    label = tagList(icon("ship"),
+                                                    "Fishing Vessel Emissions Map"),
+                                    class = "btn-primary btn-lg")
                      )
                    )
                  ),
-                 # Seafood Emission Explorer Teaser
+                 # Seafood Emission Explorer Tool
                  column(
                    width = 6,
                    div(
                      style = "position: relative; height: 300px; background-color: #031021; border-radius: 8px; overflow: hidden; margin-bottom: 20px;",
                      img(
                        src = "images/map-preview.png",
-                       style = "width: 100%; height: 100%; object-fit: cover; opacity: 0.4;"
+                       style = "width: 100%; height: 100%; object-fit: cover; opacity: 0.6;"
                      ),
                      div(
                        style = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);",
-                       actionButton("explore_seafood", "Seafood Emissions Explorer", class = "btn-primary btn-lg")
+                       actionButton("explore_seafood",
+                                    label = tagList(icon("fish"),
+                                                    "Seafood Emissions Explorer"),
+                                    class = "btn-primary btn-lg")
                      )
                    )
                  )
@@ -193,6 +198,23 @@ ui <- navbarPage(
                ) # END absolutePanel - year
            ) # END map container
   ), # END emissions map tab
+  
+  # ---- Seafood Emissions Page ----
+  tabPanel("Seafood Emissions",
+           # ---- Hero Section ----
+           div(
+             style = "
+        background-image: url('images/home-image.jpg');
+        background-size: cover;
+        background-position: center;
+        padding: 100px 0;
+        text-align: center;
+        color: #e8fffd;
+      ",
+             h1("Seamissions Global Fishing Emissions Explorer"),
+             h4("Connecting data to action for sustainable oceans.")
+           ) # END hero section
+  ), # END seafood emissions tab
   
   # ---- About Page ----
   tabPanel("About",

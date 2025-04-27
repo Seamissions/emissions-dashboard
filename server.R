@@ -104,7 +104,7 @@ server <- function(input, output, session) {
           tooltip = "emissions_co2_mt",
           update_view = FALSE
         )
-      later::later(function() { loading(FALSE) }, delay = 0.75)
+      later::later(function() { loading(FALSE) }, delay = 0.2)
     } else {
       filtered <- country_filtered()
       if (nrow(filtered) > 0) {
@@ -119,7 +119,7 @@ server <- function(input, output, session) {
             tooltip = "emissions_co2_mt",
             update_view = FALSE
           )
-        later::later(function() { loading(FALSE) }, delay = 0.75)
+        later::later(function() { loading(FALSE) }, delay = 0.2)
       }
     }
   })
@@ -135,6 +135,7 @@ server <- function(input, output, session) {
       
       mapdeck_update(map_id = "emissions_map") %>%
         add_polygon(
+          layer_id = "non_broadcasting_layer",
           data = nb_emissions,
           fill_colour = "emissions_co2_mt",
           palette = pink_palette,
@@ -142,7 +143,7 @@ server <- function(input, output, session) {
           tooltip = "emissions_co2_mt",
           update_view = FALSE
         )
-      later::later(function() { loading(FALSE) }, delay = 0.75)
+      later::later(function() { loading(FALSE) }, delay = 0.2)
     } else {
       mapdeck_update(map_id = "emissions_map") %>%
         clear_polygon(layer_id = "non_broadcasting_layer")
@@ -152,7 +153,7 @@ server <- function(input, output, session) {
   # ---- Initialize emissions map ----
   output$emissions_map <- renderMapdeck({
     loading(TRUE)
-    later::later(function() { loading(FALSE) }, delay = 1)
+    later::later(function() { loading(FALSE) }, delay = 0.2)
     mapdeck(
       token = MAPBOX_TOKEN,
       style = mapdeck_style("dark"),
@@ -229,10 +230,6 @@ server <- function(input, output, session) {
     })
   })
 } # END server function
-
-
-
-
 
 
 

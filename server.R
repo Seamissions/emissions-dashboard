@@ -31,7 +31,7 @@ server <- function(input, output, session) {
         if (input$show_all_countries) {
           mapdeck_update(map_id = "emissions_map") %>%
             add_polygon(
-              data = all_emissions,
+              data = all_emissions |> filter(year == input$year_slider_input),
               layer_id = "all_countries",
               fill_colour = "emissions_co2_mt",
               palette = blue_palette,
@@ -96,7 +96,7 @@ server <- function(input, output, session) {
       loading(TRUE)
       mapdeck_update(map_id = "emissions_map") %>%
         add_polygon(
-          data = all_emissions,
+          data = all_emissions |> filter(year == input$year_slider_input),
           layer_id = "all_countries",
           fill_colour = "emissions_co2_mt",
           palette = blue_palette,
@@ -131,7 +131,7 @@ server <- function(input, output, session) {
       
       # Lazy load nb_emissions
       nb_emissions <- readRDS("data/nb_emissions.rds") |> 
-        filter(emissions_co2_mt >= 200, year == 2016)
+        filter(emissions_co2_mt >= 200)
       
       mapdeck_update(map_id = "emissions_map") %>%
         add_polygon(
@@ -229,6 +229,10 @@ server <- function(input, output, session) {
     })
   })
 } # END server function
+
+
+
+
 
 
 

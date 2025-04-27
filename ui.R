@@ -66,13 +66,6 @@ ui <- navbarPage(
            
            useShinyjs(), # Initialize shinyjs
            
-           # ---- Custom Slider CSS ----
-           tags$style(HTML("
-      .slider-animate-container { display: none; }
-      .irs-grid-text { display: none; }
-      .irs-grid-pol { display: none; }
-    ")),
-           
            # ---- Map Container ----
            div(style = "position: relative; height: 90vh;",
                
@@ -142,8 +135,8 @@ ui <- navbarPage(
                                          step = 1,
                                          sep = "",
                                          width = "100%",
-                                         animate = TRUE
-                             ) # END sliderInput-year
+                                         ticks = TRUE,
+                                         animate = animationOptions(interval = 3000, loop = FALSE)) # END sliderInput-year
                ) # END absolutePanel - year
            ) # END map container
   ), # END emissions map tab

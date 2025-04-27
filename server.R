@@ -13,22 +13,20 @@ server <- function(input, output, session) {
   
   # ---- sidebar toggle logic ----
   observeEvent(input$toggle_sidebar, {
-    shinyjs::hide("sidebar-panel")                  # Hide sidebar
-    shinyjs::show("toggle_sidebar_outside")         # Show outside button
-  }) # END inside button toggle
+    shinyjs::hide("sidebar-panel")
+    shinyjs::show("toggle_sidebar_outside")
+  })
   
   observeEvent(input$toggle_sidebar_outside, {
-    shinyjs::show("sidebar-panel")                  # Show sidebar
-    shinyjs::hide("toggle_sidebar_outside")         # Hide outside button
-  }) # END outside button toggle
+    shinyjs::show("sidebar-panel")
+    shinyjs::hide("toggle_sidebar_outside")
+  })
   
   # ---- Reset sidebar visibility on tab switch ----
   observe({
-    if (input$navbarPage == "Emissions Map") {      # Ensure sidebar opens on tab switch
-      shinyjs::show("sidebar-panel")                # Show sidebar by default
-      shinyjs::hide("toggle_sidebar_outside")       # Hide outside button by default
-      
-      # ---- first time loading logic ----
+    if (input$navbarPage == "Emissions Map") {
+      shinyjs::show("sidebar-panel")
+      shinyjs::hide("toggle_sidebar_outside")
       if (first_time()) {
         if (input$show_all_countries) {
           mapdeck_update(map_id = "emissions_map") %>%
@@ -42,62 +40,60 @@ server <- function(input, output, session) {
               update_view = FALSE
             )
         }
-        first_time(FALSE)  # Set flag to false after initial load
+        first_time(FALSE)
       }
     }
-  }) # END tab switch observer
+  })
   
-  # ---- Instantly toggle visibility of country select input ----
+  # ---- Toggle visibility of country select input ----
   observeEvent(input$show_all_countries, {
     if (input$show_all_countries) {
       shinyjs::show("country_select")
     } else {
       shinyjs::hide("country_select")
       updateSelectInput(session, "country_select", selected = "")
+      mapdeck_update(map_id = "emissions_map") %>%
+        clear_polygon(layer_id = "all_countries") %>%
+        clear_polygon(layer_id = "country_layer")
     }
-  }, priority = 10) # END observe event - select country
+  }, priority = 10)
   
   # ---- Filter emissions by country and year ----
   country_filtered <- reactive({
     req(input$country_select)
     req(input$year_slider_input)
     
+    # Lazy load country_emissions
+    country_emissions <- readRDS("data/country_emissions.rds") |> 
+      filter(emissions_co2_mt >= 200)
+    
     country_emissions[
       country_emissions$flag == input$country_select &
         country_emissions$year == input$year_slider_input,
     ]
-  }) # END reactive filter - select country
+  }) # END reactive (country_filtered)
   
   # ---- Loading symbol ----
   output$loading_ui <- renderUI({
     if (loading()) {
       tags$div(
         id = "loading-overlay",
-        style = "
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 1001;
-        background-color: rgba(2, 181, 886, 0.8);
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.3);
-        text-align: center;",
+        style = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1001; background-color: rgba(2, 181, 886, 0.8); padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.3); text-align: center;",
         icon("spinner", class = "fa-spin", style = "font-size: 24px; margin-bottom: 10px;"),
         tags$p("Loading...")
-      ) # END tags div
+      )
     }
-  }) # END renderUI
+  })
   
-  
-  
-  
+  # ---- All countries & country emissions layers ----
   observe({
     req(input$show_all_countries)
-    if (input$show_all_countries) {
+    mapdeck_update(map_id = "emissions_map") %>%
+      clear_polygon(layer_id = "all_countries") %>%
+      clear_polygon(layer_id = "country_layer")
+    
+    if (is.null(input$country_select) || input$country_select == "") {
       loading(TRUE)
-      
       mapdeck_update(map_id = "emissions_map") %>%
         add_polygon(
           data = all_emissions,
@@ -106,118 +102,77 @@ server <- function(input, output, session) {
           palette = blue_palette,
           fill_opacity = 0.5,
           tooltip = "emissions_co2_mt",
-          update_view = FALSE) # END add_polygon - all countries
-      
-      later::later(function() {
-        loading(FALSE)
-      }, delay = 0.5) # add 0.5 second delay to loader
-      
+          update_view = FALSE
+        )
+      later::later(function() { loading(FALSE) }, delay = 0.75)
     } else {
-      # Clear broadcasting country polygons when switch is not on
-      mapdeck_update(map_id = "emissions_map") %>%
-        clear_polygon(layer_id = "all_countries") %>%
-        clear_polygon(layer_id = "country_layer")
+      filtered <- country_filtered()
+      if (nrow(filtered) > 0) {
+        loading(TRUE)
+        mapdeck_update(map_id = "emissions_map") %>%
+          add_polygon(
+            data = filtered,
+            layer_id = "country_layer",
+            fill_colour = "emissions_co2_mt",
+            palette = blue_palette,
+            fill_opacity = 0.6,
+            tooltip = "emissions_co2_mt",
+            update_view = FALSE
+          )
+        later::later(function() { loading(FALSE) }, delay = 0.75)
+      }
     }
-  }) # END observe - all country emissions layer
+  })
   
-  
+  # ---- Non-broadcasting emissions layer ----
   observe({
-    req(input$show_non_broadcasting)
     if (input$show_non_broadcasting) {
       loading(TRUE)
       
-      nb_emissions <- readRDS("data/nb_emissions.rds") %>%
+      # Lazy load nb_emissions
+      nb_emissions <- readRDS("data/nb_emissions.rds") |> 
         filter(emissions_co2_mt >= 200, year == 2016)
       
       mapdeck_update(map_id = "emissions_map") %>%
         add_polygon(
           data = nb_emissions,
-          layer_id = "non_broadcasting_layer",
           fill_colour = "emissions_co2_mt",
           palette = pink_palette,
           fill_opacity = 0.5,
           tooltip = "emissions_co2_mt",
-          update_view = FALSE) # END add_polygon - nb emissions
-      
-      later::later(function() {
-        loading(FALSE)
-      }, delay = 0.5)  # add 0.5 second delay to loader
-      
+          update_view = FALSE
+        )
+      later::later(function() { loading(FALSE) }, delay = 0.75)
     } else {
-      # Clear broadcasting country polygons when switch is not on
       mapdeck_update(map_id = "emissions_map") %>%
         clear_polygon(layer_id = "non_broadcasting_layer")
     }
-  }) # END observe - non broadcasting emissions layer
+  })
   
   # ---- Initialize emissions map ----
   output$emissions_map <- renderMapdeck({
     loading(TRUE)
-    
-    later::later(function() {
-      loading(FALSE)
-    }, delay = 0.5)  # add 0.5 second delay to loader
-    
+    later::later(function() { loading(FALSE) }, delay = 1)
     mapdeck(
       token = MAPBOX_TOKEN,
       style = mapdeck_style("dark"),
       zoom = 2,
       location = c(-10, 20)
     )
-  }) # END renderMapdeck - emissions map
+  })
   
-  # ---- Add country emissions if a country is selected ----
-  observeEvent({
-    input$year_slider_input
-    input$country_select
-  }, {
-    loading(TRUE)
-    
-    if (!is.null(input$country_select) && input$country_select != "") {
-      mapdeck_update(map_id = "emissions_map") %>%
-        clear_polygon(layer_id = "all_countries")
-    }
-    
-    map <- mapdeck_update(map_id = "emissions_map") %>%
-      clear_polygon(layer_id = "country_layer")
-    
-    if (!is.null(input$country_select) && input$country_select != "") {
-      filtered <- country_filtered()
-      
-      if (nrow(filtered) > 0) {
-        map <- map %>%
-          add_polygon(
-            data = filtered,
-            layer_id = "country_layer",
-            fill_colour = "emissions_co2_mt",
-            palette = blue_palette,
-            fill_opacity = 0.5,
-            tooltip = "emissions_co2_mt",
-            update_view = FALSE
-          )
-      } else {
-        mapdeck_update(map_id = "emissions_map") %>%
-          clear_polygon(layer_id = "fao_layer") %>%
-          clear_path(layer_id = "fao_border_layer")
-      }
-    }
-    
-    map
-    loading(FALSE)
-  }) # END observeEvent - add country emissions
-  
-  
+  # ---- FAO Zones layer ----
   observe({
-    req(input$show_fao_zones)
     if (input$show_fao_zones) {
       mapdeck_update(map_id = "emissions_map") %>%
         add_polygon(
           data = fao_regions,
           layer_id = "fao_layer",
           fill_colour = "plasma",
-          fill_opacity = 0.5,
+          fill_opacity = 1,
           tooltip = "zone",
-          update_view = FALSE) %>%
+          update_view = FALSE
+        ) %>%
         add_path(
           data = fao_borders,
           layer_id = "fao_border_layer",
@@ -231,7 +186,7 @@ server <- function(input, output, session) {
         clear_polygon(layer_id = "fao_layer") %>%
         clear_path(layer_id = "fao_border_layer")
     }
-  }) # END observe - FAO Zones layer
+  })
   
   # ---- Track view so we don’t reset zoom/location ----
   observe({
@@ -245,7 +200,7 @@ server <- function(input, output, session) {
         ))
       }
     })
-  }) # END observe - track map view
+  })
   
   # ---- Initial render ----
   output$emissions_map <- renderMapdeck({
@@ -255,10 +210,30 @@ server <- function(input, output, session) {
       zoom = current_view()$zoom,
       location = current_view()$location
     )
-  }) # END renderMapdeck - initial render
+  })
   
-  
-  
+  # ---- Re-render map when basemap style changes ----
+  observeEvent(input$basemap_style, {
+    style_choice <- if (input$basemap_style) {
+      "mapbox://styles/mapbox/dark-v10"
+    } else {
+      "mapbox://styles/mapbox/light-v10"
+    }
+    output$emissions_map <- renderMapdeck({
+      mapdeck(
+        token = MAPBOX_TOKEN,
+        style = style_choice,
+        zoom = current_view()$zoom,
+        location = current_view()$location
+      )
+    })
+  })
 } # END server function
 
 
+
+
+
+
+
+        

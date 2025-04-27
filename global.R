@@ -29,12 +29,12 @@ library(pryr)
 #MEDS/capstone/emissions-dashboard/
 
 # --- Load emissions data ---- (as .rds)
-nb_emissions <- readRDS("data/nb_emissions.rds")  |> 
-  filter(emissions_co2_mt >= 200,
-         year == 2016)
+#nb_emissions <- readRDS("data/nb_emissions.rds")  |> 
+#  filter(emissions_co2_mt >= 200,
+#         year == 2016)
 
-country_emissions <-  readRDS("data/country_emissions.rds") |> 
-  filter(emissions_co2_mt >= 200)
+#country_emissions <-  readRDS("data/country_emissions.rds") |> 
+#  filter(emissions_co2_mt >= 200)
 
 all_emissions <- readRDS("data/all_emissions.rds") |> 
   filter(emissions_co2_mt >= 200)

@@ -13,20 +13,21 @@ ui <- navbarPage(
            # ---- Hero Section ----
            div(
              style = "
+        background-image: url('images/home-image.jpg');
         background-size: cover;
         background-position: center;
         padding: 100px 0;
         text-align: center;
         color: #e8fffd;
       ",
-             h1("Welcome to the Seamissions Global Fishing Emissions Explorer"),
-             h5("Check out our tools to look at global fishing activity and seafood-related emissions."),
+             h1("Seamissions Global Fishing Emissions Explorer"),
+             h4("Connecting data to action for sustainable oceans.")
            ), # END hero section
            
-           # ---- Tools Overview Sections ----
-           div(style = "margin-top: 5px;",
+           # ---- Teaser Sections ----
+           div(style = "margin-top: 10px;",
                fluidRow(
-                 # Emissions Map Tool
+                 # Emissions Map Teaser
                  column(
                    width = 6,
                    div(
@@ -46,28 +47,22 @@ ui <- navbarPage(
                      ),
                      div(
                        style = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);",
-                       actionButton("explore_map",
-                                    label = tagList(icon("ship"),
-                                                    "Fishing Vessel Emissions Map"),
-                                    class = "btn-primary btn-lg")
+                       actionButton("explore_map", "Fishing Vessel Emissions Map", class = "btn-primary btn-lg")
                      )
                    )
                  ),
-                 # Seafood Emission Explorer Tool
+                 # Seafood Emission Explorer Teaser
                  column(
                    width = 6,
                    div(
                      style = "position: relative; height: 300px; background-color: #031021; border-radius: 8px; overflow: hidden; margin-bottom: 20px;",
                      img(
                        src = "images/map-preview.png",
-                       style = "width: 100%; height: 100%; object-fit: cover; opacity: 0.6;"
+                       style = "width: 100%; height: 100%; object-fit: cover; opacity: 0.4;"
                      ),
                      div(
                        style = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);",
-                       actionButton("explore_seafood",
-                                    label = tagList(icon("fish"),
-                                                    "Seafood Emissions Explorer"),
-                                    class = "btn-primary btn-lg")
+                       actionButton("explore_seafood", "Seafood Emissions Explorer", class = "btn-primary btn-lg")
                      )
                    )
                  )
@@ -89,7 +84,7 @@ ui <- navbarPage(
                  top: 0;
                  left: 0;
                  height: 100%;
-                 width: px;
+                 width: 350px;
                  background-color: #f9f9f9;
                  padding: 15px;
                  border-right: 0px solid #ccc;
@@ -108,24 +103,24 @@ ui <- navbarPage(
                    ),
                    
                    # ---- Sidebar Controls ----
-                   div(
-                     style = "font-size: 18px;
-                     font-weight: bold;
-                     width: 100%;",
-                     materialSwitch("show_all_countries",
-                                    "AIS Broadcasting Emissions",
-                                    value = TRUE,
-                                    status = "info")
-                   ),
+                   materialSwitch("show_all_countries", "Broadcasting Emissions", value = TRUE, status = "info"),
                    
-                   hidden(div(id = "broadcasting_legend",
-                              tags$div(style = "background: linear-gradient(to right, #20404F, #DAF3FF);
-                                       height: 20px;
-                                       border: 1px solid #ccc;
-                                       width: 60%;"),
-                              tags$p("REPLACE WITH VALUES")
+                   hidden(div(id = "broadcasting_total",
+                              tags$div(
+                                style = "display: flex; align-items: center; font-size: 16px; font-weight: bold; margin-bottom: 10px;",
+                                icon("cloud"),
+                                span(" Total Emissions: "),
+                                textOutput("total_broadcasting", inline = TRUE)
+                              )
                    )),
                    
+                   hidden(div(id = "broadcasting_legend",
+                              h5("Broadcasting Emissions Legend"),
+                              tags$div(style = "background: linear-gradient(to right, #20404F, #DAF3FF); height: 20px; border: 1px solid #ccc;"),
+                              tags$p("Low to High Emissions")
+                   )),
+                   
+                   tags$hr(),
                    
                    hidden(pickerInput("country_select",
                                       "Filter To A Country (Flag)",
@@ -135,24 +130,21 @@ ui <- navbarPage(
                                                      container = NULL)
                    )),
                    
-                   tags$hr(),
+                   materialSwitch("show_non_broadcasting", "Non-Broadcasting Emissions", value = FALSE, status = "primary"),
                    
-                   div(
-                     style = "font-size: 18px;
-                     font-weight: bold;
-                     width: 100%;",
-                     materialSwitch("show_non_broadcasting",
-                                    "Non-Broadcasting Emissions",
-                                    value = FALSE,
-                                    status = "warning")
-                   ),
+                   hidden(div(id = "non_broadcasting_total",
+                              tags$div(
+                                style = "display: flex; align-items: center; font-size: 16px; font-weight: bold; margin-bottom: 10px;",
+                                icon("cloud"),
+                                span(" Total Emissions: "),
+                                textOutput("total_non_broadcasting", inline = TRUE)
+                              )
+                   )),
                    
                    hidden(div(id = "non_broadcasting_legend",
-                              tags$div(style = "background: linear-gradient(to right, #7D3650, #FFECE5);
-                                       height: 20px;
-                                       border: 1px solid #ccc;
-                                       width: 60%;"),
-                              tags$p("REPLACE WITH VALUES")
+                              h5("Non-Broadcasting Emissions Legend"),
+                              tags$div(style = "background: linear-gradient(to right, #7D3650, #FFECE5); height: 20px; border: 1px solid #ccc;"),
+                              tags$p("Low to High Emissions")
                    )),
                    
                    tags$hr(),
@@ -198,23 +190,6 @@ ui <- navbarPage(
                ) # END absolutePanel - year
            ) # END map container
   ), # END emissions map tab
-  
-  # ---- Seafood Emissions Page ----
-  tabPanel("Seafood Emissions",
-           # ---- Hero Section ----
-           div(
-             style = "
-        background-image: url('images/home-image.jpg');
-        background-size: cover;
-        background-position: center;
-        padding: 100px 0;
-        text-align: center;
-        color: #e8fffd;
-      ",
-             h1("Seamissions Global Fishing Emissions Explorer"),
-             h4("Connecting data to action for sustainable oceans.")
-           ) # END hero section
-  ), # END seafood emissions tab
   
   # ---- About Page ----
   tabPanel("About",

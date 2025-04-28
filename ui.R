@@ -81,30 +81,63 @@ ui <- navbarPage(
            
            # Title
            fluidRow(
+             
+             style = "margin-bottom: 10px;",
+             
              column(width = 8,
                     # Title
                     tags$h3(style = "font-size: 24px; font-weight: bold; color: white; margin-bottom: 20px;", 
                             "Fishing Vessel Emissions Map")
              ),
              
-             # Total broadcasting emissions
              column(width = 2,
-                    div(style = "background-color: rgba(255, 255, 255, 0.9); padding: 10px; border-radius: 8px; text-align: center;",
-                        tags$div(style = "display: flex; flex-direction: column; align-items: center;",
-                                # icon("smog", style = "font-size: 24px; margin-bottom: 5px;"),
-                                 span("Total Broadcasting Emissions:", style = "font-size: 14px; font-weight: bold;"),
-                                 textOutput("total_broadcasting", inline = TRUE)
-                        )
+                    div(
+                      style = "background-color: rgba(255, 255, 255, 0.9); padding: 8px 10px; border-radius: 8px; 
+             display: flex; justify-content: space-between; align-items: center; height: auto;",
+                      
+                      # Icon faded (left)
+                      tags$div(
+                        icon("smog"),
+                        style = "font-size: 30px; color: rgba(5, 55, 98, 0.2); margin-right: 8px;"
+                      ),
+                      
+                      # Number and label (right)
+                      tags$div(style = "text-align: right; line-height: 1.1;",
+                               tags$div(
+                                 textOutput("total_broadcasting"),
+                                 style = "font-size: 20px; font-weight: bold; color: #053762; margin-bottom: 2px;"), # END total emissions calculation
+                               tags$div(
+                                 "Total Broadcasting Emissions",
+                                 style = "font-size: 11px; font-weight: bold; color: #053762;") # END title for value box
+                      )# END number and text for value box
+                    
                     )
              ),
              
-             # Total non-broadcasting emissions
+             # Total non-broadcasting emissions box (matched style)
              column(width = 2,
-                    div(style = "background-color: rgba(255, 255, 255, 0.9); padding: 10px; border-radius: 8px; text-align: center;",
-                        tags$div(style = "display: flex; flex-direction: column; align-items: center;",
-                                 span("Total Non-Broadcasting Emissions:", style = "font-size: 14px; font-weight: bold;"),
-                                 textOutput("total_non_broadcasting", inline = TRUE)
-                        )
+                    div(
+                      style = "background-color: rgba(255, 255, 255, 0.9); padding: 8px 10px; border-radius: 8px; 
+               display: flex; justify-content: space-between; align-items: center; height: auto;",
+                      
+                      # Icon faded (left)
+                      tags$div(
+                        icon("ship"),
+                        style = "font-size: 30px; color: rgba(125, 54, 80, 0.2); margin-right: 8px;"  # softer pink tone
+                      ),
+                      
+                      # Number and label (right)
+                      tags$div(style = "text-align: right; line-height: 1.1;",
+                               tags$div(
+                                 textOutput("total_non_broadcasting"),
+                                 style = "font-size: 20px; font-weight: bold; color: #7D3650; margin-bottom: 2px;"
+                               ),
+                               tags$div(
+                                 "Total Non-Broadcasting Emissions",
+                                 style = "font-size: 11px; font-weight: bold; color: #7D3650;"
+                               )
+                      )
+  
                     )
              )
            ), # END fluidRow
@@ -258,8 +291,10 @@ tabPanel("Seafood Emissions Explorer",
                   tags$p("Right box with Plot", style = "color: white;"),
                   div(style = "background-color: #f9f9f9; padding: 10px;",
                       plotOutput("example_barplot", height = "300px")
-                  )
-           )
+                  
+                  ), # END fluidRow
+           ),
+           
          ) # END second fluidRow
          
 ), # END tabPanel (Seafood Emissions Explorer Page)

@@ -229,30 +229,42 @@ ui <- navbarPage(
   ), # END emissions map tab
   
 # ---- Seafood Emissions Explorer Page ----
+# ---- Seafood Emissions Explorer Page ----
 tabPanel("Seafood Emissions Explorer",
-         # Title
-         tags$h3(style = "font-size: 24px; font-weight: bold; color: #f9f9f9; margin-bottom: 20px;", "Seafood Emissions Explorer"), 
          
+         # Title
+         tags$h3(style = "font-size: 24px; font-weight: bold; color: #f9f9f9; margin-bottom: 20px;", 
+                 "Seafood Emissions Explorer"), 
+         
+         # First Row ----
          fluidRow(
            column(width = 4,
                   tags$p("Left box", style = "color: white;"),
-                  div(style = "background-color: #f9f9f9; padding: 10px",
+                  div(style = "background-color: #f9f9f9; padding: 10px;",
                       tags$p("Text inside a colored box")
                   )
            ),
            
            column(width = 4, offset = 2,
                   tags$p("Right box", style = "color: white;"),
-                  div(style = "background-color: #f9f9f9; padding: 10px",
+                  div(style = "background-color: #f9f9f9; padding: 10px;",
                       tags$p("Text inside a colored box")
                   )
            )
          ), # END first fluidRow
-       
-       fluidRow(column(width = 12)) # END fluidRow
-       # END mainPanel
+         
+         # Second Row with ggplot ----
+         fluidRow(
+           column(width = 12,
+                  tags$p("Right box with Plot", style = "color: white;"),
+                  div(style = "background-color: #f9f9f9; padding: 10px;",
+                      plotOutput("example_barplot", height = "300px")
+                  )
+           )
+         ) # END second fluidRow
          
 ), # END tabPanel (Seafood Emissions Explorer Page)
+
 
   # ---- About Page ----
   tabPanel("About",

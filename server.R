@@ -247,7 +247,22 @@ server <- function(input, output, session) {
           location = c(view$longitude, view$latitude)
         ))
       }
-    })
+    }) # END isolate
+  }) # END observe
+  
+  # ---- EXAMPLE bar plot - REMOVE -----
+  output$example_barplot <- renderPlot({
+    # Fake data
+    df <- data.frame(
+      category = c("A", "B", "C"),
+      value = c(10, 20, 15)
+    )
+    
+    # Simple bar plot
+    ggplot(df, aes(x = category, y = value, fill = category)) +
+      geom_bar(stat = "identity") +
+      theme_minimal() +
+      theme(legend.position = "none")
   })
 }
 

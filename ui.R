@@ -270,17 +270,30 @@ tabPanel("Seafood Emissions Explorer",
          
          # First Row ----
          fluidRow(
-           column(width = 4,
-                  tags$p("Left box", style = "color: white;"),
-                  div(style = "background-color: #f9f9f9; padding: 10px;",
-                      tags$p("Text inside a colored box")
+           column(width = 2,
+                  div(style = "background-color: #f9f9f9; padding: 10px; border-radius: 8px;",
+                      div(style = "display: flex; align-items: center;",  # Flex container
+                          icon("fish", style = "color: #053762; margin-right: 8px;"),  # Icon
+                          tags$p("Compare Species", style = "color: #053762; margin: 0;")  # Text
+                      )
                   )
            ),
            
-           column(width = 4, offset = 2,
-                  tags$p("Right box", style = "color: white;"),
-                  div(style = "background-color: #f9f9f9; padding: 10px;",
-                      tags$p("Text inside a colored box")
+           column(width = 2,
+                  div(style = "background-color: #DA8D03; padding: 10px; border-radius: 8px;",
+                      div(style = "display: flex; align-items: center;",
+                          icon("globe", style = "color: white; margin-right: 8px;"),
+                          tags$p("Compare Countries", style = "color: white; margin: 0;")
+                      )
+                  )
+           ),
+           
+           column(width = 2,
+                  div(style = "background-color: #f9f9f9; padding: 10px; border-radius: 8px;",
+                      div(style = "display: flex; align-items: center;",
+                          icon("cogs", style = "color: #053762; margin-right: 8px;"),
+                          tags$p("Compare Gear", style = "color: #053762; margin: 0;")
+                      )
                   )
            )
          ), # END first fluidRow
@@ -288,9 +301,8 @@ tabPanel("Seafood Emissions Explorer",
          # Second Row with ggplot ----
          fluidRow(
            column(width = 12,
-                  tags$p("Right box with Plot", style = "color: white;"),
-                  div(style = "background-color: #f9f9f9; padding: 10px;",
-                      plotOutput("example_barplot", height = "300px")
+                  div(style = "background-color: #053762; padding: 10px; height: 60vh; min-height: 300px;",
+                      plotOutput("example_barplot", height = "100%", fill = TRUE)
                   
                   ), # END fluidRow
            ),

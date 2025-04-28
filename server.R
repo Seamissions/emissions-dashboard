@@ -254,15 +254,26 @@ server <- function(input, output, session) {
   output$example_barplot <- renderPlot({
     # Fake data
     df <- data.frame(
-      category = c("A", "B", "C"),
-      value = c(10, 20, 15)
+      country = c("China", "USA", "Japan","Iceland","Argentina", "Australia"),
+      emissions = c(500, 175, 150, 105, 75, 73)
     )
     
     # Simple bar plot
-    ggplot(df, aes(x = category, y = value, fill = category)) +
-      geom_bar(stat = "identity") +
-      theme_minimal() +
-      theme(legend.position = "none")
+    ggplot(df, aes(x = emissions, y = reorder(country, emissions))) +
+      geom_bar(stat = "identity", fill = "#08C4E5") +
+      labs(x = "Emissions", y = "") +
+      theme_void() +
+      theme(legend.position = "none",
+            axis.title = element_text(color = "white",
+                                      family = "Roboto",
+                                      face = "bold",
+                                      size = 18),
+            axis.text = element_text(color = "white",
+                                     family = "Roboto",
+                                     face = "bold",
+                                     size = 14),
+            panel.background = element_rect(fill = "#053762", color = NA),
+            plot.background = element_rect(fill = "#053762", color = NA))
   })
 }
 

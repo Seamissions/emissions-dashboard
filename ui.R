@@ -155,7 +155,7 @@ ui <- navbarPage(
                    materialSwitch("show_fao_zones",
                                   label = tags$div(style = "font-size: 18px;
                                                    font-weight: bold;",
-                                                   "FAO Zones"),
+                                                   "FAO Major Fishing Zones"),
                                   value = FALSE,
                                   status = "info")
                ), # END sidebar panel
@@ -228,6 +228,32 @@ ui <- navbarPage(
            ) # END map container
   ), # END emissions map tab
   
+# ---- Seafood Emissions Explorer Page ----
+tabPanel("Seafood Emissions Explorer",
+         # Title
+         tags$h3(style = "font-size: 24px; font-weight: bold; color: #f9f9f9; margin-bottom: 20px;", "Seafood Emissions Explorer"), 
+         
+         fluidRow(
+           column(width = 4,
+                  tags$p("Left box", style = "color: white;"),
+                  div(style = "background-color: #f9f9f9; padding: 10px",
+                      tags$p("Text inside a colored box")
+                  )
+           ),
+           
+           column(width = 4, offset = 2,
+                  tags$p("Right box", style = "color: white;"),
+                  div(style = "background-color: #f9f9f9; padding: 10px",
+                      tags$p("Text inside a colored box")
+                  )
+           )
+         ), # END first fluidRow
+       
+       fluidRow(column(width = 12)) # END fluidRow
+       # END mainPanel
+         
+), # END tabPanel (Seafood Emissions Explorer Page)
+
   # ---- About Page ----
   tabPanel("About",
            # ---- Hero Section ----
@@ -243,7 +269,8 @@ ui <- navbarPage(
              h1("Seamissions Global Fishing Emissions Explorer"),
              h4("Connecting data to action for sustainable oceans.")
            ) # END hero section
-  ) # END about tab
+  ) # END tabPanel (About Page)
+
 ) # END navbarPage
 
 

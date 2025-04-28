@@ -76,6 +76,38 @@ ui <- navbarPage(
   tabPanel("Emissions Map",
            
            useShinyjs(), # Initialize shinyjs
+
+           # --- Top row with title and calculations ----
+           
+           # Title
+           fluidRow(
+             column(width = 8,
+                    # Title
+                    tags$h3(style = "font-size: 24px; font-weight: bold; color: white; margin-bottom: 20px;", 
+                            "Fishing Vessel Emissions Map")
+             ),
+             
+             # Total broadcasting emissions
+             column(width = 2,
+                    div(style = "background-color: rgba(255, 255, 255, 0.9); padding: 10px; border-radius: 8px; text-align: center;",
+                        tags$div(style = "display: flex; flex-direction: column; align-items: center;",
+                                # icon("smog", style = "font-size: 24px; margin-bottom: 5px;"),
+                                 span("Total Broadcasting Emissions:", style = "font-size: 14px; font-weight: bold;"),
+                                 textOutput("total_broadcasting", inline = TRUE)
+                        )
+                    )
+             ),
+             
+             # Total non-broadcasting emissions
+             column(width = 2,
+                    div(style = "background-color: rgba(255, 255, 255, 0.9); padding: 10px; border-radius: 8px; text-align: center;",
+                        tags$div(style = "display: flex; flex-direction: column; align-items: center;",
+                                 span("Total Non-Broadcasting Emissions:", style = "font-size: 14px; font-weight: bold;"),
+                                 textOutput("total_non_broadcasting", inline = TRUE)
+                        )
+                    )
+             )
+           ), # END fluidRow
            
            # ---- Map Container ----
            div(style = "position: relative; height: 90vh;",
@@ -91,10 +123,6 @@ ui <- navbarPage(
                  padding: 15px;
                  border-right: 0px solid #ccc;
                  z-index: 1001;",
-                   
-                   # Title
-                   tags$h3(style = "font-size: 24px; font-weight: bold; color: #053762; margin-bottom: 20px;", "Fishing Vessel Emissions Map"), 
-                   
                    
                    # ---- Toggle Button Inside Sidebar ----
                    actionButton("toggle_sidebar",
@@ -173,34 +201,6 @@ ui <- navbarPage(
                  z-index: 1001"
                ),
                
-# --- Calculate emissions box ----
-               absolutePanel(
-                 id = "emissions_totals_panel",
-                 top = 10, right = 10, width = 300, height = "auto",  # Set height to auto to adjust dynamically
-                 style = "background-color: rgba(255, 255, 255, 0.9); padding: 15px; border-radius: 8px; z-index: 1002;",
-                 
-                 div(id = "broadcasting_total_box",
-                     style = "text-align: center;",  # Centering text and icons
-                     tags$div(
-                       style = "display: flex; flex-direction: column; align-items: center; margin-bottom: 15px;", # Align items vertically
-                       icon("smog", style = "font-size: 32px; margin-bottom: 10px;"),  # Larger icon, space below
-                       span("Total Broadcasting Emissions:", style = "font-size: 16px; font-weight: bold;"),
-                       textOutput("total_broadcasting", inline = TRUE)
-                     )
-                 ),
-                 
-                 div(id = "non_broadcasting_total_box",
-                     style = "text-align: center;",  # Centering text and icons
-                     tags$div(
-                       style = "display: flex; flex-direction: column; align-items: center;",  # Align items vertically
-                       span("Total Non-Broadcasting Emissions:", style = "font-size: 16px; font-weight: bold;"),
-                       textOutput("total_non_broadcasting", inline = TRUE)
-                     )
-                 )
-               ),
-               
-               
-               
                
                # ---- Emissions Map ----
                mapdeckOutput("emissions_map", height = "100%"),
@@ -223,12 +223,11 @@ ui <- navbarPage(
                                          sep = "",
                                          width = "100%",
                                          ticks = TRUE,
-                                         animate = animationOptions(interval = 3000, loop = FALSE))
+                                         animate = animationOptions(interval = 3000, loop = FALSE)) # END sliderInput (year)
                ) # END absolutePanel - year
            ) # END map container
   ), # END emissions map tab
   
-# ---- Seafood Emissions Explorer Page ----
 # ---- Seafood Emissions Explorer Page ----
 tabPanel("Seafood Emissions Explorer",
          

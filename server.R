@@ -1,5 +1,3 @@
-# ---- Server page for emissions dashboard -------------------------------------
-
 server <- function(input, output, session) {
   
   # ---- Set up home page ------------------------------------------------------
@@ -7,26 +5,66 @@ server <- function(input, output, session) {
     updateNavbarPage(session, "navbarPage", selected = "Emissions Map")
   })
   
-  # ---- Set up map viewer -----------------------------------------------------
-  
   # ---- Define color palettes ----
   blue_palette <- colorRamp(c("#20404F", "#4C9EA6", "#67D6E0", "#76F3FF", "#A9F2FF", "#DAF3FF", "white"))((1:256) / 256)
-  pink_palette <- colorRamp(c( "#805F14","#CC9921", "#F9B928", "#FFD15F", "#FFECB2","#FFF9D5" ))((1:256) / 256)
+  pink_palette <- colorRamp(c("#805F14","#CC9921", "#F9B928", "#FFD15F", "#FFECB2","#FFF9D5"))((1:256) / 256)
   
-  # ---- Set initial view ----
+  # ---- Initialize default states ----
   first_time <- reactiveVal(TRUE)
   current_view <- reactiveVal(list(zoom = 3, location = c(0, 0)))
   loading <- reactiveVal(TRUE)
   
+  # ---- Pre-calculate initial total emissions for max year ----
+  initial_total_broadcasting <- all_emissions %>%
+    filter(year == max(all_emissions$year, na.rm = TRUE)) %>%
+    summarise(total = sum(emissions_co2_mt, na.rm = TRUE)) %>%
+    pull(total)
+  
   # ---- Sidebar toggle logic ----
   observeEvent(input$toggle_sidebar, {
-    shinyjs::hide("sidebar-panel")
-    shinyjs::show("toggle_sidebar_outside")
+    # Toggle the sidebar visibility
+    shinyjs::toggle("sidebar-panel")
+    
+    # Show the outside button and hide the inside button
+    shinyjs::toggle("toggle_sidebar_outside")
+    shinyjs::toggle("toggle_sidebar")
   })
   
   observeEvent(input$toggle_sidebar_outside, {
-    shinyjs::show("sidebar-panel")
-    shinyjs::hide("toggle_sidebar_outside")
+    # Toggle the sidebar visibility
+    shinyjs::toggle("sidebar-panel")
+    
+    # Show the inside button and hide the outside button
+    shinyjs::toggle("toggle_sidebar")
+    shinyjs::toggle("toggle_sidebar_outside")
+  })
+  # ---- Initialize the map on first render ----
+  observe({
+    if (first_time() && input$navbarPage == "Emissions Map") {
+      
+      # Trigger the material switch to be on for broadcasting layer
+      updateMaterialSwitch(session, "show_all_countries", value = TRUE)
+      
+      # Add all_countries (broadcasting emissions) layer on first render
+      mapdeck_update(map_id = "emissions_map") %>%
+        add_polygon(
+          data = all_emissions %>% filter(year == max(all_emissions$year, na.rm = TRUE)),
+          layer_id = "all_countries",
+          fill_colour = "emissions_co2_mt",
+          palette = blue_palette,
+          fill_opacity = 0.5,
+          tooltip = "emissions_co2_mt",
+          update_view = FALSE
+        )
+      
+      # Update the broadcasting total emissions box
+      output$total_broadcasting_text <- renderText({
+        paste0(format(round(initial_total_broadcasting, 2), big.mark = ","), " Mt CO2")
+      })
+      
+      # After the initial render, set first_time to FALSE to prevent re-running
+      first_time(FALSE)
+    }
   })
   
   # ---- Toggle legends visibility and total emissions ----
@@ -214,7 +252,6 @@ server <- function(input, output, session) {
 }
 
 # END server function
-
 
 
         

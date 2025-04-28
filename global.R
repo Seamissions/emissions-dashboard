@@ -46,3 +46,10 @@ m <- grDevices::colorRamp(c("#DA8D03"))( (1:256)/256 )
 country_flags <- sort(unique(country_emissions$flag))
 year_min <- min(country_emissions$year, na.rm = TRUE)
 year_max <- max(country_emissions$year, na.rm = TRUE)
+
+# Pre-calculate total emissions for the initial year (max year)
+initial_total_broadcasting <- all_emissions %>%
+  filter(year == max(all_emissions$year, na.rm = TRUE)) %>%
+  summarise(total = sum(emissions_co2_mt, na.rm = TRUE)) %>%
+  pull(total)
+

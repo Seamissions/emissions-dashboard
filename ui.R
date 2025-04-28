@@ -13,7 +13,6 @@ ui <- navbarPage(
            # ---- Hero Section ----
            div(
              style = "
-        background-image: url('images/home-image.jpg');
         background-size: cover;
         background-position: center;
         padding: 100px 0;
@@ -21,7 +20,7 @@ ui <- navbarPage(
         color: #e8fffd;
       ",
              h1("Seamissions Global Fishing Emissions Explorer"),
-             h4("Connecting data to action for sustainable oceans.")
+             h4("This is where the short overview goes.")
            ), # END hero section
            
            # ---- Teaser Sections ----
@@ -38,32 +37,35 @@ ui <- navbarPage(
                      overflow: hidden;
                      margin-bottom: 20px;",
                      
-                     img(
-                       src = "images/map-preview.png",
+                     img(src = "images/map-preview.png",
                        style = "width: 100%;
                        height: 100%;
                        object-fit: cover;
-                       opacity: 0.4;"
-                     ),
+                       opacity: 0.4;"), # END img
                      div(
                        style = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);",
                        actionButton("explore_map", "Fishing Vessel Emissions Map", class = "btn-primary btn-lg")
                      )
                    )
                  ),
-                 # Seafood Emission Explorer Teaser
+                 # Seafood Emission Explorer Tool Overview
                  column(
                    width = 6,
                    div(
                      style = "position: relative; height: 300px; background-color: #031021; border-radius: 8px; overflow: hidden; margin-bottom: 20px;",
-                     img(
-                       src = "images/map-preview.png",
-                       style = "width: 100%; height: 100%; object-fit: cover; opacity: 0.4;"
-                     ),
-                     div(
-                       style = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);",
-                       actionButton("explore_seafood", "Seafood Emissions Explorer", class = "btn-primary btn-lg")
-                     )
+                    
+                      img(src = "images/map-preview.png",
+                       style = "width: 100%;
+                       height: 100%;
+                       object-fit: cover;
+                       opacity: 0.4;"), # END img
+                     
+                     div(style = "position: absolute;
+                         top: 50%;
+                         left: 50%;
+                         transform: translate(-50%, -50%);",
+                         
+                       actionButton("explore_seafood", "Seafood Emissions Explorer", class = "btn-primary btn-lg")) # END divider
                    )
                  )
                )
@@ -90,6 +92,10 @@ ui <- navbarPage(
                  border-right: 0px solid #ccc;
                  z-index: 1001;",
                    
+                   # Title
+                   tags$h3(style = "font-size: 24px; font-weight: bold; color: #053762; margin-bottom: 20px;", "Fishing Vessel Emissions Map"), 
+                   
+                   
                    # ---- Toggle Button Inside Sidebar ----
                    actionButton("toggle_sidebar",
                                 label = NULL,
@@ -103,53 +109,55 @@ ui <- navbarPage(
                    ),
                    
                    # ---- Sidebar Controls ----
-                   materialSwitch("show_all_countries", "Broadcasting Emissions", value = TRUE, status = "info"),
-                   
-                   hidden(div(id = "broadcasting_total",
-                              tags$div(
-                                style = "display: flex; align-items: center; font-size: 16px; font-weight: bold; margin-bottom: 10px;",
-                                icon("cloud"),
-                                span(" Total Emissions: "),
-                                textOutput("total_broadcasting", inline = TRUE)
-                              )
-                   )),
+                   materialSwitch("show_all_countries",
+                                  label = tags$div(style = "font-size: 18px;
+                                                   font-weight: bold;",
+                                                   "Broadcasting Emissions"),
+                                  value = TRUE,
+                                  status = "info"),
                    
                    hidden(div(id = "broadcasting_legend",
-                              h5("Broadcasting Emissions Legend"),
-                              tags$div(style = "background: linear-gradient(to right, #20404F, #DAF3FF); height: 20px; border: 1px solid #ccc;"),
-                              tags$p("Low to High Emissions")
-                   )),
+                       tags$div(style = "background: linear-gradient(to right,#015661, #03C7E8);
+                                height: 20px;
+                                width: 70%;
+                                border: 1px solid #ccc;"),
+                       tags$p("Low to High Emissions")),# END div
+                       
+                       pickerInput("country_select",
+                                   "Filter To A Country (Flag)",
+                                   choices = country_flags,
+                                   multiple = FALSE,
+                                   options = list(`live-search` = TRUE,
+                                                  container = NULL)) # END pickerInput
+                   
+                   ), # END hidden
                    
                    tags$hr(),
                    
-                   hidden(pickerInput("country_select",
-                                      "Filter To A Country (Flag)",
-                                      choices = country_flags,
-                                      multiple = FALSE,
-                                      options = list(`live-search` = TRUE,
-                                                     container = NULL)
-                   )),
-                   
-                   materialSwitch("show_non_broadcasting", "Non-Broadcasting Emissions", value = FALSE, status = "primary"),
-                   
-                   hidden(div(id = "non_broadcasting_total",
-                              tags$div(
-                                style = "display: flex; align-items: center; font-size: 16px; font-weight: bold; margin-bottom: 10px;",
-                                icon("cloud"),
-                                span(" Total Emissions: "),
-                                textOutput("total_non_broadcasting", inline = TRUE)
-                              )
-                   )),
+                   materialSwitch("show_non_broadcasting",
+                                  label = tags$div(style = "font-size: 18px;
+                                                   font-weight: bold;",
+                                                   "Non-Broadcasting Emissions"),
+                                  value = FALSE,
+                                  status = "warning"), # END materialSwitch
                    
                    hidden(div(id = "non_broadcasting_legend",
-                              h5("Non-Broadcasting Emissions Legend"),
-                              tags$div(style = "background: linear-gradient(to right, #7D3650, #FFECE5); height: 20px; border: 1px solid #ccc;"),
-                              tags$p("Low to High Emissions")
-                   )),
+                              tags$div(style = "background: linear-gradient(to right, #805F14, #f9b928);
+                                       height: 20px;
+                                       width: 70%;
+                                       border: 1px solid #ccc;"),
+                              
+                              tags$p("Low to High Emissions")) # END divider
+                          ), # END hidden
                    
                    tags$hr(),
                    
-                   materialSwitch("show_fao_zones", "FAO Zones", value = FALSE, status = "info")
+                   materialSwitch("show_fao_zones",
+                                  label = tags$div(style = "font-size: 18px;
+                                                   font-weight: bold;",
+                                                   "FAO Zones"),
+                                  value = FALSE,
+                                  status = "info")
                ), # END sidebar panel
                
                actionButton("toggle_sidebar_outside",
@@ -164,6 +172,35 @@ ui <- navbarPage(
                  display: none;
                  z-index: 1001"
                ),
+               
+# --- Calculate emissions box ----
+               absolutePanel(
+                 id = "emissions_totals_panel",
+                 top = 10, right = 10, width = 300, height = "auto",  # Set height to auto to adjust dynamically
+                 style = "background-color: rgba(255, 255, 255, 0.9); padding: 15px; border-radius: 8px; z-index: 1002;",
+                 
+                 div(id = "broadcasting_total_box",
+                     style = "text-align: center;",  # Centering text and icons
+                     tags$div(
+                       style = "display: flex; flex-direction: column; align-items: center; margin-bottom: 15px;", # Align items vertically
+                       icon("smog", style = "font-size: 32px; margin-bottom: 10px;"),  # Larger icon, space below
+                       span("Total Broadcasting Emissions:", style = "font-size: 16px; font-weight: bold;"),
+                       textOutput("total_broadcasting", inline = TRUE)
+                     )
+                 ),
+                 
+                 div(id = "non_broadcasting_total_box",
+                     style = "text-align: center;",  # Centering text and icons
+                     tags$div(
+                       style = "display: flex; flex-direction: column; align-items: center;",  # Align items vertically
+                       span("Total Non-Broadcasting Emissions:", style = "font-size: 16px; font-weight: bold;"),
+                       textOutput("total_non_broadcasting", inline = TRUE)
+                     )
+                 )
+               ),
+               
+               
+               
                
                # ---- Emissions Map ----
                mapdeckOutput("emissions_map", height = "100%"),
@@ -208,5 +245,6 @@ ui <- navbarPage(
            ) # END hero section
   ) # END about tab
 ) # END navbarPage
+
 
 

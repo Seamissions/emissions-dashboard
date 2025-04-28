@@ -11,6 +11,7 @@ library(shinyjs)
 library(bs4Dash)
 library(bslib)
 library(later) # to delay loader
+library(gganimate)
 library(tidyverse)
 library(shinycssloaders)
 library(mapdeck)

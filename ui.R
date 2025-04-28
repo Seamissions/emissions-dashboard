@@ -270,30 +270,41 @@ tabPanel("Seafood Emissions Explorer",
          
          # First Row ----
          fluidRow(
+           
+           # Compare species button ---- 
            column(width = 2,
-                  div(style = "background-color: #f9f9f9; padding: 10px; border-radius: 8px;",
-                      div(style = "display: flex; align-items: center;",  # Flex container
-                          icon("fish", style = "color: #053762; margin-right: 8px;"),  # Icon
-                          tags$p("Compare Species", style = "color: #053762; margin: 0;")  # Text
-                      )
+                  actionButton(
+                    "explore_map",
+                    tagList(
+                      icon("globe", style = "margin-right: 8px;"),
+                      "Compare Species"
+                    ),
+                    class = "btn-primary btn-lg"
                   )
            ),
            
+           
+           # Compare countries button ---- 
            column(width = 2,
-                  div(style = "background-color: #DA8D03; padding: 10px; border-radius: 8px;",
-                      div(style = "display: flex; align-items: center;",
-                          icon("globe", style = "color: white; margin-right: 8px;"),
-                          tags$p("Compare Countries", style = "color: white; margin: 0;")
-                      )
+                  actionButton(
+                    "explore_map",
+                    tagList(
+                      icon("globe", style = "margin-right: 8px;"),
+                      "Compare Countries"
+                    ),
+                    class = "btn-primary btn-lg"
                   )
            ),
            
+           # Compare gear button ---- 
            column(width = 2,
-                  div(style = "background-color: #f9f9f9; padding: 10px; border-radius: 8px;",
-                      div(style = "display: flex; align-items: center;",
-                          icon("cogs", style = "color: #053762; margin-right: 8px;"),
-                          tags$p("Compare Gear", style = "color: #053762; margin: 0;")
-                      )
+                  actionButton(
+                    "explore_map",
+                    tagList(
+                      icon("gears", style = "margin-right: 8px;"),
+                      "Compare Fishing Gear"
+                    ),
+                    class = "btn-primary btn-lg"
                   )
            )
          ), # END first fluidRow

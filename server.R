@@ -1,15 +1,30 @@
+# --------------------------------------------------------------------------------
+# ---- server --------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+
+
 server <- function(input, output, session) {
   
-  # ---- Set up home page ------------------------------------------------------
+  # ---- Set up buttons ------------------------------------------------------
+  
+  # Define action to change to Emissions Map tab
   observeEvent(input$explore_map, {
-    updateNavbarPage(session, "navbarPage", selected = "Emissions Map")
+    updateNavbarPage(session, "navbarPage", selected = "Emissions Map") 
   })
   
-  # ---- Define color palettes ----
+  # Define action to change to Seafood Emissions Explorer tab
+  observeEvent(input$explore_seafood, {
+    updateNavbarPage(session, "navbarPage", selected = "Seafood Emissions Explorer")
+  })
+  
+  # ---- Define color palettes -------------------------------------------------
   blue_palette <- colorRamp(c("#20404F", "#4C9EA6", "#67D6E0", "#76F3FF", "#A9F2FF", "#DAF3FF", "white"))((1:256) / 256)
   pink_palette <- colorRamp(c("#805F14","#CC9921", "#F9B928", "#FFD15F", "#FFECB2","#FFF9D5"))((1:256) / 256)
   
-  # ---- Initialize default states ----
+  
+  # ---- Emissions map ---------------------------------------------------------
+  
+  # ---- Initialize default states for map----
   first_time <- reactiveVal(TRUE)
   current_view <- reactiveVal(list(zoom = 3, location = c(0, 0)))
   loading <- reactiveVal(TRUE)
@@ -114,14 +129,18 @@ server <- function(input, output, session) {
     country_emissions %>% filter(flag == input$country_select, year == input$year_slider_input)
   })
   
-  # ---- Loading symbol ----
+  # ---- Define Loading symbol ----
   output$loading_ui <- renderUI({
     if (loading()) {
       tags$div(
         id = "loading-overlay",
-        style = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1001; background-color: rgba(2, 181, 886, 0.8); padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.3); text-align: center;",
-        icon("spinner", class = "fa-spin", style = "font-size: 24px; margin-bottom: 10px;"),
-        tags$p("Loading...")
+        style = "position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1001;
+        color: #08C4E5;",
+        icon("spinner", class = "fa-spin", style = "font-size: 40px; margin-bottom: 10px;"),
       )
     }
   })
@@ -250,7 +269,8 @@ server <- function(input, output, session) {
     }) # END isolate
   }) # END observe
   
-  # ---- EXAMPLE bar plot - REMOVE -----
+  # END Emissions Map
+  
   output$example_barplot <- renderPlot({
     # Fake data
     df <- data.frame(
@@ -275,7 +295,12 @@ server <- function(input, output, session) {
             panel.background = element_rect(fill = "#053762", color = NA),
             plot.background = element_rect(fill = "#053762", color = NA))
   })
+  
+  
+  
 }
+
+# END Seafood Emissions Explorer
 
 # END server function
 

@@ -1,4 +1,7 @@
-# ---- Global ------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+# ---- Global --------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+
 
 # ---- Source config file storing tokens ----
 source("config.R")
@@ -8,10 +11,12 @@ library(shiny)
 library(shinydashboard)
 library(shinyWidgets)
 library(shinyjs)
+library(shinycssloaders)
 library(bs4Dash)
 library(bslib)
 library(later) # to delay loader
 library(gganimate)
+library(plotly)
 library(tidyverse)
 library(shinycssloaders)
 library(mapdeck)
@@ -25,7 +30,9 @@ library(bslib) # for theme colors
 library(rsconnect)
 library(pryr)
 
-# ---- Load data ---------------------------------------------------------------
+# ---- Load & prep data ---------------------------------------------------------------
+
+# ---- Emissions map data ----
 
 # Load emissions data
 all_emissions <- readRDS("data/all_emissions.rds") |> 
@@ -54,3 +61,10 @@ initial_total_broadcasting <- all_emissions %>%
   summarise(total = sum(emissions_co2_mt, na.rm = TRUE)) %>%
   pull(total)
 
+# ---- Seafood explorer data ----
+
+# Create the fake data
+df <- data.frame(
+  country = c("China", "USA", "Japan", "Iceland", "Argentina", "Australia"),
+  emissions = c(500, 175, 150, 105, 75, 73)
+)

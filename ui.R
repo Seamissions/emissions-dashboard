@@ -1,4 +1,8 @@
-# ---- ui.R ---------------------------------------------------------
+# --------------------------------------------------------------------------------
+# ---- ui.R --------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+  
+  
 source("theme.R")
 
 ui <- navbarPage(
@@ -72,7 +76,7 @@ ui <- navbarPage(
            ) # END teaser sections
   ), # END home tab
   
-  # ---- Emissions Map Page ----
+  # ---- Emissions Map Page ----------------------------------------------------
   tabPanel("Emissions Map",
            
            useShinyjs(), # Initialize shinyjs
@@ -271,54 +275,43 @@ tabPanel("Seafood Emissions Explorer",
          # First Row ----
          fluidRow(
            
-           # Compare species button ---- 
-           column(width = 2,
-                  actionButton(
-                    "explore_map",
-                    tagList(
-                      icon("globe", style = "margin-right: 8px;"),
-                      "Compare Species"
-                    ),
-                    class = "btn-primary btn-lg"
-                  )
-           ),
-           
-           
-           # Compare countries button ---- 
-           column(width = 2,
-                  actionButton(
-                    "explore_map",
-                    tagList(
-                      icon("globe", style = "margin-right: 8px;"),
-                      "Compare Countries"
-                    ),
-                    class = "btn-primary btn-lg"
-                  )
-           ),
-           
-           # Compare gear button ---- 
-           column(width = 2,
-                  actionButton(
-                    "explore_map",
-                    tagList(
-                      icon("gears", style = "margin-right: 8px;"),
-                      "Compare Fishing Gear"
-                    ),
-                    class = "btn-primary btn-lg"
-                  )
-           )
-         ), # END first fluidRow
+         # Compare species button ---- 
+         column(width = 2,
+                actionButton(
+                  "explore_map",
+                  tagList(
+                    icon("globe", style = "margin-right: 8px;"),
+                    "Compare Species"
+                  ),
+                  class = "btn-primary btn-lg"
+                )
+         ),
          
-         # Second Row with ggplot ----
-         fluidRow(
-           column(width = 12,
-                  div(style = "background-color: #053762; padding: 10px; height: 60vh; min-height: 300px;",
-                      plotOutput("example_barplot", height = "100%", fill = TRUE)
-                  
-                  ), # END fluidRow
-           ),
-           
-         ) # END second fluidRow
+         
+         # Compare countries button ---- 
+         column(width = 2,
+                actionButton(
+                  "explore_map",
+                  tagList(
+                    icon("globe", style = "margin-right: 8px;"),
+                    "Compare Countries"
+                  ),
+                  class = "btn-primary btn-lg"
+                )
+         ),
+         
+), # END first fluidRow
+
+# Second Row with ggplot ----
+fluidRow(
+  column(width = 12,
+         div(style = "background-color: #053762; padding: 10px; height: 60vh; min-height: 300px;",
+             plotOutput("example_barplot", height = "60vh", fill = TRUE) |> 
+               withSpinner(type = 4, color = '#08C4E5')
+         )
+  )
+)
+  
          
 ), # END tabPanel (Seafood Emissions Explorer Page)
 

@@ -7,14 +7,7 @@
 
 **Link to dashboard:** [https://emlab-ucsb.shinyapps.io/emissions-dashboard/](https://emlab-ucsb.shinyapps.io/emissions-dashboard/)
 
-**Client:** [EmLab](https://github.com/emlab-ucsb)
-
-**Authors:**
-[Carmen Hoyt](https://github.com/ceh58)
-[Joshua Mull](https://github.com/llumj)
-[Nicole Pepper](https://github.com/nicolelpepper)
-[Stephen Carrol](https://github.com/stephenccodes)
-
+## About this repository:
 This repository stores files for the interactive Seafood Emissions Dashboard that visualizes emissions related to global fishing fleets. It is a Shiny App Dashboard designed in R Studio. This app is designed in partnership with Global Fishing Watch (GFW) and the Environmental Markets Lab (EmLab). The app contains two primary tools:
 1) **Fishing Vessel Emissions Map** An interactive web map (designed using Mapbox {mapdeck}) that allows users to visualize the global distribution of both AIS-broadcasting and non-broadcasting fishing vessel emissions.
 2) **Seafood Emissions Explorer** An interactive app page that allows users to visualize a variety of plots including emissions per unit catch by 
@@ -53,4 +46,10 @@ emissions-dashboard
 
 *** Data files were not pushed to github
 ```
+
+**Authors:**
+- Carmen Hoyt (https://github.com/ceh58)
+- Joshua Mull (https://github.com/llumj)
+- Nicole Pepper(https://github.com/nicolelpepper)
+- Stephen Carrol (https://github.com/stephenccodes)
 

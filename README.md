@@ -15,10 +15,3 @@ This repository stores files for the interactive Seafood Emissions Dashboard tha
 ** Content Overview **
 A brief walkthrough of the directory and file contents
 
-**File Structure**
-├── data/
-│   ├── raw/
-│   ├── processed/
-├── notebooks/
-├── src/
-└── README.md

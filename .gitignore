@@ -5,6 +5,7 @@
 
 # data
 /data/
+/data-raw/
 
 # config file storing tokens
 config.R

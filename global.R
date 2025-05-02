@@ -5,6 +5,8 @@
 
 # ---- Source config file storing tokens ----
 source("config.R")
+sf::sf_use_s2(FALSE)
+
 
 # ---- Load libraries ----
 library(shiny)
@@ -43,9 +45,11 @@ country_emissions <- readRDS("data/country_emissions.rds") |>
 
 # Load background data
 fao_regions <- st_read(here::here("data/fao_region_shapefile","World_Fao_Zones.shp")) |>
-  st_transform(4326)
+  st_transform(4326) |>
+  st_make_valid()
 
-fao_borders <- st_cast(fao_regions, "MULTILINESTRING")
+fao_borders <- st_cast(fao_regions, "MULTILINESTRING") |>
+  st_make_valid()
 
 # Color palette for FAO zones
 m <- grDevices::colorRamp(c("#DA8D03"))( (1:256)/256 )

@@ -104,7 +104,7 @@ server <- function(input, output, session) {
       }
       if (input$show_non_broadcasting) {
         output$total_non_broadcasting <- renderText({
-          nb_emissions <- readRDS("data/nb_emissions.rds") %>% filter(emissions_co2_mt >= 200, year == input$year_slider_input)
+          nb_emissions <- readRDS("data/nb_emissions.rds") |> filter(emissions_co2_mt >= 200, year == input$year_slider_input)
           total <- sum(nb_emissions$emissions_co2_mt, na.rm = TRUE)
           paste0(format(round(total, 2), big.mark = ","), " Mt CO2")
         })
@@ -207,7 +207,10 @@ server <- function(input, output, session) {
   
   # ---- Calculate total emissions ----
   broadcasting_total <- reactive({
-    req(input$show_all_countries, input$year_slider_input)
+    req(input$show_all_countries,
+        input$year_slider_input)
+    
+    
     if (!is.null(input$country_select) && input$country_select != "") {
       filtered <- country_filtered()
       sum(filtered$emissions_co2_mt, na.rm = TRUE)

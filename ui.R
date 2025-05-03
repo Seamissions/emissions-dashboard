@@ -27,56 +27,118 @@ ui <- navbarPage(
              h4("This is where the short overview goes.")
            ), # END hero section
            
-           # ---- Teaser Sections ----
-           div(style = "margin-top: 10px;",
-               fluidRow(
-                 # Emissions Map Teaser
-                 column(
-                   width = 6,
+           # ---- Teaser Sections ----------------------------------------------
+           div(
+             style = "margin-top: 10px;",
+             fluidRow(
+               
+               # Emissions Map Teaser ------------------------------------------
+               column(
+                 width = 6,
+                 div(
+                   style = "height: 300px;
+                 background-color:#031021;
+                 border-radius: 8px;
+                 overflow: hidden;
+                 display: flex;
+                 flex-direction: column;
+                 justify-content: space-between;
+                 color: white;
+                 font-family: sans-serif;",
+                   
+                   # Top half: image + button
                    div(
                      style = "position: relative;
-                     height: 300px;
-                     background-color:#031021;
-                     border-radius: 8px;
-                     overflow: hidden;
-                     margin-bottom: 20px;",
-                     
-                     img(src = "images/map-preview.png",
-                       style = "width: 100%;
-                       height: 100%;
-                       object-fit: cover;
-                       opacity: 0.4;"), # END img
+                   height: 50%;
+                   width: 100%;",
+                     img(
+                       src = "images/map-preview.png",
+                       style = "position: absolute;
+                     top: 0; left: 0;
+                     width: 100%;
+                     height: 100%;
+                     object-fit: cover;
+                     opacity: 0.4;
+                     z-index: 1;"
+                     ),
                      div(
-                       style = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);",
-                       actionButton("explore_map", "Fishing Vessel Emissions Map", class = "btn-primary btn-lg")
+                       style = "position: relative;
+                     z-index: 2;
+                     height: 100%;
+                     display: flex;
+                     justify-content: center;
+                     align-items: center;",
+                       actionButton("explore_map", "Explore the Map", class = "btn-primary btn-lg")
                      )
-                   )
-                 ),
-                 # Seafood Emission Explorer Tool Overview
-                 column(
-                   width = 6,
+                   ), # END top half
+                   
+                   # Bottom half: description
                    div(
-                     style = "position: relative; height: 300px; background-color: #031021; border-radius: 8px; overflow: hidden; margin-bottom: 20px;",
-                    
-                      img(src = "images/map-preview.png",
-                       style = "width: 100%;
-                       height: 100%;
-                       object-fit: cover;
-                       opacity: 0.4;"), # END img
-                     
-                     div(style = "position: absolute;
-                         top: 50%;
-                         left: 50%;
-                         transform: translate(-50%, -50%);",
-                         
-                       actionButton("explore_seafood", "Seafood Emissions Explorer", class = "btn-primary btn-lg")) # END divider
-                   )
-                 )
-               )
-           ) # END teaser sections
+                     style = "padding: 12px; height: 50%;",
+                     tags$p("Explore where fishing activity is most concentrated.",
+                            style = "margin: 0; font-size: 16px; color: white;")
+                   ) # END bottom half
+                 ) # END outer div
+               ), # END column (Emissions Map Teaser)
+               
+               # Seafood Emission Explorer Tool Preview ------------------------
+               column(
+                 width = 6,
+                 div(
+                   style = "height: 300px;
+                 background-color:#031021;
+                 border-radius: 8px;
+                 overflow: hidden;
+                 display: flex;
+                 flex-direction: column;
+                 justify-content: space-between;
+                 color: white;
+                 font-family: sans-serif;",
+                   
+                   # Top half: image + button
+                   div(
+                     style = "position: relative;
+                   height: 50%;
+                   width: 100%;",
+                     img(
+                       src = "images/map-preview.png",
+                       style = "position: absolute;
+                     top: 0; left: 0;
+                     width: 100%;
+                     height: 100%;
+                     object-fit: cover;
+                     opacity: 0.4;
+                     z-index: 1;"
+                     ),
+                     div(
+                       style = "position: relative;
+                     z-index: 2;
+                     height: 100%;
+                     display: flex;
+                     justify-content: center;
+                     align-items: center;",
+                       actionButton("explore_seafood", "Seafood Emissions Explorer", class = "btn-primary btn-lg")
+                     )
+                   ), # END top half
+                   
+                   # Bottom half: description
+                   div(
+                     style = "padding: 12px; height: 50%;",
+                     tags$p("This is where the tool description goes.",
+                            style = "margin: 0; font-size: 16px; color: white;")
+                   ) # END bottom half
+                 ) # END outer div
+               ) # END column (Seafood Explorer Teaser)
+               
+             ) # END fluidRow
+           ) # END div (Teaser Sections)
+           
   ), # END home tab
   
+  # ------------------------------------------------------------------------------------------------------------------
   # ---- Emissions Map Page ------------------------------------------------------------------------------------------
+  # ------------------------------------------------------------------------------------------------------------------
+  
   tabPanel("Emissions Map",
            
            useShinyjs(), # Initialize shinyjs
@@ -209,8 +271,11 @@ ui <- navbarPage(
                ) # END absolutePanel - year
            ) # END map container
   ), # END emissions map tab
-  
+
+# ------------------------------------------------------------------------------------------------------------------
 # ---- Seafood Emissions Explorer Page -----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------------------
+
 tabPanel("Seafood Emissions Explorer",
          
          # Title
@@ -225,7 +290,7 @@ tabPanel("Seafood Emissions Explorer",
                 actionButton(
                   "explore_map",
                   tagList(
-                    icon("globe", style = "margin-right: 8px;"),
+                    icon("fish", style = "margin-right: 8px;"),
                     "Compare Species"
                   ),
                   class = "btn-primary btn-lg"
@@ -260,9 +325,11 @@ fluidRow(
          
 ), # END tabPanel (Seafood Emissions Explorer Page)
 
+# ------------------------------------------------------------------------------------------------------------------
+# ---- About Page --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------------------
 
-  # ---- About Page ----
-  tabPanel("About",
+  tabPanel("Methods",
            # ---- Hero Section ----
            div(
              style = "
@@ -276,7 +343,7 @@ fluidRow(
              h1("Seamissions Global Fishing Emissions Explorer"),
              h4("Connecting data to action for sustainable oceans.")
            ) # END hero section
-  ) # END tabPanel (About Page)
+  ) # END tabPanel (Methods Page)
 
 ) # END navbarPage
 

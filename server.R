@@ -20,6 +20,8 @@ server <- function(input, output, session) {
   # ---- Define color palettes -------------------------------------------------
   blue_palette <- colorRamp(c("#20404F", "#4C9EA6", "#67D6E0", "#76F3FF", "#A9F2FF", "#DAF3FF", "white"))((1:256) / 256)
   pink_palette <- colorRamp(c("#805F14","#CC9921", "#F9B928", "#FFD15F", "#FFECB2","#FFF9D5"))((1:256) / 256)
+  pink_palette <- colorRamp(c("#2A782A","#34CF46","#41FF58", "#92FF98","#C0FFC7","#ECFFE5"))((1:256) / 256)
+  pink_palette <- colorRamp(c("#9E3E74","#D4539C","#FF63BB", "#FF9AD6","#FFD9D7","#FFF9F9"))((1:256) / 256)
   
   
   # ---- Emissions map ---------------------------------------------------------
@@ -140,7 +142,7 @@ server <- function(input, output, session) {
         transform: translate(-50%, -50%);
         z-index: 1001;
         color: #08C4E5;",
-        icon("spinner", class = "fa-spin", style = "font-size: 40px; margin-bottom: 10px;"),
+        icon("spinner", class = "fa-spin", style = "font-size: 60px; margin-bottom: 10px;"),
       )
     }
   })

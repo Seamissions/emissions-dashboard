@@ -76,80 +76,16 @@ ui <- navbarPage(
            ) # END teaser sections
   ), # END home tab
   
-  # ---- Emissions Map Page ----------------------------------------------------
+  # ---- Emissions Map Page ------------------------------------------------------------------------------------------
   tabPanel("Emissions Map",
            
            useShinyjs(), # Initialize shinyjs
 
-           # --- Top row with title and calculations ----
-           
-           # Title
-           fluidRow(
-             
-             style = "margin-bottom: 10px;",
-             
-             column(width = 8,
-                    # Title
-                    tags$h3(style = "font-size: 24px; font-weight: bold; color: white; margin-bottom: 20px;", 
-                            "Fishing Vessel Emissions Map")
-             ),
-             
-             column(width = 2,
-                    div(
-                      style = "background-color: rgba(255, 255, 255, 0.9); padding: 8px 10px; border-radius: 8px; 
-             display: flex; justify-content: space-between; align-items: center; height: auto;",
-                      
-                      # Icon faded (left)
-                      tags$div(
-                        icon("smog"),
-                        style = "font-size: 30px; color: rgba(5, 55, 98, 0.2); margin-right: 8px;"
-                      ),
-                      
-                      # Number and label (right)
-                      tags$div(style = "text-align: right; line-height: 1.1;",
-                               tags$div(
-                                 textOutput("total_broadcasting"),
-                                 style = "font-size: 20px; font-weight: bold; color: #053762; margin-bottom: 2px;"), # END total emissions calculation
-                               tags$div(
-                                 "Total Broadcasting Emissions",
-                                 style = "font-size: 11px; font-weight: bold; color: #053762;") # END title for value box
-                      )# END number and text for value box
-                    
-                    )
-             ),
-             
-             # Total non-broadcasting emissions box (matched style)
-             column(width = 2,
-                    div(
-                      style = "background-color: rgba(255, 255, 255, 0.9); padding: 8px 10px; border-radius: 8px; 
-               display: flex; justify-content: space-between; align-items: center; height: auto;",
-                      
-                      # Icon faded (left)
-                      tags$div(
-                        icon("ship"),
-                        style = "font-size: 30px; color: rgba(125, 54, 80, 0.2); margin-right: 8px;"  # softer pink tone
-                      ),
-                      
-                      # Number and label (right)
-                      tags$div(style = "text-align: right; line-height: 1.1;",
-                               tags$div(
-                                 textOutput("total_non_broadcasting"),
-                                 style = "font-size: 20px; font-weight: bold; color: #7D3650; margin-bottom: 2px;"
-                               ),
-                               tags$div(
-                                 "Total Non-Broadcasting Emissions",
-                                 style = "font-size: 11px; font-weight: bold; color: #7D3650;"
-                               )
-                      )
-  
-                    )
-             )
-           ), # END fluidRow
            
            # ---- Map Container ----
            div(style = "position: relative; height: 90vh;",
                
-               # ---- Sidebar Panel ----
+               # ---- Sidebar Panel --------------------------------------------
                div(id = "sidebar-panel",
                    style = "position: absolute;
                  top: 0;
@@ -166,14 +102,19 @@ ui <- navbarPage(
                                 label = NULL,
                                 icon = icon("angle-left", style = "font-size: 20px;"),
                                 style = "position: absolute;
-                   top: 40%;
-                   right: -40px;
-                   width: 0%;
-                   background-color: #f9f9f9;
-                   border: none;"
-                   ),
+                                         top: 40%;
+                                         right: -40px;
+                                         width: 0%;
+                                         background-color: #f9f9f9;
+                                         border: none;"),
                    
-                   # ---- Sidebar Controls ----
+                   # Map title
+                   tags$h3(style = "font-size: 24px; font-weight: bold; color: #20404F; margin-bottom: 20px;", 
+                           "Fishing Vessel Emissions"), 
+                   
+                   # ---- Sidebar Layer Controls -------------------------------
+                   
+                   # Controls for broadcasting emissions data
                    materialSwitch("show_all_countries",
                                   label = tags$div(style = "font-size: 18px;
                                                    font-weight: bold;",
@@ -186,7 +127,9 @@ ui <- navbarPage(
                                 height: 20px;
                                 width: 70%;
                                 border: 1px solid #ccc;"),
-                       tags$p("Low to High Emissions")),# END div
+                       tags$div(
+                         textOutput("total_broadcasting"),
+                         style = "font-size: 15px; font-weight: bold; color: #053762; margin-bottom: 10px;")),# END div
                        
                        pickerInput("country_select",
                                    "Filter To A Country (Flag)",
@@ -212,7 +155,9 @@ ui <- navbarPage(
                                        width: 70%;
                                        border: 1px solid #ccc;"),
                               
-                              tags$p("Low to High Emissions")) # END divider
+                              tags$div(
+                                textOutput("total_non_broadcasting"),
+                                style = "font-size: 15px; font-weight: bold; color: #053762; margin-bottom: 10px;")) # END div
                           ), # END hidden
                    
                    tags$hr(),
@@ -239,18 +184,18 @@ ui <- navbarPage(
                ),
                
                
-               # ---- Emissions Map ----
+               # ---- Emissions Map --------------------------------------------
                mapdeckOutput("emissions_map", height = "100%"),
                uiOutput("loading_ui"),
                
-               # ---- Year Slider ----
+                # ---- Year Slider ----
                absolutePanel(bottom = 30,
-                             right = 5,
-                             left = "60%",
+                             right = 8,
                              style = "z-index: 1000;
-                 background-color: rgba(255,255,255,0.8);
-                 padding: 8px;
-                 border-radius: 8px;",
+                                    background-color: rgba(255,255,255,0.8);
+                                    padding: 8px;
+                                    border-radius: 8px;
+                                    width: 20%;",
                              sliderInput("year_slider_input",
                                          "Select Year",
                                          min = year_min,
@@ -265,7 +210,7 @@ ui <- navbarPage(
            ) # END map container
   ), # END emissions map tab
   
-# ---- Seafood Emissions Explorer Page ----
+# ---- Seafood Emissions Explorer Page -----------------------------------------------------------------------------
 tabPanel("Seafood Emissions Explorer",
          
          # Title

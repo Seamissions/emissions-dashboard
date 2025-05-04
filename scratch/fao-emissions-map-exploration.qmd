@@ -13,11 +13,16 @@ library(knitr)
 library(kableExtra)
 library(plotly)
 library(ggiraph)
+library(ggflags) # circle flags - use install.packages("devtools") then devtools::install_github("rensa/ggflags") if needed
+library(ggimage) # rectangle flags
+library(countrycode)
+library(ggflags)
+library(dplyr)
 ```
 
 ```{r}
 # load library
-fao_emissions <- read_csv(here::here("MEDS/capstone/emissions-dashboard/data/full_emissions_fao_species.csv"))
+fao_emissions <- read_csv("/Users/npepper/MEDS/capstone/emissions-dashboard/data-raw/full_emissions_fao_species.csv")
 ```
 
 ```{r}
@@ -37,11 +42,22 @@ top_species <- fao_emissions |>
 
 ```{r}
 # Calc top major groups
-top_groups <- fao_emissions |>
+top_major_groups <- fao_emissions |>
   group_by(major_group) |>
   summarize(sum_emissions = sum(total_co2_mt, na.rm = TRUE)) |>
   arrange(desc(sum_emissions)) |>
   head(20)
+```
+
+
+```{r}
+# Calc top isscap
+top_iss_groups <- fao_emissions |>
+  group_by(isscaap_group) |>
+  filter(isscaap_group != "no_fao_species_catch_data") |>
+  summarize(sum_emissions = sum(total_co2_mt, na.rm = TRUE)) |>
+  arrange(desc(sum_emissions)) |>
+  head(10)
 ```
 
 ```{r}
@@ -52,95 +68,64 @@ top_flags <- fao_emissions |>
   arrange(desc(sum_emissions))
 ```
 
+
+### Plot top countries
+I dropped NA and UNK
+Question: Should we set NA to UNK
+
+NA 162387172
+UNK 26566516
+
 ```{r}
-# ---- Seafood explorer data ----
-
-# Create the fake data
-df <- data.frame(
-  country = c("China", "USA", "Japan", "Iceland", "Argentina", "Australia"),
-  emissions = c(500, 175, 150, 105, 75, 73)
-)
-
+# Calc top countries
+top_flags <- fao_emissions |>
+  filter(flag != c("UNK", NA)) |>
+  group_by(flag) |>
+  summarize(sum_emissions = sum(total_co2_mt, na.rm = TRUE)) |>
+  arrange(desc(sum_emissions)) |>
+  head(10) |>
+  mutate(
+    iso2 = tolower(countrycode(flag, origin = "iso3c", destination = "iso2c")), # add column for iso2 from iso3
+    country_name = countrycode(flag, origin = "iso3c", destination = "country.name") # add column for country name from iso3
+  )
 ```
 
-```{r}
-# Create the ggplot
-  country_plot <- ggplot() +
-    geom_bar(data = df,
-             aes(x = emissions, y = reorder(country, emissions)),
-             stat = 'identity',
-             fill = "#08C4E5") +
-    labs(x = "Emissions") +
-    theme_void() +
-    theme(
-      legend.position = "none",
-      axis.title.x = element_text(color = "white", family = "Roboto", face = "bold", size = 18),
-      axis.text.y = element_text(color = "white", family = "Roboto", face = "bold", size = 14),
-      panel.background = element_rect(fill = "#053762", color = NA),
-      plot.background = element_rect(fill = "#053762", color = NA)
-    )
-  
-  # Convert ggplot to plotly
-  ggplotly(country_plot, tooltip = "text")
-  
-  
-```
+
+
 
 ```{r}
-library(ggiraph)
+library(scales)  # for comma formatting
 
-# ---- Seafood explorer data ----
-df <- data.frame(
-  country = c("China", "USA", "Japan", "Iceland", "Argentina", "Australia"),
-  emissions = c(500, 175, 150, 105, 75, 73))
-
-country_plot_2 <- ggplot() +
-  geom_bar_interactive(
-    data = df,
+ggplot(data = top_flags) +
+  geom_bar(
+    aes(x = sum_emissions, y = reorder(flag_label, sum_emissions)),
+    stat = "identity",
+    fill = "#08C4E5"
+  ) +
+  geom_flag(
+    aes(country = country, y = reorder(flag_label, sum_emissions), x = 0),
+    size = 15
+  ) +
+  geom_text(
     aes(
-      x = emissions,
-      y = reorder(country, emissions),
-      tooltip = paste0(country, ": ", emissions, " emissions"),
-      data_id = country),
-    stat = 'identity',
-    fill = "#08C4E5") +
+      x = sum_emissions + 0.09 * max(sum_emissions, na.rm = TRUE),  # offset to the right
+      y = reorder(flag_label, sum_emissions),
+      label = comma(sum_emissions)
+    ),
+    color = "white",
+    family = "Roboto",
+    fontface = "bold",
+    size = 4
+  ) +
   labs(x = "Emissions") +
   theme_void() +
   theme(
     legend.position = "none",
-    axis.title.x = element_text(color = "white", face = "bold", size = 18),
-    axis.text.y = element_text(color = "white", face = "bold", size = 14),
+    axis.title.x = element_text(color = "white", family = "Roboto", face = "bold", size = 18),
+    axis.text.y = element_text(color = "white", family = "Roboto", face = "bold", size = 14),
     panel.background = element_rect(fill = "#053762", color = NA),
-    plot.background = element_rect(fill = "#053762", color = NA))
-
-
-# ---- Render as interactive plot ----
-girafe(ggobj = country_plot_2,
-        options = list(
-    opts_hover(css = "filter: drop-shadow(0px 0px 6px #333333);"),
-    opts_hover_inv(css = "opacity:0.3;"),
-    opts_tooltip(css = "background-color: white;
-                 color: #053762;
-                 font-weight: bold;
-                 border: 1px solid #08C4E5;
-                 padding: 6px;
-                 border-radius: 6px;")
-  )
-)
+    plot.background = element_rect(fill = "#053762", color = NA)
+  ) +
+  expand_limits(x = -0.05 * max(top_flags$sum_emissions, na.rm = TRUE))
 
 ```
-
-```{r}
-country_plot_2
-```
-
-
-```{r}
-# Test total for emissions
-arg_emissions <- country_emissions |>
-  filter(flag == "ARG",
-         year == 2016) |>
-   summarise(total_emissions = sum(emissions_co2_mt, na.rm = TRUE))
-
-```
-

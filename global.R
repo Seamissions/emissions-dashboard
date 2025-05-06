@@ -52,10 +52,8 @@ fao_borders <- st_cast(fao_regions, "MULTILINESTRING") |>
 m <- grDevices::colorRamp(c("#DA8D03"))( (1:256)/256 )
 
 # Precompute values used in UI
-country_flags <- sort(unique(country_emissions$flag))
-year_min <- min(country_emissions$year, na.rm = TRUE)
-year_max <- max(country_emissions$year, na.rm = TRUE)
-
+year_min <- min(broadcasting_emissions$year, na.rm = TRUE)
+year_max <- max(broadcasting_emissions$year, na.rm = TRUE)
 
 # ---- Seafood explorer data ----
 top_flags <- readRDS("data/top_flags.rds") |>

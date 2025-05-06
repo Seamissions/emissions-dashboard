@@ -16,16 +16,14 @@ ui <- navbarPage(
            
            # ---- Hero Section ----
            div(
-             style = "
-        background-size: cover;
-        background-position: center;
-        padding: 100px 0;
-        text-align: center;
-        color: #e8fffd;
-      ",
+             style = "background-size: cover;
+                     background-position: center;
+                     padding: 100px 0;
+                     text-align: center;
+                     color: #e8fffd;",
              h1("Seamissions Global Fishing Emissions Explorer"),
              h4("This is where the short overview goes.")
-           ), # END hero section
+             ), # END div (hero section)
            
            # ---- Teaser Sections ----------------------------------------------
            div(style = "margin-top: 10px;",
@@ -170,24 +168,30 @@ ui <- navbarPage(
                                   status = "info"),
                    
                    hidden(div(id = "broadcasting_legend",
-                       tags$div(style = "background: linear-gradient(to right,#015661, #03C7E8);
-                                        height: 20px;
-                                        width: 70%;
-                                        border: 1px solid #ccc;"),
-                       
-                       tags$div(textOutput("total_broadcasting"),
-                                style = "font-size: 15px; font-weight: bold; color: #053762; margin-bottom: 10px;")),# END div
-                       
-                       pickerInput(inputId = "country_select_input",
-                                   label = "Select a country",
-                                   choices = c("All Countries", sort(unique(broadcasting_emissions$country_name[broadcasting_emissions$country_name != "All Countries"]))),
-                                   selected = "All Countries",
-                                   options = list(`live-search` = TRUE,
-                                                  `noneSelectedText` = "All Countries")
-                                   ) # END pickerInput
-                       
+                              tags$div(style = "background: linear-gradient(to right,#015661, #03C7E8);
+           height: 20px;
+           width: 70%;
+           border: 1px solid #ccc;"),
+                              
+                              tags$div(textOutput("total_broadcasting"),
+                                       style = "font-size: 15px; font-weight: bold; color: #053762; margin-bottom: 10px;"),
+                              
+                              pickerInput(inputId = "country_select_input",
+                                          label = "Select a country",
+                                          choices = c("All Countries", sort(unique(broadcasting_emissions$country_name[broadcasting_emissions$country_name != "All Countries"]))),
+                                          selected = "All Countries",
+                                          options = list(`live-search` = TRUE,
+                                                         `noneSelectedText` = "All Countries")), # END pickerInput (country select)
+                              
+                              tags$div(
+                                textOutput("no_data_warning"),
+                                style = "color: #81818F;
+                                        margin-top: 10px;"))# END div (no data warning text)
+                          
+                          
+                          ), # END hidden (broadcasting emissions legend and text)
                    
-                   ), # END hidden
+               
                    
                    # Horizontal separator
                    tags$hr(),

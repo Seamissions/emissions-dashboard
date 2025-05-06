@@ -152,13 +152,11 @@ country_filtered <- reactive({
   # ---- All countries & country emissions layers ----
   observe({
     req(input$show_broadcasting_input)
-    mapdeck_update(map_id = "emissions_map") %>%
-      clear_polygon(layer_id = "all_countries") %>%
-      clear_polygon(layer_id = "country_layer")
+    loading(TRUE)
     
     if (is.null(input$country_select_input) || input$country_select_input == "") {
-      loading(TRUE)
       mapdeck_update(map_id = "emissions_map") %>%
+        clear_polygon(layer_id = "country_layer") %>%
         add_polygon(
           data = broadcasting_emissions %>% filter(country_name == "All Countries", year == input$year_slider_input),
           layer_id = "all_countries",
@@ -168,12 +166,11 @@ country_filtered <- reactive({
           tooltip = "emissions_co2_mt",
           update_view = FALSE
         )
-      later::later(function() { loading(FALSE) }, delay = 0.2)
     } else {
       filtered <- country_filtered()
       if (nrow(filtered) > 0) {
-        loading(TRUE)
         mapdeck_update(map_id = "emissions_map") %>%
+          clear_polygon(layer_id = "all_countries") %>%
           add_polygon(
             data = filtered,
             layer_id = "country_layer",
@@ -183,10 +180,18 @@ country_filtered <- reactive({
             tooltip = "emissions_co2_mt",
             update_view = FALSE
           )
-        later::later(function() { loading(FALSE) }, delay = 0.2)
+      } else {
+        # Clear both layers and show no data message
+        mapdeck_update(map_id = "emissions_map") %>%
+          clear_polygon(layer_id = "all_countries") %>%
+          clear_polygon(layer_id = "country_layer")
       }
     }
+    
+    later::later(function() { loading(FALSE) }, delay = 0.2)
   })
+  
+  
   
   # ---- Non-broadcasting emissions layer ----
   observe({
@@ -233,6 +238,15 @@ country_filtered <- reactive({
     }
   })
   
+  # ---- Add no data warning ----
+  output$no_data_warning <- renderText({
+    filtered <- country_filtered()
+    if (nrow(filtered) == 0) {
+      "⚠️ This country does not have emissions for the selected year. Please pick another country or year."
+    } else {
+      ""  # No message if data is present
+    }
+  })
   
   
   # ---- Initialize emissions map ----

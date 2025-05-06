@@ -282,6 +282,7 @@ tabPanel("Seafood Emissions Explorer",
          tags$h3(style = "font-size: 24px; font-weight: bold; color: #f9f9f9; margin-bottom: 20px;", 
                  "Seafood Emissions Explorer"), 
          
+         
          # First Row ----
          fluidRow(
            
@@ -310,18 +311,44 @@ tabPanel("Seafood Emissions Explorer",
                 )
          ),
          
+         
 ), # END first fluidRow
 
 # Second Row with ggplot ----
 fluidRow(
   column(width = 12,
-         div(style = "background-color: #053762; padding: 10px; height: 60vh; min-height: 300px;",
+         div(style = "background-color: #053762; height: 60vh; min-height: 300px;  margin-top: 30px;  margin-bottom: 30px;  margin-left: 20px; margin-right: 20px;",
              plotOutput("example_barplot", height = "60vh", fill = TRUE) |> 
-               withSpinner(type = 4, color = '#08C4E5')
-         )
+               withSpinner(type = 4, color = '#08C4E5') ) # END div
+  ) # END column
+), # END plot fluid Row
+
+fluidRow(
+  column(
+    width = 12,
+    div(
+      style = "display: flex; justify-content: flex-end; align-items: center; padding-right: 20px; margin-top: 10px;",
+      
+      tags$div("Total Emissions", 
+               style = "margin-right: 20px; color: white; font-weight: 500; font-size: 14px;"),
+      
+      div(
+        style = "display: inline-block;",
+        materialSwitch(
+          inputId = "per_unit_plot_toggle",
+          label = NULL,
+          status = "info",
+          right = TRUE,
+          inline = TRUE
+        )
+      ),
+      
+      tags$div("Per Unit Catch", 
+               style = "margin-left: 8px; margin-right: 100px; color: white; font-weight: 500; font-size: 14px;")
+    )
   )
 )
-  
+# END unit toggle fluidRow
          
 ), # END tabPanel (Seafood Emissions Explorer Page)
 

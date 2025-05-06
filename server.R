@@ -277,28 +277,59 @@ server <- function(input, output, session) {
   # END Emissions Map
   
   output$example_barplot <- renderPlot({
-    # Fake data
-    df <- data.frame(
-      country = c("China", "USA", "Japan","Iceland","Argentina", "Australia"),
-      emissions = c(500, 175, 150, 105, 75, 73)
-    )
     
-    # Simple bar plot
-    ggplot(df, aes(x = emissions, y = reorder(country, emissions))) +
-      geom_bar(stat = "identity", fill = "#08C4E5") +
-      labs(x = "Emissions", y = "") +
+    show_per_unit <- input$per_unit_plot_toggle
+    
+    x_var <- if (isTRUE(show_per_unit)) {
+      top_flags$emissions_per_ton
+    } else {
+      top_flags$sum_emissions
+    }
+    
+    x_label <- if (isTRUE(show_per_unit)) {
+      paste0(comma(top_flags$emissions_per_ton), " MT")
+    } else {
+      paste0(comma(top_flags$sum_emissions), " MT")
+    }
+    
+    max_x <- max(x_var, na.rm = TRUE)
+    
+    ggplot(data = top_flags) +
+      geom_col(
+        aes(x = x_var, y = reorder(country_name, sum_emissions)),
+        fill = "#08C4E5") +
+      geom_flag(
+        aes(x = 0, y = reorder(country_name, sum_emissions), country = iso2),
+        size = 15) +
+      geom_text(
+        aes(x = x_var + 0.09 * max_x,
+            y = reorder(country_name, sum_emissions),
+            label = x_label),
+        color = "white",
+     #   fontface = "bold",
+        size = 7) +
+      
+      labs(title = "Annual CO₂ Emissions from Top Fishing Fleets") +
+      
       theme_void() +
-      theme(legend.position = "none",
-            axis.title = element_text(color = "white",
-                                      family = "Roboto",
-                                      face = "bold",
-                                      size = 18),
-            axis.text = element_text(color = "white",
-                                     family = "Roboto",
-                                     face = "bold",
-                                     size = 14),
-            panel.background = element_rect(fill = "#053762", color = NA),
-            plot.background = element_rect(fill = "#053762", color = NA))
+      theme(
+        legend.position = "none",
+        title = element_text(color = "white",
+                             family = "Roboto",
+                             face = "bold",
+                             size = 24),
+        axis.title.x = element_blank(),
+        axis.text.y = element_text(color = "white",
+                                   size = 22,
+                                   hjust = 1,
+                                   margin = margin(r = -5)),
+        panel.background = element_rect(fill = "#053762", color = NA),
+        plot.background = element_rect(fill = "#053762", color = NA)
+      ) +
+      expand_limits(
+        x = c(-0.05 * max_x, 1.2 * max_x)
+      )
+  
   })
   
   

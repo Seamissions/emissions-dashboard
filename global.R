@@ -29,8 +29,11 @@ library(sf)
 library(viridis)
 library(RColorBrewer) # for colors
 library(bslib) # for theme colors
+library(scales)  # for commas in labels
 library(rsconnect)
 library(pryr)
+library(tidyverse)
+library(ggflags)
 
 # ---- Load & prep data ---------------------------------------------------------------
 
@@ -50,6 +53,10 @@ fao_regions <- st_read(here::here("data/fao_region_shapefile","World_Fao_Zones.s
 
 fao_borders <- st_cast(fao_regions, "MULTILINESTRING") |>
   st_make_valid()
+
+top_flags <- readRDS("data/top_flags.rds") |>
+  filter(year == 2016) |>
+  head(10)
 
 # Color palette for FAO zones
 m <- grDevices::colorRamp(c("#DA8D03"))( (1:256)/256 )

@@ -18,6 +18,7 @@ library(ggimage) # rectangle flags
 library(countrycode)
 library(ggflags)
 library(dplyr)
+library(gganimate)
 ```
 
 ```{r}
@@ -69,6 +70,23 @@ top_flags <- fao_emissions |>
 ```
 
 
+```{r}
+top_flags <- fao_emissions |>
+  filter(!flag %in% c("UNK", NA),
+         year == 2024) |>
+  group_by(flag) |>
+  summarize(sum_emissions = sum(total_co2_mt, na.rm = TRUE)) |>
+  arrange(desc(sum_emissions)) |>
+  slice_head(n = 10) |>
+  mutate(
+    iso2 = tolower(countrycode(flag, origin = "iso3c", destination = "iso2c")),
+    country_name = countrycode(flag, origin = "iso3c", destination = "country.name"))
+
+write_rds(top_flags, "top_flags.rds")
+
+```
+
+
 ### Plot top countries
 I dropped NA and UNK
 Question: Should we set NA to UNK
@@ -77,47 +95,94 @@ NA 162387172
 UNK 26566516
 
 ```{r}
-# Calc top countries
+# ---- Step 1: Calculate Top 10 Countries by Emissions ----
 top_flags <- fao_emissions |>
-  filter(flag != c("UNK", NA)) |>
+  filter(!flag %in% c("UNK", NA),
+         year == 2024) |>
   group_by(flag) |>
   summarize(sum_emissions = sum(total_co2_mt, na.rm = TRUE)) |>
   arrange(desc(sum_emissions)) |>
-  head(10) |>
+  slice_head(n = 10) |>
   mutate(
-    iso2 = tolower(countrycode(flag, origin = "iso3c", destination = "iso2c")), # add column for iso2 from iso3
-    country_name = countrycode(flag, origin = "iso3c", destination = "country.name") # add column for country name from iso3
-  )
-```
+    iso2 = tolower(countrycode(flag, origin = "iso3c", destination = "iso2c")),
+    country_name = countrycode(flag, origin = "iso3c", destination = "country.name"))
 
-
-
-
-```{r}
-library(scales)  # for comma formatting
-
+# ---- Step 2: Plot ----
 ggplot(data = top_flags) +
-  geom_bar(
-    aes(x = sum_emissions, y = reorder(flag_label, sum_emissions)),
-    stat = "identity",
+  geom_col(
+    aes(x = sum_emissions, y = reorder(country_name, sum_emissions)),
     fill = "#08C4E5"
   ) +
   geom_flag(
-    aes(country = country, y = reorder(flag_label, sum_emissions), x = 0),
+    aes(x = 0, y = reorder(country_name, sum_emissions), country = iso2),
+    size = 15
+  ) +
+geom_text(
+  aes(x = sum_emissions + 0.09 * max(sum_emissions, na.rm = TRUE),
+      y = reorder(country_name, sum_emissions),
+      label = paste0(comma(sum_emissions), " MT")),
+  color = "white",
+  family = "Roboto",
+  fontface = "bold",
+  size = 4) +
+ theme_void() +
+theme(
+  legend.position = "none",
+  axis.title.x = element_blank(),
+  axis.text.y = element_text(color = "white",
+                             family = "Roboto",
+                             face = "bold",
+                             size = 14,
+                             hjust = 1,
+                             margin = margin(r = -10)),
+  panel.background = element_rect(fill = "#053762", color = NA),
+  plot.background = element_rect(fill = "#053762", color = NA)) +
+
+  expand_limits(
+    x = c(-0.05 * max(top_flags$sum_emissions),
+          1.2 * max(top_flags$sum_emissions))
+  )
+```
+
+```{r}
+# ---- Step 1: Calculate Emissions per Unit Catch ----
+top_flags_eiu <- fao_emissions |>
+  filter(!flag %in% c("UNK", NA)) |>
+  group_by(flag) |>
+  summarize(
+    sum_emissions = sum(total_co2_mt, na.rm = TRUE),
+    sum_catch = sum(country_total_tons_by_species, na.rm = TRUE),
+    emissions_per_ton = sum_emissions / sum_catch
+  ) |>
+  arrange(desc(emissions_per_ton)) |>
+  slice_head(n = 10) |>
+  mutate(
+    iso2 = tolower(countrycode(flag, origin = "iso3c", destination = "iso2c")),
+    country_name = countrycode(flag, origin = "iso3c", destination = "country.name")
+  )
+
+# ---- Step 2: Plot ----
+ggplot(data = top_flags_eiu) +
+  geom_col(
+    aes(x = emissions_per_ton, y = reorder(country_name, emissions_per_ton)),
+    fill = "#08C4E5"
+  ) +
+  geom_flag(
+    aes(x = 0, y = reorder(country_name, emissions_per_ton), country = iso2),
     size = 15
   ) +
   geom_text(
     aes(
-      x = sum_emissions + 0.09 * max(sum_emissions, na.rm = TRUE),  # offset to the right
-      y = reorder(flag_label, sum_emissions),
-      label = comma(sum_emissions)
+      x = emissions_per_ton + 0.09 * max(emissions_per_ton, na.rm = TRUE),
+      y = reorder(country_name, emissions_per_ton),
+      label = round(emissions_per_ton, 2)
     ),
     color = "white",
     family = "Roboto",
     fontface = "bold",
     size = 4
   ) +
-  labs(x = "Emissions") +
+  labs(x = "Emissions per Ton of Catch (tCO₂/ton)") +
   theme_void() +
   theme(
     legend.position = "none",
@@ -126,6 +191,71 @@ ggplot(data = top_flags) +
     panel.background = element_rect(fill = "#053762", color = NA),
     plot.background = element_rect(fill = "#053762", color = NA)
   ) +
-  expand_limits(x = -0.05 * max(top_flags$sum_emissions, na.rm = TRUE))
-
+  expand_limits(
+    x = c(-0.05 * max(top_flags_eiu$emissions_per_ton),
+          1.2 * max(top_flags_eiu$emissions_per_ton))
+  )
 ```
+
+
+```{r}
+# --- For only significant countries: 
+
+# ---- Step 1: Calculate Emissions per Unit Catch with Filtering ----
+top_flags_eiu <- fao_emissions |>
+  filter(!flag %in% c("UNK", NA)) |>
+  group_by(flag) |>
+  summarize(
+    sum_emissions = sum(total_co2_mt, na.rm = TRUE),
+    sum_catch = sum(country_total_tons_by_species, na.rm = TRUE),
+    emissions_per_ton = sum_emissions / sum_catch
+  ) |>
+  filter(sum_catch > 10000) |>  # filter out tiny catch volumes
+  arrange(desc(emissions_per_ton)) |>
+  slice_head(n = 10) |>
+  mutate(
+    iso2 = tolower(countrycode(flag, origin = "iso3c", destination = "iso2c")),
+    country_name = countrycode(flag, origin = "iso3c", destination = "country.name")
+  )
+
+
+# ---- Step 2: Plot ----
+ggplot(data = top_flags_eiu) +
+  geom_col(
+    aes(x = emissions_per_ton, y = reorder(country_name, emissions_per_ton)),
+    fill = "#08C4E5"
+  ) +
+  geom_flag(
+    aes(x = 0, y = reorder(country_name, emissions_per_ton), country = iso2),
+    size = 15
+  ) +
+  geom_text(
+    aes(
+      x = emissions_per_ton + 0.09 * max(emissions_per_ton, na.rm = TRUE),
+      y = reorder(country_name, emissions_per_ton),
+      label = round(emissions_per_ton, 2)
+    ),
+    color = "white",
+    family = "Roboto",
+    fontface = "bold",
+    size = 4
+  ) +
+  labs(x = "Emissions per Ton of Catch (tCO₂/ton)") +
+  theme_void() +
+  theme(
+    legend.position = "none",
+    axis.title.x = element_text(color = "white", family = "Roboto", face = "bold", size = 18),
+    axis.text.y = element_text(color = "white", family = "Roboto", face = "bold", size = 14),
+    panel.background = element_rect(fill = "#053762", color = NA),
+    plot.background = element_rect(fill = "#053762", color = NA)
+  ) +
+  expand_limits(
+    x = c(-0.05 * max(top_flags_eiu$emissions_per_ton),
+          1.2 * max(top_flags_eiu$emissions_per_ton))
+  )
+```
+
+
+# Animated flag
+
+

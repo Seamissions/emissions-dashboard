@@ -309,7 +309,24 @@ country_filtered <- reactive({
   
   # END Emissions Map
   
-  output$example_barplot <- renderPlot({
+  
+  
+  # ---- Country emissions plot ------------------------------------------------
+  
+  # ---- Toggle barplots on button click ----
+  observeEvent(input$compare_species_input, {
+    shinyjs::hide("country_plot")
+    shinyjs::show("isscaap_plot")
+  })
+  
+  observeEvent(input$compare_countries_input, {
+    shinyjs::hide("isscaap_plot")
+    shinyjs::show("country_plot")
+  })
+  
+
+  # --- Plot comparing countries ----
+  output$country_plot_output <- renderPlot({
     
     show_per_unit <- input$unit_plot_toggle_input
     
@@ -327,6 +344,7 @@ country_filtered <- reactive({
     
     max_x <- max(x_var, na.rm = TRUE)
     
+    # ---- Country emissions plot ----------------------------------------------
     ggplot(data = top_flags) +
       geom_col(aes(x = x_var,
                    y = reorder(country_name, sum_emissions)),
@@ -360,6 +378,55 @@ country_filtered <- reactive({
         x = c(-0.05 * max_x, 1.2 * max_x))
   
   })
+  
+  # --- Plot comparing ISSCAAP groups ----
+  output$isscaap_plot_output <- renderPlot({
+    
+    show_per_unit <- input$unit_plot_toggle_input
+    
+    x_var <- if (isTRUE(show_per_unit)) {
+      top_isscaap$emissions_per_ton
+    } else {
+      top_isscaap$sum_emissions
+    }
+    
+    x_label <- if (isTRUE(show_per_unit)) {
+      paste0(comma(top_isscaap$emissions_per_ton), " MT")
+    } else {
+      paste0(comma(top_isscaap$sum_emissions), " MT")
+    }
+    
+    max_x <- max(x_var, na.rm = TRUE)
+    
+    ggplot(data = top_isscaap) +
+      geom_col(aes(x = x_var,
+                   y = reorder(isscaap_group, sum_emissions)),
+               fill = "#08C4E5") +
+      geom_text(aes(x = x_var + 0.09 * max_x,
+                    y = reorder(isscaap_group, sum_emissions),
+                    label = x_label),
+                color = "white",
+                size = 7) +
+      labs(title = "Annual CO₂ Emissions by ISSCAAP Group") +
+      theme_void() +
+      theme(
+        legend.position = "none",
+        title = element_text(color = "white",
+                             family = "Roboto",
+                             face = "bold",
+                             size = 24),
+        axis.title.x = element_blank(),
+        axis.text.y = element_text(color = "white",
+                                   size = 22,
+                                   hjust = 1,
+                                   margin = margin(r = -5)),
+        panel.background = element_rect(fill = "#053762", color = NA),
+        plot.background = element_rect(fill = "#053762", color = NA)
+      ) +
+      expand_limits(x = c(-0.05 * max_x, 1.2 * max_x))
+  })
+  
+  
   
 }
 

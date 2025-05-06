@@ -23,7 +23,7 @@ library(gganimate)
 
 ```{r}
 # load library
-fao_emissions <- read_csv("/Users/npepper/MEDS/capstone/emissions-dashboard/data-raw/full_emissions_fao_species.csv")
+fao_emissions <- read_csv("/Users/npepper/MEDS/capstone/data/data-raw/full_emissions_fao_species.csv")
 ```
 
 ```{r}
@@ -256,6 +256,51 @@ ggplot(data = top_flags_eiu) +
 ```
 
 
-# Animated flag
+# Isscap group plots
+
+```{r}
+# ---- Step 1: Calculate Top 10 Countries by Emissions ----
+top_isscaap <- fao_emissions |>
+  filter(isscaap_group != "no_fao_species_catch_data",
+         isscaap_group != "Marine fishes not identified") |>
+  group_by(isscaap_group) |>
+  summarize(sum_emissions = sum(total_co2_mt, na.rm = TRUE)) |>
+  arrange(desc(sum_emissions)) |>
+  slice_head(n = 10) 
+
+# ---- Step 2: Plot ----
+ggplot(data = top_isscaap) +
+  geom_col(
+    aes(x = sum_emissions, y = reorder(isscaap_group, sum_emissions)),
+    fill = "#08C4E5"
+  )  +
+geom_text(
+  aes(x = sum_emissions + 0.09 * max(sum_emissions, na.rm = TRUE),
+      y = reorder(isscaap_group, sum_emissions),
+      label = paste0(comma(sum_emissions), " MT")),
+  color = "white",
+  family = "Roboto",
+  fontface = "bold",
+  size = 4) +
+ theme_void() +
+theme(
+  legend.position = "none",
+  axis.title.x = element_blank(),
+  axis.text.y = element_text(color = "white",
+                             family = "Roboto",
+                             face = "bold",
+                             size = 14,
+                             hjust = 1,
+                             margin = margin(r = -10)),
+  panel.background = element_rect(fill = "#053762", color = NA),
+  plot.background = element_rect(fill = "#053762", color = NA)) +
+
+  expand_limits(
+    x = c(-0.05 * max(top_isscaap$sum_emissions),
+          1.2 * max(top_isscaap$sum_emissions))
+  )
+```
+
+
 
 

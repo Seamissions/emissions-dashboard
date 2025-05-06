@@ -1,7 +1,7 @@
-# --------------------------------------------------------------------------------
-# ---- ui.R --------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-  
+# ------------------------------------------------------------------------------------------------------------------
+#     ui.R 
+# ------------------------------------------------------------------------------------------------------------------
+
   
 source("theme.R")
 
@@ -29,7 +29,7 @@ ui <- navbarPage(
            div(style = "margin-top: 10px;",
              fluidRow(
                
-               # Emissions Map Landing Page Overview  ------------------------------------------
+               # Emissions Map Landing Page Overview  --------------------------
                column(width = 6,
                       div(style = "height: 300px;
                                   background-color:#031021;
@@ -289,7 +289,7 @@ tabPanel("Seafood Emissions Explorer",
          # Compare species button ---- 
          column(width = 2,
                 actionButton(
-                  "explore_map",
+                  "compare_species_input",
                   tagList(
                     icon("fish", style = "margin-right: 8px;"),
                     "Compare Species"),
@@ -300,7 +300,7 @@ tabPanel("Seafood Emissions Explorer",
          # Compare countries button ---- 
          column(width = 2,
                 actionButton(
-                  "explore_map",
+                  "compare_countries_input",
                   tagList(
                     icon("globe", style = "margin-right: 8px;"),
                     "Compare Countries"),
@@ -320,13 +320,26 @@ fluidRow(
                      margin-bottom: 30px;
                      margin-left: 20px;
                      margin-right: 20px;",
-             plotOutput("example_barplot",
-                        height = "60vh",
-                        fill = TRUE) |> 
-               withSpinner(type = 4,
-                           color = '#08C4E5') ) # END div (plot)
-  ) # END column
-), # END plot fluid Row
+             
+             # ---- Country plot (default visible) ----
+             div(
+               id = "country_plot",
+               plotOutput("country_plot_output", height = "60vh", fill = TRUE) |> 
+                 withSpinner(type = 4, color = '#08C4E5')
+             ),
+             
+             # ---- ISSCAAP plot (hidden on load) ----
+             shinyjs::hidden(
+               div(
+                 id = "isscaap_plot",
+                 plotOutput("isscaap_plot_output", height = "60vh", fill = TRUE) |> 
+                   withSpinner(type = 4, color = '#08C4E5')
+               )
+             )
+         )
+  )
+), # END fluid row (plots)
+
 
 fluidRow(
   column(

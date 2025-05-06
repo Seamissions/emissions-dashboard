@@ -15,12 +15,10 @@ library(shinyWidgets)
 library(shinyjs)
 library(shinycssloaders)
 library(bs4Dash)
-library(bslib)
 library(later) # to delay loader
 library(gganimate)
 library(plotly)
 library(tidyverse)
-library(shinycssloaders)
 library(mapdeck)
 library(markdown)
 library(geojsonsf)
@@ -32,7 +30,6 @@ library(bslib) # for theme colors
 library(scales)  # for commas in labels
 library(rsconnect)
 library(pryr)
-library(tidyverse)
 library(ggflags)
 
 # ---- Load & prep data ---------------------------------------------------------------
@@ -40,23 +37,16 @@ library(ggflags)
 # ---- Emissions map data ----
 
 # Load emissions data
-all_emissions <- readRDS("data/all_emissions.rds") |> 
+broadcasting_emissions <- readRDS("data/broadcasting_emissions.rds") |> 
   filter(emissions_co2_mt >= 200)
 
-country_emissions <- readRDS("data/country_emissions.rds") |> 
-  filter(emissions_co2_mt >= 200)
-
-# Load background data
+# Load FAO data
 fao_regions <- st_read(here::here("data/fao_region_shapefile","World_Fao_Zones.shp")) |>
   st_transform(4326) |>
   st_make_valid()
 
 fao_borders <- st_cast(fao_regions, "MULTILINESTRING") |>
   st_make_valid()
-
-top_flags <- readRDS("data/top_flags.rds") |>
-  filter(year == 2016) |>
-  head(10)
 
 # Color palette for FAO zones
 m <- grDevices::colorRamp(c("#DA8D03"))( (1:256)/256 )
@@ -66,16 +56,9 @@ country_flags <- sort(unique(country_emissions$flag))
 year_min <- min(country_emissions$year, na.rm = TRUE)
 year_max <- max(country_emissions$year, na.rm = TRUE)
 
-# Pre-calculate total emissions for the initial year (max year)
-initial_total_broadcasting <- all_emissions %>%
-  filter(year == max(all_emissions$year, na.rm = TRUE)) %>%
-  summarise(total = sum(emissions_co2_mt, na.rm = TRUE)) %>%
-  pull(total)
 
 # ---- Seafood explorer data ----
+top_flags <- readRDS("data/top_flags.rds") |>
+  filter(year == 2016) |>
+  head(10)
 
-# Create the fake data
-df <- data.frame(
-  country = c("China", "USA", "Japan", "Iceland", "Argentina", "Australia"),
-  emissions = c(500, 175, 150, 105, 75, 73)
-)

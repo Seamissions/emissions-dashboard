@@ -49,7 +49,7 @@ fao_borders <- st_cast(fao_regions, "MULTILINESTRING") |>
   st_make_valid()
 
 # Color palette for FAO zones
-m <- grDevices::colorRamp(c("#DA8D03"))( (1:256)/256 )
+fao_zone_color <- grDevices::colorRamp(c("#CEECEB"))( (1:256)/256 )
 
 # Precompute values used in UI
 year_min <- min(broadcasting_emissions$year, na.rm = TRUE)

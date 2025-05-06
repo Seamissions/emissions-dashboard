@@ -7,22 +7,21 @@ server <- function(input, output, session) {
   
   # ---- Set up buttons ------------------------------------------------------
   
-  # Define action to change to Emissions Map tab
-  observeEvent(input$explore_map, {
-    updateNavbarPage(session, "navbarPage", selected = "Emissions Map") 
-  }) # END observeEvent (Select Emission)
-  
-  # Define action to change to Seafood Emissions Explorer tab
-  observeEvent(input$explore_seafood, {
-    updateNavbarPage(session, "navbarPage", selected = "Seafood Emissions Explorer")
+  observe({
+    shinyjs::onclick("explore_map_card", {
+      updateNavbarPage(session, "navbarPage", selected = "Emissions Map")
+    })
+    
+    shinyjs::onclick("explore_seafood_card", {
+      updateNavbarPage(session, "navbarPage", selected = "Seafood Emissions Explorer")
+    })
   })
+  
   
   # ---- Define color palettes -------------------------------------------------
   blue_palette <- colorRamp(c("#20404F", "#4C9EA6", "#67D6E0", "#76F3FF", "#A9F2FF", "#DAF3FF", "white"))((1:256) / 256)
-  orange_palette <- colorRamp(c("#805F14","#CC9921", "#F9B928", "#FFD15F", "#FFECB2","#FFF9D5"))((1:256) / 256)
-  green_palette <- colorRamp(c("#2A782A","#34CF46","#41FF58", "#92FF98","#C0FFC7","#ECFFE5"))((1:256) / 256)
   pink_palette <- colorRamp(c("#9E3E74","#D4539C","#FF63BB", "#FF9AD6","#FFD9D7","#FFF9F9"))((1:256) / 256)
-  
+  orange_palette <- colorRamp(c("#7A5100", "#B97700", "#FFB300", "#FFD54F", "#FFEB99", "#FFF5CC", "#FFFEF2"))((1:256) / 256)
   
   # ---- Emissions map ---------------------------------------------------------
   
@@ -205,7 +204,7 @@ country_filtered <- reactive({
           layer_id = "non_broadcasting_layer",
           data = nb_emissions,
           fill_colour = "emissions_co2_mt",
-          palette = pink_palette,
+          palette = orange_palette,
           fill_opacity = 0.5,
           tooltip = "emissions_co2_mt",
           update_view = FALSE
@@ -279,7 +278,7 @@ country_filtered <- reactive({
           data = fao_borders,
           layer_id = "fao_border_layer",
           stroke_color = "zone",
-          palette = m,
+          palette = fao_zone_color,
           stroke_width = 4,
           update_view = FALSE
         )

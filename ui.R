@@ -12,111 +12,126 @@ ui <- navbarPage(
   theme = seamissions_theme,
   
   # ---- Home Page ----
+  useShinyjs(),
+  
   tabPanel("Home",
            
            # ---- Hero Section ----
-           div(
-             style = "background-size: cover;
-                     background-position: center;
-                     padding: 100px 0;
-                     text-align: center;
-                     color: #e8fffd;",
-             h1("Seamissions Global Fishing Emissions Explorer"),
-             h4("This is where the short overview goes.")
-             ), # END div (hero section)
+           div(style = "background-size: cover;
+              background-image: url('images/dashboard-hero.png');
+              background-position: center;
+              height: 400px;
+              padding: 100px 0;
+              text-align: center;
+              color: #e8fffd;",
+               h1("Seamissions Global Fishing Emissions Explorer"),
+               h4("This is where the short overview goes.")
+           ), # END div (hero section)
            
-           # ---- Teaser Sections ----------------------------------------------
-           div(style = "margin-top: 10px;",
-             fluidRow(
-               
-               # Emissions Map Landing Page Overview  --------------------------
-               column(width = 6,
-                      div(style = "height: 300px;
-                                  background-color:#031021;
-                                  border-radius: 8px;
-                                  overflow: hidden;
-                                  display: flex;
-                                  flex-direction: column;
-                                  justify-content: space-between;
-                                  color: white;
-                                  font-family: sans-serif;",
-                   
-                # Top half: image + button
-                div(style = "position: relative;
-                            height: 50%;
-                            width: 100%;",
-                     img(src = "images/map-preview.png",
-                     style = "position: absolute;
-                             top: 0; left: 0;
-                             width: 100%;
-                             height: 100%;
-                             object-fit: cover;
-                             opacity: 0.4;
-                             z-index: 1;"),
-                     div(style = "position: relative;
-                                 z-index: 2;
-                                 height: 100%;
-                                 display: flex;
-                                 justify-content: center;
-                                 align-items: center;",
-                       actionButton("explore_map", "Explore the Map", class = "btn-primary btn-lg") # END actionButton
-                       ) # END div
-                   ), # END top half
-                   
-                   # Bottom half: description
-                   div(style = "padding: 12px; height: 50%;",
-                       tags$p("Explore where fishing activity is most concentrated.",
-                              style = "margin: 0; font-size: 16px; color: white;") # END div
-                       ) # END bottom half
-                 ) # END outer div
-               ), # END column (Emissions Map Teaser)
-               
-               # Seafood Emission Explorer Tool Preview ------------------------
-               column(width = 6,
-                      div(style = "height: 300px;
-                                   background-color:#031021;
-                                   border-radius: 8px;
-                                   overflow: hidden;
-                                   display: flex;
-                                   flex-direction: column;
-                                   justify-content: space-between;
-                                   color: white;
-                                   font-family: sans-serif;",
-                   
-                   # Top half: image + button
-                   div(style = "position: relative;
-                               height: 50%;
-                               width: 100%;",
-                     img(src = "images/map-preview.png",
-                     style = "position: absolute;
-                             top: 0; left: 0;
-                             width: 100%;
-                             height: 100%;
-                             object-fit: cover;
-                             opacity: 0.4;
-                             z-index: 1;"),
-                     div(style = "position: relative;
-                                 z-index: 2;
-                                 height: 100%;
-                                 display: flex;
-                                 justify-content: center;
-                                 align-items: center;",
-                         actionButton("explore_seafood", "Seafood Emissions Explorer", class = "btn-primary btn-lg") # END actionButton
-                     ) # END div
-                   ), # END top half
-                   
-                   # Bottom half: description
-                   div(style = "padding: 12px; height: 50%;",
-                       tags$p("This is where the tool description goes.",
-                              style = "margin: 0; font-size: 16px; color: white;") # END div
-                   ) # END bottom half
-                 ) # END outer div
-               ) # END column (Seafood Explorer Teaser)
-               
-             ) # END fluidRow
+           tags$p(style = "font-weight: bold; color: white; margin: 40px;", 
+                  "Fishing vessels play a critical role in feeding the world, but they also contribute significantly to global greenhouse gas emissions. While some vessels broadcast their locations via AIS (Automatic Identification System), many do not—leaving large gaps in how we monitor industrial fishing activity and its environmental footprint. To better understand and manage the ocean's role in climate change, we need new tools that illuminate where emissions are coming from and who is responsible."), 
+           
+           tags$p(style = "font-weight: bold; color: white; margin: 40px;", 
+                  "This dashboard combines satellite-based vessel tracking, emissions modeling, and machine learning to map fishing vessel emissions across the globe—both from broadcasting and non-broadcasting fleets. By visualizing emissions at sea, this tool offers a replicable and scalable approach for understanding the climate impact of global fisheries and informing more sustainable ocean governance."), 
+           
+           
+           # ---- Teaser Sections ----
+           div(style = "margin-top: 40px;",
+               fluidRow(
+                 column(width = 3),  # spacer
+                 
+                 # Emissions Map Teaser ----
+                 column(width = 3,
+                        div(id = "explore_map_card",
+                            style = "cursor: pointer;
+                    position: relative;
+                    padding-top: 50px;
+                    padding-bottom: 10px;
+                    background-color: white;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                    overflow: visible;
+                    font-family: sans-serif;
+                    text-align: center;",
+                            
+                            div(style = "height: 12px;
+                       background-color: #20404F;
+                       border-top-left-radius: 8px;
+                       border-top-right-radius: 8px;
+                       position: absolute;
+                       top: 0; left: 0; right: 0;"),
+                            
+                            div(style = "position: absolute;
+                       top: -28px;
+                       left: 50%;
+                       transform: translateX(-50%);
+                       background-color: black;
+                       width: 56px;
+                       height: 56px;
+                       border-radius: 50%;
+                       display: flex;
+                       align-items: center;
+                       justify-content: center;
+                       z-index: 10;",
+                                tags$i(class = "fas fa-ship", style = "color: white; font-size: 24px;")
+                            ),
+                            
+                            h4(strong("Explore the Emissions Map")),
+                            p("Explore where large fishing vessels operate around the world. Many use AIS (Automatic Identification System) to broadcast their location — but over half of the global fleet do not broadcast their location, making them harder to track emissions.",
+                              style = "color: #444;
+                      padding: 0 20px;")
+                        )
+                 ), # END column
+                 
+                 
+                 # Seafood Explorer Teaser ----
+                 column(width = 3,
+                        div(id = "explore_seafood_card", style = "cursor: pointer;
+                    position: relative;
+                    padding-top: 50px;
+                    padding-bottom: 10px;
+                    background-color: white;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                    overflow: visible;
+                    font-family: sans-serif;
+                    text-align: center;",
+                            
+                            div(style = "height: 12px;
+                      background-color: #20404F;
+                      border-top-left-radius: 8px;
+                      border-top-right-radius: 8px;
+                      position: absolute;
+                      top: 0; left: 0; right: 0;"),
+                            
+                            div(style = "position: absolute;
+                      top: -28px;
+                      left: 50%;
+                      transform: translateX(-50%);
+                      background-color: black;
+                      width: 56px;
+                      height: 56px;
+                      border-radius: 50%;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      z-index: 10;",
+                                tags$i(class = "fas fa-fish", style = "color: white; font-size: 24px;")
+                            ),
+                            
+                            h4(strong("Seafood Emissions Explorer")),
+                            p("This is where the tool description goes.",
+                              style = "color: #444; padding: 0 20px; margin-bottom: 20px;")
+                        )
+                 ), # END column
+                 
+                 column(width = 3)  # spacer
+               ) # END fluidRow
            ) # END div (Teaser Sections)
            
-  ), # END home tab
+  ), # END tabPanel (Home)
+  
+  
   
   # ------------------------------------------------------------------------------------------------------------------
   # ---- Emissions Map Page ------------------------------------------------------------------------------------------
@@ -136,7 +151,7 @@ ui <- navbarPage(
                            top: 0;
                            left: 0;
                            height: 100%;
-                           width: 350px;
+                           width: 400px;
                            background-color: #f9f9f9;
                            padding: 15px;
                            border-right: 0px solid #ccc;
@@ -154,8 +169,12 @@ ui <- navbarPage(
                                          border: none;"),
                    
                    # Map title
-                   tags$h3(style = "font-size: 24px; font-weight: bold; color: #20404F; margin-bottom: 20px;", 
+                   tags$h3(style = "font-size: 24px; font-weight: bold; color: #20404F; margin-bottom: 5px;", 
                            "Fishing Vessel Emissions"), 
+                   
+                   # Map title
+                   tags$p(style = "font-weight: bold; color: #20404F; margin-bottom: 20px;", 
+                           "Explore where large fishing vessels operate around the world. Many use AIS (Automatic Identification System) to broadcast their location — but over half of the global fleet do not broadcast their location, making them harder to track emissions."), 
                    
                    # ---- Sidebar Layer Controls -------------------------------
                    
@@ -163,7 +182,7 @@ ui <- navbarPage(
                    materialSwitch(inputId = "show_broadcasting_input",
                                   label = tags$div(style = "font-size: 18px;
                                                            font-weight: bold;",
-                                                           "Broadcasting Emissions"),
+                                                           "AIS Broadcasting Emissions"),
                                   value = TRUE,
                                   status = "info"),
                    

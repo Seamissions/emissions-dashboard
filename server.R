@@ -192,6 +192,8 @@ country_filtered <- reactive({
   
   
   
+  
+  
   # ---- Non-broadcasting emissions layer ----
   observe({
     mapdeck_update(map_id = "emissions_map") %>%
@@ -327,7 +329,8 @@ country_filtered <- reactive({
   
   observeEvent(input$select_country_input, {
     shinyjs::hide("country_plot")
-    shinyjs::show("isscaap_plot")
+    shinyjs::hide("isscaap_plot")
+    shinyjs::show("species_bar_plot")
     shinyjs::show("country_select_plot_input")
   })
   
@@ -432,6 +435,68 @@ country_filtered <- reactive({
       ) +
       expand_limits(x = c(-0.05 * max_x, 1.2 * max_x))
   })
+  
+  output$species_bar_plot_output <- renderPlot({
+    req(input$selected_country_input)
+    
+    show_per_unit <- input$unit_plot_toggle_input
+    
+    country_species_data <- top_isscaap_country %>%
+      filter(flag == input$selected_country_input)
+    
+    x_var <- if (isTRUE(show_per_unit)) {
+      country_species_data$emissions_per_ton
+    } else {
+      country_species_data$sum_emissions
+    }
+    
+    x_label <- if (isTRUE(show_per_unit)) {
+      paste0(comma(country_species_data$emissions_per_ton), " MT")
+    } else {
+      paste0(comma(country_species_data$sum_emissions), " MT")
+    }
+    
+    max_x <- max(x_var, na.rm = TRUE)
+    
+    ggplot(data = country_species_data) +
+      geom_col(
+        aes(x = x_var,
+            y = reorder(isscaap_group, x_var)),
+        fill = "#08C4E5"
+      ) +
+      geom_text(
+        aes(x = x_var + 0.09 * max_x,
+            y = reorder(isscaap_group, x_var),
+            label = x_label),
+        color = "white",
+        size = 7
+      ) +
+      labs(title = paste("Emissions by Species Group in", input$selected_country_input)) +
+      theme_void() +
+      theme(
+        legend.position = "none",
+        title = element_text(color = "white", family = "Roboto", face = "bold", size = 24),
+        axis.title.x = element_blank(),
+        axis.text.y = element_text(color = "white", size = 22, hjust = 1, margin = margin(r = -5)),
+        panel.background = element_rect(fill = "#053762", color = NA),
+        plot.background = element_rect(fill = "#053762", color = NA)
+      ) +
+      expand_limits(x = c(-0.05 * max_x, 1.2 * max_x))
+  })
+  
+  
+  # --- Text box for selected country’s total emissions ----
+  output$selected_country_total <- renderText({
+    req(input$selected_country_input)
+    
+    total <- top_isscaap_country %>%
+      filter(flag == input$selected_country_input) %>%
+      summarize(total = sum(sum_emissions, na.rm = TRUE)) %>%
+      pull(total)
+    
+    paste0(format(round(total, 2), big.mark = ","), " Mt CO₂")
+  })
+  
   
   
   

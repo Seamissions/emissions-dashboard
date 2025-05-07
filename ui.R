@@ -73,7 +73,7 @@ ui <- navbarPage(
                                          align-items: center;
                                          justify-content: center;
                                          z-index: 10;",
-                                tags$i(class = "fas fa-ship", style = "color: white; font-size: 24px;")
+                                tags$i(class = "fas fa-earth-americas", style = "color: white; font-size: 24px;")
                             ),
                             
                             h4(strong("Fishing Vessel Emissions Map")),
@@ -118,12 +118,12 @@ ui <- navbarPage(
                                           justify-content: center;
                                           z-index: 10;",
                                 
-                                tags$i(class = "fas fa-fish",
+                                tags$i(class = "fas fa-chart-bar",
                                        style = "color: white;
                                        font-size: 24px;")
                             ),
                             
-                            h4(strong("Seafood Emissions Explorer")),
+                            h4(strong("Compare Seafood Emissions")),
                             p("This is where the tool description goes.",
                               style = "color: #444;
                                         padding: 0 20px;
@@ -305,7 +305,7 @@ tabPanel("Compare Seafood Emissions",
                          font-weight: bold;
                          color: #f9f9f9;
                          margin-bottom: 20px;", 
-                         "Seafood Emissions Explorer"), 
+                         "Compare Seafood Emissions"), 
          
          
          # Header Row ----
@@ -354,7 +354,7 @@ shinyjs::hidden(
       fluidRow(
         column(4, offset = 1,
                selectInput("selected_country_input", "Select a Country:",
-                           choices = sort(unique(broadcasting_emissions$country_name)))
+                           choices = sort(unique(top_isscaap_country$flag)))
         ),
         column(6,
                tags$h4(textOutput("selected_country_total"),
@@ -391,7 +391,17 @@ fluidRow(
                  id = "isscaap_plot",
                  plotOutput("isscaap_plot_output", height = "60vh", fill = TRUE) |> 
                    withSpinner(type = 4, color = '#08C4E5')) # END div 
-             ) # END hidden
+             ), # END hidden
+             
+             # ---- Species plot for selected country (hidden on load) ----
+             shinyjs::hidden(
+               div(
+                 id = "species_bar_plot",
+                 plotOutput("species_bar_plot_output", height = "60vh", fill = TRUE) |> 
+                   withSpinner(type = 4, color = '#08C4E5')
+               )
+             )
+             
              
              
          ) # END row div
@@ -439,7 +449,7 @@ fluidRow(
 # ---- About Page --------------------------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------------------------------------------
 
-  tabPanel("Methods",
+  tabPanel("Usage Guide",
            # ---- Hero Section ----
            div(style = "background-image: url('images/home-image.jpg');
                         background-size: cover;

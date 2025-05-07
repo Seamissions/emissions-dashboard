@@ -64,3 +64,5 @@ top_isscaap <- readRDS("data/top_isscaap.rds") |>
   filter(year == 2016) |>
   head(15)
 
+isscaap_country <- readRDS("data/top_isscaap_country.rds")
+

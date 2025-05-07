@@ -18,12 +18,12 @@ ui <- navbarPage(
            
            # ---- Hero Section ----
            div(style = "background-size: cover;
-              background-image: url('images/dashboard-hero.png');
-              background-position: center;
-              height: 400px;
-              padding: 100px 0;
-              text-align: center;
-              color: #e8fffd;",
+                        background-image: url('images/dashboard-hero.png');
+                        background-position: center;
+                        height: 400px;
+                        padding: 100px 0;
+                        text-align: center;
+                        color: #e8fffd;",
                h1("Seamissions Global Fishing Emissions Explorer"),
                h4("This is where the short overview goes.")
            ), # END div (hero section)
@@ -44,39 +44,39 @@ ui <- navbarPage(
                  column(width = 3,
                         div(id = "explore_map_card",
                             style = "cursor: pointer;
-                    position: relative;
-                    padding-top: 50px;
-                    padding-bottom: 10px;
-                    background-color: white;
-                    border-radius: 8px;
-                    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-                    overflow: visible;
-                    font-family: sans-serif;
-                    text-align: center;",
+                                      position: relative;
+                                      padding-top: 50px;
+                                      padding-bottom: 10px;
+                                      background-color: white;
+                                      border-radius: 8px;
+                                      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                                      overflow: visible;
+                                      font-family: sans-serif;
+                                      text-align: center;",
                             
                             div(style = "height: 12px;
-                       background-color: #20404F;
-                       border-top-left-radius: 8px;
-                       border-top-right-radius: 8px;
-                       position: absolute;
-                       top: 0; left: 0; right: 0;"),
-                            
+                                         background-color: #F9B928;
+                                         border-top-left-radius: 8px;
+                                         border-top-right-radius: 8px;
+                                         position: absolute;
+                                         top: 0; left: 0; right: 0;"),
+                                              
                             div(style = "position: absolute;
-                       top: -28px;
-                       left: 50%;
-                       transform: translateX(-50%);
-                       background-color: black;
-                       width: 56px;
-                       height: 56px;
-                       border-radius: 50%;
-                       display: flex;
-                       align-items: center;
-                       justify-content: center;
-                       z-index: 10;",
+                                         top: -28px;
+                                         left: 50%;
+                                         transform: translateX(-50%);
+                                         background-color: black;
+                                         width: 56px;
+                                         height: 56px;
+                                         border-radius: 50%;
+                                         display: flex;
+                                         align-items: center;
+                                         justify-content: center;
+                                         z-index: 10;",
                                 tags$i(class = "fas fa-ship", style = "color: white; font-size: 24px;")
                             ),
                             
-                            h4(strong("Explore the Emissions Map")),
+                            h4(strong("Fishing Vessel Emissions Map")),
                             p("Explore where large fishing vessels operate around the world. Many use AIS (Automatic Identification System) to broadcast their location — but over half of the global fleet do not broadcast their location, making them harder to track emissions.",
                               style = "color: #444;
                       padding: 0 20px;")
@@ -86,42 +86,48 @@ ui <- navbarPage(
                  
                  # Seafood Explorer Teaser ----
                  column(width = 3,
-                        div(id = "explore_seafood_card", style = "cursor: pointer;
-                    position: relative;
-                    padding-top: 50px;
-                    padding-bottom: 10px;
-                    background-color: white;
-                    border-radius: 8px;
-                    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-                    overflow: visible;
-                    font-family: sans-serif;
-                    text-align: center;",
+                        div(id = "explore_seafood_card",
+                        style = "cursor: pointer;
+                                  position: relative;
+                                  padding-top: 50px;
+                                  padding-bottom: 10px;
+                                  background-color: white;
+                                  border-radius: 8px;
+                                  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                                  overflow: visible;
+                                  font-family: sans-serif;
+                                  text-align: center;",
                             
                             div(style = "height: 12px;
-                      background-color: #20404F;
-                      border-top-left-radius: 8px;
-                      border-top-right-radius: 8px;
-                      position: absolute;
-                      top: 0; left: 0; right: 0;"),
+                                          background-color: #F9B928;
+                                          border-top-left-radius: 8px;
+                                          border-top-right-radius: 8px;
+                                          position: absolute;
+                                          top: 0; left: 0; right: 0;"),
                             
                             div(style = "position: absolute;
-                      top: -28px;
-                      left: 50%;
-                      transform: translateX(-50%);
-                      background-color: black;
-                      width: 56px;
-                      height: 56px;
-                      border-radius: 50%;
-                      display: flex;
-                      align-items: center;
-                      justify-content: center;
-                      z-index: 10;",
-                                tags$i(class = "fas fa-fish", style = "color: white; font-size: 24px;")
+                                          top: -28px;
+                                          left: 50%;
+                                          transform: translateX(-50%);
+                                          background-color: black;
+                                          width: 56px;
+                                          height: 56px;
+                                          border-radius: 50%;
+                                          display: flex;
+                                          align-items: center;
+                                          justify-content: center;
+                                          z-index: 10;",
+                                
+                                tags$i(class = "fas fa-fish",
+                                       style = "color: white;
+                                       font-size: 24px;")
                             ),
                             
                             h4(strong("Seafood Emissions Explorer")),
                             p("This is where the tool description goes.",
-                              style = "color: #444; padding: 0 20px; margin-bottom: 20px;")
+                              style = "color: #444;
+                                        padding: 0 20px;
+                                        margin-bottom: 20px;")
                         )
                  ), # END column
                  
@@ -289,10 +295,10 @@ ui <- navbarPage(
   ), # END emissions map tab
 
 # ------------------------------------------------------------------------------------------------------------------
-# ---- Seafood Emissions Explorer Page -----------------------------------------------------------------------------
+# ---- Compare Seafood Emissions Page ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------------------------------------------
 
-tabPanel("Seafood Emissions Explorer",
+tabPanel("Compare Seafood Emissions",
          
          # Title
          tags$h3(style = "font-size: 24px;
@@ -321,15 +327,46 @@ tabPanel("Seafood Emissions Explorer",
                 actionButton(
                   "compare_countries_input",
                   tagList(
-                    icon("globe", style = "margin-right: 8px;"),
+                    icon("earth-americas", style = "margin-right: 8px;"),
                     "Compare Countries"),
                   class = "btn-primary btn-lg") # END actionButton (Compare Countries)
          ), # END column (Compare Countries)
          
+         # Select a country button ---- 
+         column(width = 2,
+                actionButton(
+                  "select_country_input",
+                  tagList(
+                    icon("flag", style = "margin-right: 8px;"),
+                    "Select a Country"),
+                  class = "btn-primary btn-lg") # END actionButton (Compare Countries)
+         ) # END column (Compare Countries)
+         
          
 ), # END first fluidRow
 
-# Second Row with ggplot ----
+
+# Add country selector and total emissions (hidden)
+
+# Country Selector and Total Emissions (hidden initially)
+shinyjs::hidden(
+  div(id = "country_select_plot_input",
+      fluidRow(
+        column(4, offset = 1,
+               selectInput("selected_country_input", "Select a Country:",
+                           choices = sort(unique(broadcasting_emissions$country_name)))
+        ),
+        column(6,
+               tags$h4(textOutput("selected_country_total"),
+                       style = "color: white; font-weight: bold; margin-top: 25px;")
+        )
+      ) # END fluidRow
+  ) # END div (country_select_plot_input)
+
+),
+
+
+# --- Second Row with ggplot ---------------------------------------------------
 fluidRow(
   column(width = 12,
          div(style = "background-color: #053762;
@@ -340,22 +377,24 @@ fluidRow(
                      margin-left: 20px;
                      margin-right: 20px;",
              
+             # --- Define plots (hidden when not selected) ----------------------
+             
              # ---- Country plot (default visible) ----
              div(
                id = "country_plot",
                plotOutput("country_plot_output", height = "60vh", fill = TRUE) |> 
-                 withSpinner(type = 4, color = '#08C4E5')
-             ),
+                 withSpinner(type = 4, color = '#08C4E5')), # END div
              
              # ---- ISSCAAP plot (hidden on load) ----
              shinyjs::hidden(
                div(
                  id = "isscaap_plot",
                  plotOutput("isscaap_plot_output", height = "60vh", fill = TRUE) |> 
-                   withSpinner(type = 4, color = '#08C4E5')
-               )
-             )
-         )
+                   withSpinner(type = 4, color = '#08C4E5')) # END div 
+             ) # END hidden
+             
+             
+         ) # END row div
   )
 ), # END fluid row (plots)
 

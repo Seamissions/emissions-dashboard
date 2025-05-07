@@ -13,7 +13,7 @@ server <- function(input, output, session) {
     })
     
     shinyjs::onclick("explore_seafood_card", {
-      updateNavbarPage(session, "navbarPage", selected = "Seafood Emissions Explorer")
+      updateNavbarPage(session, "navbarPage", selected = "Compare Seafood Emissions")
     })
   })
   
@@ -314,13 +314,21 @@ country_filtered <- reactive({
   
   # ---- Toggle barplots on button click ----
   observeEvent(input$compare_species_input, {
-    shinyjs::hide("country_plot")
     shinyjs::show("isscaap_plot")
+    shinyjs::hide("country_plot")
+    shinyjs::hide("country_select_plot_input")
   })
   
   observeEvent(input$compare_countries_input, {
-    shinyjs::hide("isscaap_plot")
     shinyjs::show("country_plot")
+    shinyjs::hide("isscaap_plot")
+    shinyjs::hide("country_select_plot_input")
+  })
+  
+  observeEvent(input$select_country_input, {
+    shinyjs::hide("country_plot")
+    shinyjs::show("isscaap_plot")
+    shinyjs::show("country_select_plot_input")
   })
   
 

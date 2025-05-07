@@ -60,3 +60,7 @@ top_flags <- readRDS("data/top_flags.rds") |>
   filter(year == 2016) |>
   head(10)
 
+top_isscaap <- readRDS("data/top_isscaap.rds") |>
+  filter(year == 2016) |>
+  head(15)
+

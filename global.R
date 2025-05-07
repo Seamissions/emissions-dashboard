@@ -31,6 +31,7 @@ library(scales)  # for commas in labels
 library(rsconnect)
 library(pryr)
 library(ggflags)
+library(ggimage)
 
 # ---- Load & prep data ---------------------------------------------------------------
 

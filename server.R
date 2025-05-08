@@ -359,7 +359,7 @@ country_filtered <- reactive({
       geom_col(aes(x = x_var,
                    y = reorder(country_name, sum_emissions)),
                fill = "#08C4E5") +
-      geom_flag(aes(x = 0,
+      ggflags::geom_flag(aes(x = 0,
                     y = reorder(country_name,
                                 sum_emissions),
                     country = iso2),size = 15) +
@@ -412,15 +412,6 @@ country_filtered <- reactive({
       geom_col(aes(x = x_var,
                    y = reorder(isscaap_group, sum_emissions)),
                fill = "#08C4E5") +
-      # Add images just to the left of bars
-      geom_image(
-        aes(x = -0.05 * max_x,  # lock to left side
-            y = reorder(isscaap_group, sum_emissions),
-            image = image),
-        size = 0.05,  # screen-relative (0–1), so it scales with screen
-        by = "height"  # ensures size is relative to height of the plot area
-      ) +  # Adjust multiplier
-     
       geom_text(aes(x = x_var + 0.09 * max_x,
                     y = reorder(isscaap_group, sum_emissions),
                     label = x_label),
@@ -442,9 +433,9 @@ country_filtered <- reactive({
         panel.background = element_rect(fill = "#053762", color = NA),
         plot.background = element_rect(fill = "#053762", color = NA)
       ) +
-      expand_limits(x = c(-0.1 * max_x, 1.2 * max_x))
-    
+      expand_limits(x = c(-0.05 * max_x, 1.2 * max_x))
   })
+  
   
   output$species_bar_plot_output <- renderPlot({
     req(input$selected_country_input)

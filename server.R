@@ -35,8 +35,8 @@ server <- function(input, output, session) {
     filter(country_name == "All Countries", year == max(year, na.rm = TRUE)) %>%
     summarise(total = sum(emissions_co2_mt, na.rm = TRUE)) %>%
     pull(total)
-
-
+  
+  
   # ---- Sidebar toggle logic ----
   observeEvent(input$toggle_sidebar_open_input, {
     # Toggle the sidebar visibility
@@ -126,7 +126,7 @@ server <- function(input, output, session) {
   }, priority = 10)
   
   # ---- Filter emissions by country and year ----
-country_filtered <- reactive({
+  country_filtered <- reactive({
     req(input$country_select_input, input$year_slider_input)
     broadcasting_emissions %>%
       filter(country_name == input$country_select_input, year == input$year_slider_input)
@@ -318,12 +318,14 @@ country_filtered <- reactive({
   observeEvent(input$compare_species_input, {
     shinyjs::show("isscaap_plot")
     shinyjs::hide("country_plot")
+    shinyjs::hide("species_bar_plot")
     shinyjs::hide("country_select_plot_input")
   })
   
   observeEvent(input$compare_countries_input, {
     shinyjs::show("country_plot")
     shinyjs::hide("isscaap_plot")
+    shinyjs::hide("species_bar_plot")
     shinyjs::hide("country_select_plot_input")
   })
   
@@ -334,7 +336,7 @@ country_filtered <- reactive({
     shinyjs::show("country_select_plot_input")
   })
   
-
+  
   # --- Plot comparing countries ----
   output$country_plot_output <- renderPlot({
     
@@ -360,33 +362,33 @@ country_filtered <- reactive({
                    y = reorder(country_name, sum_emissions)),
                fill = "#08C4E5") +
       ggflags::geom_flag(aes(x = 0,
-                    y = reorder(country_name,
-                                sum_emissions),
-                    country = iso2),size = 15) +
+                             y = reorder(country_name,
+                                         sum_emissions),
+                             country = iso2),size = 15) +
       geom_text(aes(x = x_var + 0.09 * max_x,
                     y = reorder(country_name, sum_emissions),
                     label = x_label),
-        color = "white",
-        size = 7) +
+                color = "white",
+                size = 7) +
       
       labs(title = "Annual CO₂ Emissions from Top Fishing Fleets") +
       
       theme_void() +
       theme(legend.position = "none",
-        title = element_text(color = "white",
-                             family = "Roboto",
-                             face = "bold",
-                             size = 24),
-        axis.title.x = element_blank(),
-        axis.text.y = element_text(color = "white",
-                                   size = 22,
-                                   hjust = 1,
-                                   margin = margin(r = -5)),
-        panel.background = element_rect(fill = "#053762", color = NA),
-        plot.background = element_rect(fill = "#053762", color = NA)) +
+            title = element_text(color = "white",
+                                 family = "Roboto",
+                                 face = "bold",
+                                 size = 24),
+            axis.title.x = element_blank(),
+            axis.text.y = element_text(color = "white",
+                                       size = 22,
+                                       hjust = 1,
+                                       margin = margin(r = -5)),
+            panel.background = element_rect(fill = "#053762", color = NA),
+            plot.background = element_rect(fill = "#053762", color = NA)) +
       expand_limits(
         x = c(-0.05 * max_x, 1.2 * max_x))
-  
+    
   })
   
   # --- Plot comparing ISSCAAP groups ----
@@ -437,13 +439,22 @@ country_filtered <- reactive({
   })
   
   
+  # --- Plot for selected country ISSCAAP groups ----
   output$species_bar_plot_output <- renderPlot({
     req(input$selected_country_input)
     
     show_per_unit <- input$unit_plot_toggle_input
     
+    # Aggregate over years for selected country
     country_species_data <- top_isscaap_country %>%
-      filter(flag == input$selected_country_input)
+      filter(flag == input$selected_country_input) %>%
+      group_by(isscaap_group) %>%
+      summarise(
+        sum_emissions = sum(sum_emissions, na.rm = TRUE),
+        total_catch = sum(total_catch, na.rm = TRUE),
+        emissions_per_ton = sum_emissions / total_catch,
+        .groups = "drop"
+      )
     
     x_var <- if (isTRUE(show_per_unit)) {
       country_species_data$emissions_per_ton
@@ -460,30 +471,33 @@ country_filtered <- reactive({
     max_x <- max(x_var, na.rm = TRUE)
     
     ggplot(data = country_species_data) +
-      geom_col(
-        aes(x = x_var,
-            y = reorder(isscaap_group, x_var)),
-        fill = "#08C4E5"
-      ) +
-      geom_text(
-        aes(x = x_var + 0.09 * max_x,
-            y = reorder(isscaap_group, x_var),
-            label = x_label),
-        color = "white",
-        size = 7
-      ) +
+      geom_col(aes(x = x_var,
+                   y = reorder(isscaap_group, sum_emissions)),
+               fill = "#08C4E5") +
+      geom_text(aes(x = x_var + 0.09 * max_x,
+                    y = reorder(isscaap_group, sum_emissions),
+                    label = x_label),
+                color = "white",
+                size = 7) +
       labs(title = paste("Emissions by Species Group in", input$selected_country_input)) +
       theme_void() +
       theme(
         legend.position = "none",
-        title = element_text(color = "white", family = "Roboto", face = "bold", size = 24),
+        title = element_text(color = "white",
+                             family = "Roboto",
+                             face = "bold",
+                             size = 24),
         axis.title.x = element_blank(),
-        axis.text.y = element_text(color = "white", size = 22, hjust = 1, margin = margin(r = -5)),
+        axis.text.y = element_text(color = "white",
+                                   size = 22,
+                                   hjust = 1,
+                                   margin = margin(r = -5)),
         panel.background = element_rect(fill = "#053762", color = NA),
         plot.background = element_rect(fill = "#053762", color = NA)
       ) +
       expand_limits(x = c(-0.05 * max_x, 1.2 * max_x))
   })
+  
   
   
   # --- Text box for selected country’s total emissions ----
@@ -506,6 +520,8 @@ country_filtered <- reactive({
 # END Seafood Emissions Explorer
 
 # END server function
+
+
 
 
         

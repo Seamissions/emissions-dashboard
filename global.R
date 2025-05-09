@@ -61,9 +61,18 @@ top_flags <- readRDS("data/top_flags.rds") |>
   filter(year == 2016) |>
   head(10)
 
-top_isscaap <- readRDS("data/top_isscaap.rds") |>
-  filter(year == 2016) |>
-  head(15)
-
-top_isscaap_country <- readRDS("data/top_isscaap_country.rds") |>
+# --- Read in species data ----
+species_data <- readRDS("data/species_data.rds") |>
   filter(year == 2016)
+
+# --- Prep top isscaap data ----
+top_isscaap <- species_data |>
+  filter(year == 2016) |>
+  group_by(isscaap_group, year, image) |>
+  summarize(
+    sum_emissions = sum(sum_emissions, na.rm = TRUE),
+    total_catch = sum(total_catch, na.rm = TRUE),
+    emissions_per_ton = sum_emissions / total_catch,
+    .groups = "drop"
+  ) |>
+  slice_max(order_by = sum_emissions, n = 10, with_ties = FALSE)

@@ -300,16 +300,17 @@ ui <- navbarPage(
 
 tabPanel("Compare Seafood Emissions",
          
-         # Title
-         tags$h3(style = "font-size: 24px;
-                         font-weight: bold;
-                         color: #f9f9f9;
-                         margin-bottom: 20px;", 
-                         "Compare Seafood Emissions"), 
          
          
          # Header Row ----
          fluidRow(
+           
+           # Title
+           tags$h3(style = "font-size: 24px;
+                         font-weight: bold;
+                         color: #f9f9f9;
+                         margin-bottom: 20px;", 
+                   "Compare Seafood Emissions"), 
            
          # Compare species button ---- 
          column(width = 2,
@@ -353,8 +354,9 @@ shinyjs::hidden(
   div(id = "country_select_plot_input",
       fluidRow(
         column(4, offset = 1,
-               selectInput("selected_country_input", "Select a Country:",
-                           choices = sort(unique(top_isscaap_country$flag)))
+               pickerInput(inputId = "selected_country_input",
+                           label = "Select a Country:",
+                           choices = sort(unique(species_data$country_name)))
         ),
         column(6,
                tags$h4(textOutput("selected_country_total"),

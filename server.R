@@ -336,7 +336,7 @@ server <- function(input, output, session) {
     shinyjs::show("country_select_plot_input")
   })
   
-  
+
   # --- Plot comparing countries ----
   output$country_plot_output <- renderPlot({
     
@@ -446,8 +446,8 @@ server <- function(input, output, session) {
     show_per_unit <- input$unit_plot_toggle_input
     
     # Aggregate over years for selected country
-    country_species_data <- top_isscaap_country %>%
-      filter(flag == input$selected_country_input) %>%
+    country_species_data <- species_data %>%
+      filter(country_name == input$selected_country_input) %>%
       group_by(isscaap_group) %>%
       summarise(
         sum_emissions = sum(sum_emissions, na.rm = TRUE),
@@ -498,20 +498,19 @@ server <- function(input, output, session) {
       expand_limits(x = c(-0.05 * max_x, 1.2 * max_x))
   })
   
-  
+
   
   # --- Text box for selected country’s total emissions ----
   output$selected_country_total <- renderText({
     req(input$selected_country_input)
     
-    total <- top_isscaap_country %>%
-      filter(flag == input$selected_country_input) %>%
+    total <- species_data %>%
+      filter(country_name == input$selected_country_input) %>%
       summarize(total = sum(sum_emissions, na.rm = TRUE)) %>%
       pull(total)
     
     paste0(format(round(total, 2), big.mark = ","), " Mt CO₂")
   })
-  
   
   
   

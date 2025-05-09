@@ -30,9 +30,9 @@ server <- function(input, output, session) {
   loading <- reactiveVal(TRUE)
   
   # Pre-calculate total emissions for the initial year (max year)
-  initial_total_broadcasting <- broadcasting_emissions %>%
-    filter(country_name == "All Countries", year == max(year, na.rm = TRUE)) %>%
-    summarise(total = sum(emissions_co2_mt, na.rm = TRUE)) %>%
+  initial_total_broadcasting <- broadcasting_emissions |>
+    filter(country_name == "All Countries", year == max(year, na.rm = TRUE)) |>
+    summarise(total = sum(emissions_co2_mt, na.rm = TRUE)) |>
     pull(total)
   
   # ---- Sidebar toggle logic ----
@@ -61,9 +61,9 @@ server <- function(input, output, session) {
       updateMaterialSwitch(session, "show_broadcasting_input", value = TRUE)
       
       # Add "All Countries" layer on first render
-      mapdeck_update(map_id = "emissions_map") %>%
+      mapdeck_update(map_id = "emissions_map") |>
         add_polygon(
-          data = broadcasting_emissions %>% filter(country_name == "All Countries", year == max(year, na.rm = TRUE)),
+          data = broadcasting_emissions |> filter(country_name == "All Countries", year == max(year, na.rm = TRUE)),
           layer_id = "all_countries",
           fill_colour = "emissions_co2_mt",
           palette = blue_palette,
@@ -117,8 +117,8 @@ server <- function(input, output, session) {
     shinyjs::toggle("country_select_input", condition = input$show_broadcasting_input)
     if (!input$show_broadcasting_input) {
       updateSelectInput(session, "country_select_input", selected = "")
-      mapdeck_update(map_id = "emissions_map") %>%
-        clear_polygon(layer_id = "all_countries") %>%
+      mapdeck_update(map_id = "emissions_map") |>
+        clear_polygon(layer_id = "all_countries") |>
         clear_polygon(layer_id = "country_layer")
     }
   }, priority = 10)
@@ -126,7 +126,7 @@ server <- function(input, output, session) {
   # ---- Filter emissions by country and year ----
   country_filtered <- reactive({
     req(input$country_select_input, input$year_slider_input)
-    broadcasting_emissions %>%
+    broadcasting_emissions |>
       filter(country_name == input$country_select_input, year == input$year_slider_input)
   })
   
@@ -152,10 +152,10 @@ server <- function(input, output, session) {
     loading(TRUE)
     
     if (is.null(input$country_select_input) || input$country_select_input == "") {
-      mapdeck_update(map_id = "emissions_map") %>%
-        clear_polygon(layer_id = "country_layer") %>%
+      mapdeck_update(map_id = "emissions_map") |>
+        clear_polygon(layer_id = "country_layer") |>
         add_polygon(
-          data = broadcasting_emissions %>% filter(country_name == "All Countries", year == input$year_slider_input),
+          data = broadcasting_emissions |> filter(country_name == "All Countries", year == input$year_slider_input),
           layer_id = "all_countries",
           fill_colour = "emissions_co2_mt",
           palette = blue_palette,
@@ -166,8 +166,8 @@ server <- function(input, output, session) {
     } else {
       filtered <- country_filtered()
       if (nrow(filtered) > 0) {
-        mapdeck_update(map_id = "emissions_map") %>%
-          clear_polygon(layer_id = "all_countries") %>%
+        mapdeck_update(map_id = "emissions_map") |>
+          clear_polygon(layer_id = "all_countries") |>
           add_polygon(
             data = filtered,
             layer_id = "country_layer",
@@ -179,8 +179,8 @@ server <- function(input, output, session) {
           )
       } else {
         # Clear both layers and show no data message
-        mapdeck_update(map_id = "emissions_map") %>%
-          clear_polygon(layer_id = "all_countries") %>%
+        mapdeck_update(map_id = "emissions_map") |>
+          clear_polygon(layer_id = "all_countries") |>
           clear_polygon(layer_id = "country_layer")
       }
     }
@@ -188,15 +188,14 @@ server <- function(input, output, session) {
     later::later(function() { loading(FALSE) }, delay = 0.2)
   })
   
-  
   # ---- Non-broadcasting emissions layer ----
   observe({
-    mapdeck_update(map_id = "emissions_map") %>%
+    mapdeck_update(map_id = "emissions_map") |>
       clear_polygon(layer_id = "non_broadcasting_layer")
     if (input$show_non_broadcasting_input) {
       loading(TRUE)
-      nb_emissions <- readRDS("/capstone/seamissions/data-processed/dashboard/nb_emissions.rds") %>% filter(emissions_co2_mt >= 200, year == input$year_slider_input)
-      mapdeck_update(map_id = "emissions_map") %>%
+      nb_emissions <- readRDS("/capstone/seamissions/data-processed/dashboard/nb_emissions.rds") |> filter(emissions_co2_mt >= 200, year == input$year_slider_input)
+      mapdeck_update(map_id = "emissions_map") |>
         add_polygon(
           layer_id = "non_broadcasting_layer",
           data = nb_emissions,
@@ -224,10 +223,10 @@ server <- function(input, output, session) {
       
     } else {
       # If "All Countries" or no country is selected, use the pre-aggregated row
-      total <- broadcasting_emissions %>%
+      total <- broadcasting_emissions |>
         filter(country_name == "All Countries",
-               year == input$year_slider_input) %>%
-        summarise(total = sum(emissions_co2_mt, na.rm = TRUE)) %>%
+               year == input$year_slider_input) |>
+        summarise(total = sum(emissions_co2_mt, na.rm = TRUE)) |>
         pull(total)
       
       total
@@ -262,7 +261,7 @@ server <- function(input, output, session) {
     if (input$show_fao_zones_input) {
       loading(TRUE)
       
-      mapdeck_update(map_id = "emissions_map") %>%
+      mapdeck_update(map_id = "emissions_map") |>
         add_polygon(
           data = fao_regions,
           layer_id = "fao_layer",
@@ -270,7 +269,7 @@ server <- function(input, output, session) {
           fill_opacity = 1,
           tooltip = "zone",
           update_view = FALSE
-        ) %>%
+        ) |>
         add_path(
           data = fao_borders,
           layer_id = "fao_border_layer",
@@ -283,8 +282,8 @@ server <- function(input, output, session) {
       later::later(function() { loading(FALSE) }, delay = 0.2)
       
     } else {
-      mapdeck_update(map_id = "emissions_map") %>%
-        clear_polygon(layer_id = "fao_layer") %>%
+      mapdeck_update(map_id = "emissions_map") |>
+        clear_polygon(layer_id = "fao_layer") |>
         clear_path(layer_id = "fao_border_layer")
     }
   })
@@ -437,28 +436,32 @@ server <- function(input, output, session) {
       geom_col(aes(x = x_var,
                    y = reorder(isscaap_group, sum_emissions)),
                fill = "#08C4E5") +
+      
+      # Add image aligned under the bar
+      geom_image(aes(
+        x = -0.05 * max_x,
+        y = reorder(isscaap_group, sum_emissions),
+        image = image
+      ), size = 0.05, asp = 1.5) +  # Adjust size/asp as needed
+      
       geom_text(aes(x = x_var + 0.09 * max_x,
                     y = reorder(isscaap_group, sum_emissions),
                     label = x_label),
                 color = "white",
                 size = 7) +
+      
       labs(title = "Annual CO₂ Emissions by ISSCAAP Group") +
+      
       theme_void() +
       theme(
         legend.position = "none",
-        title = element_text(color = "white",
-                             family = "Roboto",
-                             face = "bold",
-                             size = 24),
+        title = element_text(color = "white", family = "Roboto", face = "bold", size = 24),
         axis.title.x = element_blank(),
-        axis.text.y = element_text(color = "white",
-                                   size = 22,
-                                   hjust = 1,
-                                   margin = margin(r = -5)),
+        axis.text.y = element_text(color = "white", size = 22, hjust = 1, margin = margin(r = -5)),
         panel.background = element_rect(fill = "#053762", color = NA),
         plot.background = element_rect(fill = "#053762", color = NA)
       ) +
-      expand_limits(x = c(-0.05 * max_x, 1.2 * max_x))
+      expand_limits(x = c(-0.1 * max_x, 1.2 * max_x))
   })
   
   
@@ -469,9 +472,9 @@ server <- function(input, output, session) {
     show_per_unit <- input$unit_plot_toggle_input
     
     # Aggregate over years for selected country
-    country_species_data <- species_data %>%
-      filter(country_name == input$selected_country_input) %>%
-      group_by(isscaap_group) %>%
+    country_species_data <- species_data |>
+      filter(country_name == input$selected_country_input) |>
+      group_by(isscaap_group) |>
       summarise(
         sum_emissions = sum(sum_emissions, na.rm = TRUE),
         total_catch = sum(total_catch, na.rm = TRUE),
@@ -527,9 +530,9 @@ server <- function(input, output, session) {
   output$selected_country_total <- renderText({
     req(input$selected_country_input)
     
-    total <- species_data %>%
-      filter(country_name == input$selected_country_input) %>%
-      summarize(total = sum(sum_emissions, na.rm = TRUE)) %>%
+    total <- species_data |>
+      filter(country_name == input$selected_country_input) |>
+      summarize(total = sum(sum_emissions, na.rm = TRUE)) |>
       pull(total)
     
     paste0(format(round(total, 2), big.mark = ","), " Mt CO₂")

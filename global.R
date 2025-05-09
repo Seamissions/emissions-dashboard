@@ -31,7 +31,7 @@ library(scales)  # for commas in labels
 library(rsconnect)
 library(pryr)
 library(ggflags)
-#library(ggimage)
+library(ggimage)
 
 # ---- Load & prep data ---------------------------------------------------------------
 
@@ -76,3 +76,9 @@ top_isscaap <- species_data |>
     .groups = "drop"
   ) |>
   slice_max(order_by = sum_emissions, n = 10, with_ties = FALSE)
+
+top_isscaap$image <- "www/images/herring.png"
+
+
+
+

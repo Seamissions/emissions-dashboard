@@ -17,7 +17,6 @@ server <- function(input, output, session) {
     })
   })
   
-  
   # ---- Define color palettes -------------------------------------------------
   blue_palette <- colorRamp(c("#20404F", "#4C9EA6", "#67D6E0", "#76F3FF", "#A9F2FF", "#DAF3FF", "white"))((1:256) / 256)
   pink_palette <- colorRamp(c("#9E3E74","#D4539C","#FF63BB", "#FF9AD6","#FFD9D7","#FFF9F9"))((1:256) / 256)
@@ -35,7 +34,6 @@ server <- function(input, output, session) {
     filter(country_name == "All Countries", year == max(year, na.rm = TRUE)) %>%
     summarise(total = sum(emissions_co2_mt, na.rm = TRUE)) %>%
     pull(total)
-  
   
   # ---- Sidebar toggle logic ----
   observeEvent(input$toggle_sidebar_open_input, {
@@ -106,7 +104,7 @@ server <- function(input, output, session) {
       }
       if (input$show_non_broadcasting_input) {
         output$total_non_broadcasting <- renderText({
-          nb_emissions <- readRDS("data/nb_emissions.rds") |> filter(emissions_co2_mt >= 200, year == input$year_slider_input)
+          nb_emissions <- readRDS("/capstone/seamissions/data-processed/dashboard/nb_emissions.rds") |> filter(emissions_co2_mt >= 200, year == input$year_slider_input)
           total <- sum(nb_emissions$emissions_co2_mt, na.rm = TRUE)
           paste0(format(round(total, 2), big.mark = ","), " Mt CO2")
         })
@@ -191,16 +189,13 @@ server <- function(input, output, session) {
   })
   
   
-  
-  
-  
   # ---- Non-broadcasting emissions layer ----
   observe({
     mapdeck_update(map_id = "emissions_map") %>%
       clear_polygon(layer_id = "non_broadcasting_layer")
     if (input$show_non_broadcasting_input) {
       loading(TRUE)
-      nb_emissions <- readRDS("data/nb_emissions.rds") %>% filter(emissions_co2_mt >= 200, year == input$year_slider_input)
+      nb_emissions <- readRDS("/capstone/seamissions/data-processed/dashboard/nb_emissions.rds") %>% filter(emissions_co2_mt >= 200, year == input$year_slider_input)
       mapdeck_update(map_id = "emissions_map") %>%
         add_polygon(
           layer_id = "non_broadcasting_layer",

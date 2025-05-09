@@ -314,12 +314,28 @@ server <- function(input, output, session) {
   
   # ---- Country emissions plot ------------------------------------------------
   
+  
+  useShinyjs()
+  
+  # ---- Set default active button and plot on load ----
+  runjs("$('#compare_countries_input').addClass('plot-button-active');")
+  shinyjs::show("country_plot")
+  shinyjs::hide("isscaap_plot")
+  shinyjs::hide("species_bar_plot")
+  shinyjs::hide("country_select_plot_input")
+  
   # ---- Toggle barplots on button click ----
   observeEvent(input$compare_species_input, {
     shinyjs::show("isscaap_plot")
     shinyjs::hide("country_plot")
     shinyjs::hide("species_bar_plot")
     shinyjs::hide("country_select_plot_input")
+    
+    runjs("
+    $('#compare_species_input').addClass('plot-button-active');
+    $('#compare_countries_input').removeClass('plot-button-active');
+    $('#select_country_input').removeClass('plot-button-active');
+  ")
   })
   
   observeEvent(input$compare_countries_input, {
@@ -327,6 +343,12 @@ server <- function(input, output, session) {
     shinyjs::hide("isscaap_plot")
     shinyjs::hide("species_bar_plot")
     shinyjs::hide("country_select_plot_input")
+    
+    runjs("
+    $('#compare_species_input').removeClass('plot-button-active');
+    $('#compare_countries_input').addClass('plot-button-active');
+    $('#select_country_input').removeClass('plot-button-active');
+  ")
   })
   
   observeEvent(input$select_country_input, {
@@ -334,6 +356,12 @@ server <- function(input, output, session) {
     shinyjs::hide("isscaap_plot")
     shinyjs::show("species_bar_plot")
     shinyjs::show("country_select_plot_input")
+    
+    runjs("
+    $('#compare_species_input').removeClass('plot-button-active');
+    $('#compare_countries_input').removeClass('plot-button-active');
+    $('#select_country_input').addClass('plot-button-active');
+  ")
   })
   
 

@@ -300,6 +300,20 @@ ui <- navbarPage(
 
 tabPanel("Compare Seafood Emissions",
          
+         tags$head(
+           tags$style(HTML("
+    .plot-button {
+      background-color: #08C4E5 !important;
+      color: white !important;
+      border: none !important;
+    }
+
+    .plot-button-active {
+      background-color: #F9B928 !important;
+      color: black !important;
+    }
+  "))
+         ),
          
          
          # Header Row ----
@@ -319,7 +333,7 @@ tabPanel("Compare Seafood Emissions",
                   tagList(
                     icon("fish", style = "margin-right: 8px;"),
                     "Compare Species"),
-                  class = "btn-primary btn-lg") # END actionButton (Compare Species)
+                  class = "btn btn-lg") # END actionButton (Compare Species)
          ), # END column (Compare Species)
          
          
@@ -330,7 +344,7 @@ tabPanel("Compare Seafood Emissions",
                   tagList(
                     icon("earth-americas", style = "margin-right: 8px;"),
                     "Compare Countries"),
-                  class = "btn-primary btn-lg") # END actionButton (Compare Countries)
+                  class = "btn btn-lg") # END actionButton (Compare Countries)
          ), # END column (Compare Countries)
          
          # Select a country button ---- 
@@ -340,7 +354,7 @@ tabPanel("Compare Seafood Emissions",
                   tagList(
                     icon("flag", style = "margin-right: 8px;"),
                     "Select a Country"),
-                  class = "btn-primary btn-lg") # END actionButton (Compare Countries)
+                  class = "btn btn-lg") # END actionButton (Compare Countries)
          ) # END column (Compare Countries)
          
          

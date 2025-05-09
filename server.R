@@ -104,7 +104,7 @@ server <- function(input, output, session) {
       }
       if (input$show_non_broadcasting_input) {
         output$total_non_broadcasting <- renderText({
-          nb_emissions <- readRDS("/capstone/seamissions/data-processed/dashboard/nb_emissions.rds") |> filter(emissions_co2_mt >= 200, year == input$year_slider_input)
+          nb_emissions <- readRDS("data/nb_emissions.rds") |> filter(emissions_co2_mt >= 200, year == input$year_slider_input)
           total <- sum(nb_emissions$emissions_co2_mt, na.rm = TRUE)
           paste0(format(round(total, 2), big.mark = ","), " Mt CO2")
         })
@@ -194,7 +194,7 @@ server <- function(input, output, session) {
       clear_polygon(layer_id = "non_broadcasting_layer")
     if (input$show_non_broadcasting_input) {
       loading(TRUE)
-      nb_emissions <- readRDS("/capstone/seamissions/data-processed/dashboard/nb_emissions.rds") |> filter(emissions_co2_mt >= 200, year == input$year_slider_input)
+      nb_emissions <- readRDS("data/nb_emissions.rds") |> filter(emissions_co2_mt >= 200, year == input$year_slider_input)
       mapdeck_update(map_id = "emissions_map") |>
         add_polygon(
           layer_id = "non_broadcasting_layer",

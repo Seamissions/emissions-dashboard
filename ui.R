@@ -146,7 +146,6 @@ ui <- navbarPage(
   tabPanel("Emissions Map",
            
            useShinyjs(), # Initialize shinyjs
-
            
            # ---- Map Container ----
            div(style = "position: relative; height: 90vh;",
@@ -184,19 +183,72 @@ ui <- navbarPage(
                    
                    # ---- Sidebar Layer Controls -------------------------------
                    
-                   # Controls for broadcasting emissions data
-                   materialSwitch(inputId = "show_broadcasting_input",
-                                  label = tags$div(style = "font-size: 18px;
+                 # Controls for broadcasting emissions data
+                 materialSwitch(inputId = "show_broadcasting_input",
+                                label = tags$div(style = "font-size: 18px;
                                                            font-weight: bold;",
-                                                           "AIS Broadcasting Emissions"),
-                                  value = TRUE,
-                                  status = "info"),
+                                                 "AIS Broadcasting Emissions"),
+                                value = TRUE,
+                                status = "info"),
+                 
+                 # Info icon and pop-up for broadcasting layer
+                 tagList(
+                   tags$div(
+                     id = "info_wrapper",
+                     style = "position: relative; display: inline-block;",
+                     
+                     
+                     actionLink(
+                       inputId = "show_broadcast_info",
+                       label = tags$i(
+                         class = "fas fa-info-circle",
+                         style = "color:#08C4E5; font-size: 18px; cursor: pointer;")), # END actionLink (show broadcasting info)
+                     
+                     # Pop-up box actionButton
+                     tags$div(
+                       id = "info_popup",
+                       style = "display: none;
+                               position: absolute;
+                               top: 25px;
+                               left: 0;
+                               z-index: 1000;
+                               background-color: #f1f9fc;
+                               color: #20404F;
+                               padding: 10px 15px;
+                               border-radius: 5px;
+                               border: 1px solid #08C4E5;
+                               box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+                               width: 250px;",
+                       "This is a description of the broadcasting data layer.") # END div (info icon) 
+                   ), # END actionButton (info icon)
                    
-                   hidden(div(id = "broadcasting_legend",
-                              tags$div(style = "background: linear-gradient(to right,#015661, #03C7E8);
-           height: 20px;
-           width: 70%;
-           border: 1px solid #ccc;"),
+                   # JavaScript: toggle popup, hide when clicking outside
+                   tags$script(HTML("let popupVisible = false;
+                                    document.getElementById('show_broadcast_info').addEventListener('click', function(event) {
+                                      event.stopPropagation();
+                                      const popup = document.getElementById('info_popup');
+                                      popupVisible = !popupVisible;
+                                      popup.style.display = popupVisible ? 'block' : 'none';
+                                    });
+                                
+                                    document.addEventListener('click', function(event) {
+                                      const popup = document.getElementById('info_popup');
+                                      const wrapper = document.getElementById('info_wrapper');
+                                      if (popupVisible && !wrapper.contains(event.target)) {
+                                        popup.style.display = 'none';
+                                        popupVisible = false;
+                                      }
+                                    });
+                                  ")) # END tags$script
+                                   ), # END tag list
+                 
+                 
+                 # Hidden broadcsting legend
+                 hidden(div(id = "broadcasting_legend",
+                            tags$div(style = "background: linear-gradient(to right,#015661, #03C7E8);
+                                               height: 20px;
+                                               width: 70%;
+                                               border: 1px solid #ccc;"),
                               
                               tags$div(textOutput("total_broadcasting"),
                                        style = "font-size: 15px; font-weight: bold; color: #053762; margin-bottom: 10px;"),

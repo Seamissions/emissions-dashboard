@@ -13,6 +13,7 @@ library(shiny)
 library(shinydashboard)
 library(shinyWidgets)
 library(shinyjs)
+library(shinyBS) 
 library(shinycssloaders)
 library(bs4Dash)
 library(later) # to delay loader
@@ -38,9 +39,6 @@ library(ggimage)
 # ---- Emissions map data ----
 
 # Load emissions data
-# broadcasting_emissions <- readRDS("data/broadcasting_emissions.rds") |> 
-#   filter(emissions_co2_mt >= 200)
-
  broadcasting_emissions <- readRDS("data/broadcasting_emissions.rds") |> 
    filter(emissions_co2_mt >= 200)
 

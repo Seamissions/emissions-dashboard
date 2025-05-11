@@ -165,7 +165,7 @@ ui <- navbarPage(
                    # ---- Toggle Button Inside Sidebar ----
                    actionButton("toggle_sidebar_open_input",
                                 label = NULL,
-                                icon = icon("angle-left", style = "font-size: 20px;"),
+                                icon = icon("angle-left", style = "font-size: 25px;"),
                                 style = "position: absolute;
                                          top: 40%;
                                          right: -40px;
@@ -272,7 +272,7 @@ ui <- navbarPage(
                actionButton("toggle_sidebar_close_input",
                             label = NULL,
                             icon = icon("angle-right",
-                                        style = "font-size: 20px;"),
+                                        style = "font-size: 25px;"),
                             style = "position: absolute;
                                      top: 40%;
                                      left: -20px;

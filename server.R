@@ -399,8 +399,7 @@ server <- function(input, output, session) {
                 size = 7) +
       labs(title = "Annual CO₂ Emissions from Top Fishing Fleets") +
       theme_void() +
-      theme(
-        legend.position = "none",
+      theme(legend.position = "none",
         title = element_text(color = "white", family = "Roboto", face = "bold", size = 24),
         axis.title.x = element_blank(),
         axis.text.y = element_text(color = "white", size = 22, hjust = 1, margin = margin(r = -5)),
@@ -475,14 +474,7 @@ server <- function(input, output, session) {
     # Aggregate across years for selected country
     filtered_select_country <- species_data |>
       filter(country_name == input$selected_country_input,
-             year == input$year_slider_input_plot) |>
-      group_by(isscaap_group) |>
-      summarize(
-        sum_emissions = sum(sum_emissions, na.rm = TRUE),
-        total_catch = sum(total_catch, na.rm = TRUE),
-        emissions_per_ton = sum_emissions / total_catch,
-        .groups = "drop"
-      )
+             year == input$year_slider_input_plot)
     
     
     x_var <- if (isTRUE(show_per_unit)) {

@@ -184,29 +184,27 @@ ui <- navbarPage(
                    # ---- Sidebar Layer Controls -------------------------------
                    
                  # Controls for broadcasting emissions data
-                 fluidRow(
-                   column(width = 10,
+                 column(width = 12,
+                        div(
+                          style = "display: flex; align-items: center; gap: 10px;",
                           
-                          div(style = "align-items: right;",
-                              
-                              # materialSwitch (broadcasting)
-                              materialSwitch(inputId = "show_broadcasting_input",
-                                             label = tags$div(style = "font-size: 18px;
-                                                           font-weight: bold;",
-                                                              "AIS Broadcasting Emissions"),
-                                             value = TRUE,
-                                             status = "info") # END materialSwitch
-                          ) # END div
-                   ), # END column
+                          # materialSwitch (broadcasting)
+                          materialSwitch(
+                            inputId = "show_broadcasting_input",
+                            label = tags$div(
+                              style = "font-size: 18px; font-weight: bold;",
+                              "AIS Broadcasting Emissions"
+                            ),
+                            value = TRUE,
+                            status = "info"
+                          ), # END materialSwitch
+                          
+                          # info icon (same line)
+                          infoPopup("broadcasting_popup", "This is a very important description of the broadcasting data. This is what.")
+                        ) # END div
+                 ), # END column
+                 
                    
-                   # infoPopup (broadcasting emissions)
-                   column(width = 2,
-                          div(
-                            style = "text-align: left; align-items: left;",
-                            infoPopup("broadcasting_popup", "this is a very important description of the broadcasting data this is what")
-                          ) # END div
-                   ) # END column
-                 ), # END fluid row
                  
                  # Hidden broadcsting legend
                  hidden(div(id = "broadcasting_legend",
@@ -424,7 +422,7 @@ tabPanel("Compare Seafood Emissions",
 # --- Second Row with ggplot ---------------------------------------------------
 fluidRow(
   column(width = 12,
-         div(style = "background-color: #053762;
+         div(style = "background-color:#0B2232;
                      height: 60vh;
                      min-height: 300px;
                      margin-top: 30px;

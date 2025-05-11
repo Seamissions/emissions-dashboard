@@ -8,4 +8,4 @@
 /data-raw/
 
 # config file storing tokens
-config.R
+/R/config.R

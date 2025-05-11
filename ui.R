@@ -196,7 +196,7 @@ ui <- navbarPage(
                    tags$div(
                      id = "info_wrapper",
                      style = "position: relative; display: inline-block;",
-                     
+          
                      
                      actionLink(
                        inputId = "show_broadcast_info",
@@ -332,7 +332,7 @@ ui <- navbarPage(
                                     padding: 8px;
                                     border-radius: 8px;
                                     width: 20%;",
-                             sliderInput("year_slider_input",
+                             sliderInput("year_slider_input_map",
                                          "Select Year",
                                          min = year_min,
                                          max = year_max,
@@ -369,69 +369,93 @@ tabPanel("Compare Seafood Emissions",
          
          
          # Header Row ----
+         
+         fluidRow( tags$hr()),
          fluidRow(
+           # Centered button row ----
+           column(
+             width = 12,
+             div(
+               style = "text-align: center;",
+               
+               # Compare species button ---- 
+               div(
+                 style = "display: inline-block; margin: 0 10px;",
+                 actionButton(
+                   "compare_species_input",
+                   tagList(
+                     icon("fish", style = "margin-right: 8px;"),
+                     "Compare Species"),
+                   class = "btn btn-lg") # END actionButton (Compare Species)
+               ), # END div (Compare Species wrapper)
+               
+               # Compare countries button ---- 
+               div(
+                 style = "display: inline-block; margin: 0 10px;",
+                 actionButton(
+                   "compare_countries_input",
+                   tagList(
+                     icon("earth-americas", style = "margin-right: 8px;"),
+                     "Compare Countries"),
+                   class = "btn btn-lg") # END actionButton (Compare Countries)
+               ), # END div (Compare Countries wrapper)
+               
+               # Select a country button ---- 
+               div(
+                 style = "display: inline-block; margin: 0 10px;",
+                 actionButton(
+                   "select_country_input",
+                   tagList(
+                     icon("flag", style = "margin-right: 8px;"),
+                     "Select a Country"),
+                   class = "btn btn-lg") # END actionButton (Select a Country)
+               ) # END div (Select a Country wrapper)
+               
+             ) # END div (centered button container)
+           ) # END column (full-width)
            
-           # Title
-           tags$h3(style = "font-size: 24px;
-                         font-weight: bold;
-                         color: #f9f9f9;
-                         margin-bottom: 20px;", 
-                   "Compare Seafood Emissions"), 
+         ), # END fluidRow
+
+         # Country Selector and Total Emissions (hidden initially)
+         shinyjs::hidden(
            
-         # Compare species button ---- 
-         column(width = 2,
-                actionButton(
-                  "compare_species_input",
-                  tagList(
-                    icon("fish", style = "margin-right: 8px;"),
-                    "Compare Species"),
-                  class = "btn btn-lg") # END actionButton (Compare Species)
-         ), # END column (Compare Species)
+           div(id = "country_select_plot_input", 
+               fluidRow(
+                 column(
+                   width = 12,
+                   div(
+                     style = "text-align: center;",
+                     
+                     # Country dropdown ----
+                     div(
+                       style = "display: inline-block; margin-right: 20px;",
+                       pickerInput(
+                         inputId = "selected_country_input",
+                         label = "Select a Country:",
+                         choices = c("Select a country" = "", sort(unique(species_data$country_name))),
+                         selected = NULL,
+                         options = list(`live-search` = TRUE,
+                                        `noneSelectedText` = "All Countries")
+                       ) # END pickerInput
+                     ), # END div (dropdown wrapper)
+                     
+                     
+                     # Total emissions text ----
+                     div(
+                       style = "display: inline-block;",
+                       tags$h4(
+                         textOutput("selected_country_total"),
+                         style = "color: white; font-weight: bold; margin-top: 25px;"
+                       ) # END h4
+                     ) # END div (text wrapper)
+                     
+                   ) # END center div
+                 ) # END column
+               ) # END fluidRow
+           ) # END div (country_select_plot_input)
+           
+         ),
          
-         
-         # Compare countries button ---- 
-         column(width = 2,
-                actionButton(
-                  "compare_countries_input",
-                  tagList(
-                    icon("earth-americas", style = "margin-right: 8px;"),
-                    "Compare Countries"),
-                  class = "btn btn-lg") # END actionButton (Compare Countries)
-         ), # END column (Compare Countries)
-         
-         # Select a country button ---- 
-         column(width = 2,
-                actionButton(
-                  "select_country_input",
-                  tagList(
-                    icon("flag", style = "margin-right: 8px;"),
-                    "Select a Country"),
-                  class = "btn btn-lg") # END actionButton (Compare Countries)
-         ) # END column (Compare Countries)
-         
-         
-), # END first fluidRow
-
-
-# Add country selector and total emissions (hidden)
-
-# Country Selector and Total Emissions (hidden initially)
-shinyjs::hidden(
-  div(id = "country_select_plot_input",
-      fluidRow(
-        column(4, offset = 1,
-               pickerInput(inputId = "selected_country_input",
-                           label = "Select a Country:",
-                           choices = sort(unique(species_data$country_name)))
-        ),
-        column(6,
-               tags$h4(textOutput("selected_country_total"),
-                       style = "color: white; font-weight: bold; margin-top: 25px;")
-        )
-      ) # END fluidRow
-  ) # END div (country_select_plot_input)
-
-),
 
 
 # --- Second Row with ggplot ---------------------------------------------------
@@ -470,7 +494,7 @@ fluidRow(
                )
              )
              
-             
+            
              
          ) # END row div
   )
@@ -478,8 +502,28 @@ fluidRow(
 
 
 fluidRow(
+  column(width = 6,
+         # ---- Year Slider ----
+         div(bottom = 30,
+                       style = "z-index: 1000;
+                                    background-color: rgba(255,255,255,0.8);
+                                    padding: 8px;
+                                    border-radius: 8px;
+                                    width: 20%;",
+                       sliderInput("year_slider_input_plot",
+                                   "Select Year",
+                                   min = 2016, # UPDATE to min
+                                   max = 2022, # UPDATE to max
+                                   value = 2022, # UPDATE to max
+                                   step = 1,
+                                   sep = "",
+                                   width = "100%",
+                                   ticks = TRUE) # END sliderInput (year)
+         ) # END absolutePanel - year
+
+         ),
   column(
-    width = 12,
+    width = 6,
     div(style = "display: flex;
                 justify-content: flex-end;
                 align-items: center;
@@ -509,6 +553,7 @@ fluidRow(
                        font-size: 14px;")
       ) # END div (Unit toggle)
   ) # END column (Unit toggle)
+
 ) # END fluidRow (Unit toggle)
          
 ), # END tabPanel (Seafood Emissions Explorer Page)

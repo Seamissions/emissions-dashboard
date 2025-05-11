@@ -59,26 +59,29 @@ year_max <- max(broadcasting_emissions$year, na.rm = TRUE)
 
 # ---- Seafood explorer data ----
 top_flags <- readRDS("data/top_flags.rds") |>
-  filter(year == 2016) |>
-  head(10)
+  group_by(year) |>
+  arrange(desc(sum_emissions), .by_group = TRUE) |>
+  slice_head(n = 10) |>
+  ungroup()
+
 
 # --- Read in species data ----
-country_species_data <- readRDS("data/species_data.rds") |>
-  filter(year == 2016,
-         country_name == "Albania") 
-  #group_by(country_name,)
-
+species_data <- readRDS("data/species_data.rds")
 
 # --- Prep top isscaap data ----
 top_isscaap <- species_data |>
-  filter(year == 2016) |>
   group_by(isscaap_group, year, image) |>
   summarize(
     sum_emissions = sum(sum_emissions, na.rm = TRUE),
     total_catch = sum(total_catch, na.rm = TRUE),
     emissions_per_ton = sum_emissions / total_catch,
-    .groups = "drop") |>
-  slice_max(order_by = sum_emissions, n = 10, with_ties = FALSE)
+    .groups = "drop"
+  ) |>
+  group_by(year) |>
+  arrange(desc(sum_emissions), .by_group = TRUE) |>
+  slice_head(n = 10) |>
+  ungroup()
+
 
 top_isscaap$image <- "www/images/herring.png"
 

@@ -103,7 +103,7 @@ server <- function(input, output, session) {
       }
       if (input$show_non_broadcasting_input) {
         output$total_non_broadcasting <- renderText({
-          nb_emissions <- readRDS("data/nb_emissions.rds") |> filter(emissions_co2_mt >= 200, year == input$year_slider_input)
+          nb_emissions <- readRDS("data/nb_emissions.rds") |> filter(emissions_co2_mt >= 200, year == input$year_slider_input_map)
           total <- sum(nb_emissions$emissions_co2_mt, na.rm = TRUE)
           paste0(format(round(total, 2), big.mark = ","), " Mt CO2")
         })
@@ -124,9 +124,9 @@ server <- function(input, output, session) {
   
   # ---- Filter emissions by country and year ----
   country_filtered <- reactive({
-    req(input$country_select_input, input$year_slider_input)
+    req(input$country_select_input, input$year_slider_input_map)
     broadcasting_emissions |>
-      filter(country_name == input$country_select_input, year == input$year_slider_input)
+      filter(country_name == input$country_select_input, year == input$year_slider_input_map)
   })
   
   
@@ -154,7 +154,7 @@ server <- function(input, output, session) {
       mapdeck_update(map_id = "emissions_map") |>
         clear_polygon(layer_id = "country_layer") |>
         add_polygon(
-          data = broadcasting_emissions |> filter(country_name == "All Countries", year == input$year_slider_input),
+          data = broadcasting_emissions |> filter(country_name == "All Countries", year == input$year_slider_input_map),
           layer_id = "all_countries",
           fill_colour = "emissions_co2_mt",
           palette = blue_palette,
@@ -193,7 +193,7 @@ server <- function(input, output, session) {
       clear_polygon(layer_id = "non_broadcasting_layer")
     if (input$show_non_broadcasting_input) {
       loading(TRUE)
-      nb_emissions <- readRDS("data/nb_emissions.rds") |> filter(emissions_co2_mt >= 200, year == input$year_slider_input)
+      nb_emissions <- readRDS("data/nb_emissions.rds") |> filter(emissions_co2_mt >= 200, year == input$year_slider_input_map)
       mapdeck_update(map_id = "emissions_map") |>
         add_polygon(
           layer_id = "non_broadcasting_layer",
@@ -210,7 +210,7 @@ server <- function(input, output, session) {
   
   # ---- Calculate total emissions for the selected year and country ----
   broadcasting_total <- reactive({
-    req(input$year_slider_input)
+    req(input$year_slider_input_map)
     
     if (!is.null(input$country_select_input) &&
         input$country_select_input != "All Countries" &&
@@ -224,7 +224,7 @@ server <- function(input, output, session) {
       # If "All Countries" or no country is selected, use the pre-aggregated row
       total <- broadcasting_emissions |>
         filter(country_name == "All Countries",
-               year == input$year_slider_input) |>
+               year == input$year_slider_input_map) |>
         summarise(total = sum(emissions_co2_mt, na.rm = TRUE)) |>
         pull(total)
       
@@ -363,53 +363,51 @@ server <- function(input, output, session) {
     
     show_per_unit <- input$unit_plot_toggle_input
     
+    filtered_flags <- top_flags |>
+      filter(year == input$year_slider_input_plot)
+    
+    req(nrow(filtered_flags) > 0)  # prevents error if no data for selected year
+    
     x_var <- if (isTRUE(show_per_unit)) {
-      top_flags$emissions_per_ton
+      filtered_flags$emissions_per_ton
     } else {
-      top_flags$sum_emissions
+      filtered_flags$sum_emissions
     }
     
     x_label <- if (isTRUE(show_per_unit)) {
-      paste0(comma(top_flags$emissions_per_ton), " MT")
+      paste0(comma(filtered_flags$emissions_per_ton), " MT")
     } else {
-      paste0(comma(top_flags$sum_emissions), " MT")
+      paste0(comma(filtered_flags$sum_emissions), " MT")
     }
     
     max_x <- max(x_var, na.rm = TRUE)
     
-    # ---- Country emissions plot ----------------------------------------------
-    ggplot(data = top_flags) +
+    filtered_flags$x_var <- x_var
+    filtered_flags$x_label <- x_label
+    
+    ggplot(data = filtered_flags) +
       geom_col(aes(x = x_var,
                    y = reorder(country_name, sum_emissions)),
                fill = "#08C4E5") +
       ggflags::geom_flag(aes(x = 0,
-                             y = reorder(country_name,
-                                         sum_emissions),
-                             country = iso2),size = 15) +
+                             y = reorder(country_name, sum_emissions),
+                             country = iso2), size = 15) +
       geom_text(aes(x = x_var + 0.09 * max_x,
                     y = reorder(country_name, sum_emissions),
                     label = x_label),
                 color = "white",
                 size = 7) +
-      
       labs(title = "Annual CO₂ Emissions from Top Fishing Fleets") +
-      
       theme_void() +
-      theme(legend.position = "none",
-            title = element_text(color = "white",
-                                 family = "Roboto",
-                                 face = "bold",
-                                 size = 24),
-            axis.title.x = element_blank(),
-            axis.text.y = element_text(color = "white",
-                                       size = 22,
-                                       hjust = 1,
-                                       margin = margin(r = -5)),
-            panel.background = element_rect(fill = "#0b2232ff", color = NA),
-            plot.background = element_rect(fill = "#0b2232ff", color = NA)) +
-      expand_limits(
-        x = c(-0.05 * max_x, 1.2 * max_x))
-    
+      theme(
+        legend.position = "none",
+        title = element_text(color = "white", family = "Roboto", face = "bold", size = 24),
+        axis.title.x = element_blank(),
+        axis.text.y = element_text(color = "white", size = 22, hjust = 1, margin = margin(r = -5)),
+        panel.background = element_rect(fill = "#0b2232ff", color = NA),
+        plot.background = element_rect(fill = "#0b2232ff", color = NA)
+      ) +
+      expand_limits(x = c(-0.05 * max_x, 1.2 * max_x))
   })
   
   # --- Plot comparing ISSCAAP groups ----
@@ -417,21 +415,25 @@ server <- function(input, output, session) {
     
     show_per_unit <- input$unit_plot_toggle_input
     
+    filtered_isscaap <- top_isscaap |>
+    filter(year == input$year_slider_input_plot)
+    
+    
     x_var <- if (isTRUE(show_per_unit)) {
-      top_isscaap$emissions_per_ton
+      filtered_isscaap$emissions_per_ton
     } else {
-      top_isscaap$sum_emissions
+      filtered_isscaap$sum_emissions
     }
     
     x_label <- if (isTRUE(show_per_unit)) {
-      paste0(comma(top_isscaap$emissions_per_ton), " MT")
+      paste0(comma(filtered_isscaap$emissions_per_ton), " MT")
     } else {
-      paste0(comma(top_isscaap$sum_emissions), " MT")
+      paste0(comma(filtered_isscaap$sum_emissions), " MT")
     }
     
     max_x <- max(x_var, na.rm = TRUE)
     
-    ggplot(data = top_isscaap) +
+    ggplot(data = filtered_isscaap) +
       geom_col(aes(x = x_var,
                    y = reorder(isscaap_group, sum_emissions)),
                fill = "#08C4E5") +
@@ -471,8 +473,9 @@ server <- function(input, output, session) {
     show_per_unit <- input$unit_plot_toggle_input
     
     # Aggregate across years for selected country
-    country_species_data <- species_data |>
-      filter(country_name == input$selected_country_input) |>
+    filtered_select_country <- species_data |>
+      filter(country_name == input$selected_country_input,
+             year == input$year_slider_input_plot) |>
       group_by(isscaap_group) |>
       summarize(
         sum_emissions = sum(sum_emissions, na.rm = TRUE),
@@ -483,21 +486,21 @@ server <- function(input, output, session) {
     
     
     x_var <- if (isTRUE(show_per_unit)) {
-      country_species_data$emissions_per_ton
+      filtered_select_country$emissions_per_ton
     } else {
-      country_species_data$sum_emissions
+      filtered_select_country$sum_emissions
     }
     
     x_label <- if (isTRUE(show_per_unit)) {
-      paste0(comma(round(country_species_data$emissions_per_ton, 2)), " MT")
+      paste0(comma(round(filtered_select_country$emissions_per_ton, 2)), " MT")
     } else {
-      paste0(comma(round(country_species_data$sum_emissions, 2)), " MT")
+      paste0(comma(round(filtered_select_country$sum_emissions, 2)), " MT")
     }
     
     
     max_x <- max(x_var, na.rm = TRUE)
     
-    ggplot(data = country_species_data) +
+    ggplot(data = filtered_select_country) +
       geom_col(aes(x = x_var,
                    y = reorder(isscaap_group, sum_emissions)),
                fill = "#08C4E5") +
@@ -525,7 +528,6 @@ server <- function(input, output, session) {
       expand_limits(x = c(-0.05 * max_x, 1.2 * max_x))
   })
   
-
   
   # --- Text box for selected country’s total emissions ----
   output$selected_country_total <- renderText({
@@ -539,8 +541,7 @@ server <- function(input, output, session) {
     paste0(format(round(total, 2), big.mark = ","), " Mt CO₂")
   })
   
-  
-  
+
 }
 
 # END Seafood Emissions Explorer

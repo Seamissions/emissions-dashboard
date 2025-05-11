@@ -4,7 +4,8 @@
 
 
 # ---- Source config file storing tokens ----
-source("config.R")
+source("R/config.R")
+source("R/infoPopup.R")
 sf::sf_use_s2(FALSE)
 
 

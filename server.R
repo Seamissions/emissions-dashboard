@@ -404,8 +404,8 @@ server <- function(input, output, session) {
         title = element_text(color = "white", family = "Roboto", face = "bold", size = 24),
         axis.title.x = element_blank(),
         axis.text.y = element_text(color = "white", size = 22, hjust = 1, margin = margin(r = -5)),
-        panel.background = element_rect(fill = "#0b2232ff", color = NA),
-        plot.background = element_rect(fill = "#0b2232ff", color = NA)
+        panel.background = element_rect(fill = "#0B2232", color = NA),
+        plot.background = element_rect(fill = "#0B2232", color = NA)
       ) +
       expand_limits(x = c(-0.05 * max_x, 1.2 * max_x))
   })
@@ -459,8 +459,8 @@ server <- function(input, output, session) {
         title = element_text(color = "white", family = "Roboto", face = "bold", size = 24),
         axis.title.x = element_blank(),
         axis.text.y = element_text(color = "white", size = 22, hjust = 1, margin = margin(r = -5)),
-        panel.background = element_rect(fill = "#0b2232ff", color = NA),
-        plot.background = element_rect(fill = "#0b2232ff", color = NA)
+        panel.background = element_rect(fill = "#0B2232", color = NA),
+        plot.background = element_rect(fill = "#0B2232", color = NA)
       ) +
       expand_limits(x = c(-0.1 * max_x, 1.2 * max_x))
   })
@@ -522,8 +522,8 @@ server <- function(input, output, session) {
                                    size = 22,
                                    hjust = 1,
                                    margin = margin(r = -5)),
-        panel.background = element_rect(fill = "#0b2232ff", color = NA),
-        plot.background = element_rect(fill = "#0b2232ff", color = NA)
+        panel.background = element_rect(fill = "#0B2232", color = NA),
+        plot.background = element_rect(fill = "#0B2232", color = NA)
       ) +
       expand_limits(x = c(-0.05 * max_x, 1.2 * max_x))
   })

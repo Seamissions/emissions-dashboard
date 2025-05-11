@@ -222,7 +222,7 @@ ui <- navbarPage(
                        "This is a description of the broadcasting data layer.") # END div (info icon) 
                    ), # END actionButton (info icon)
                    
-                   # JavaScript: toggle popup, hide when clicking outside
+                   # Toggle popup, hide when clicking outside
                    tags$script(HTML("let popupVisible = false;
                                     document.getElementById('show_broadcast_info').addEventListener('click', function(event) {
                                       event.stopPropagation();
@@ -241,6 +241,8 @@ ui <- navbarPage(
                                     });
                                   ")) # END tags$script
                                    ), # END tag list
+                 
+                 infoPopup("broadcasting_popup", "description"),
                  
                  
                  # Hidden broadcsting legend

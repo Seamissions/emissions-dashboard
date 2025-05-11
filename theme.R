@@ -3,8 +3,8 @@ library(bslib)
 
 seamissions_theme <- bs_theme(
   version = 5,  # Bootstrap version
-  bg = "#0b2232ff",      # Background color
-  fg = "#0b2232ff",       # Foreground (text) color
+  bg = "#0B2232",      # Background color
+  fg = "#0B2232",       # Foreground (text) color
   primary = "#08C4E5",  # Primary color
   secondary = "#DA8D03", # Orange for buttons
   base_font = font_google("Roboto"),       # Base font

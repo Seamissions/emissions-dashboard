@@ -470,16 +470,17 @@ server <- function(input, output, session) {
     
     show_per_unit <- input$unit_plot_toggle_input
     
-    # Aggregate over years for selected country
+    # Aggregate across years for selected country
     country_species_data <- species_data |>
       filter(country_name == input$selected_country_input) |>
       group_by(isscaap_group) |>
-      summarise(
+      summarize(
         sum_emissions = sum(sum_emissions, na.rm = TRUE),
         total_catch = sum(total_catch, na.rm = TRUE),
         emissions_per_ton = sum_emissions / total_catch,
         .groups = "drop"
       )
+    
     
     x_var <- if (isTRUE(show_per_unit)) {
       country_species_data$emissions_per_ton
@@ -488,10 +489,11 @@ server <- function(input, output, session) {
     }
     
     x_label <- if (isTRUE(show_per_unit)) {
-      paste0(comma(country_species_data$emissions_per_ton), " MT")
+      paste0(comma(round(country_species_data$emissions_per_ton, 2)), " MT")
     } else {
-      paste0(comma(country_species_data$sum_emissions), " MT")
+      paste0(comma(round(country_species_data$sum_emissions, 2)), " MT")
     }
+    
     
     max_x <- max(x_var, na.rm = TRUE)
     

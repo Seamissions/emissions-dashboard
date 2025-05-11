@@ -63,8 +63,11 @@ top_flags <- readRDS("data/top_flags.rds") |>
   head(10)
 
 # --- Read in species data ----
-species_data <- readRDS("data/species_data.rds") |>
-  filter(year == 2016)
+country_species_data <- readRDS("data/species_data.rds") |>
+  filter(year == 2016,
+         country_name == "Albania") 
+  #group_by(country_name,)
+
 
 # --- Prep top isscaap data ----
 top_isscaap <- species_data |>
@@ -74,8 +77,7 @@ top_isscaap <- species_data |>
     sum_emissions = sum(sum_emissions, na.rm = TRUE),
     total_catch = sum(total_catch, na.rm = TRUE),
     emissions_per_ton = sum_emissions / total_catch,
-    .groups = "drop"
-  ) |>
+    .groups = "drop") |>
   slice_max(order_by = sum_emissions, n = 10, with_ties = FALSE)
 
 top_isscaap$image <- "www/images/herring.png"

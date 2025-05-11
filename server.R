@@ -357,7 +357,7 @@ server <- function(input, output, session) {
   ")
   })
   
-
+  
   # --- Plot comparing countries ----
   output$country_plot_output <- renderPlot({
     
@@ -400,11 +400,11 @@ server <- function(input, output, session) {
       labs(title = "Annual CO₂ Emissions from Top Fishing Fleets") +
       theme_void() +
       theme(legend.position = "none",
-        title = element_text(color = "white", family = "Roboto", face = "bold", size = 24),
-        axis.title.x = element_blank(),
-        axis.text.y = element_text(color = "white", size = 22, hjust = 1, margin = margin(r = -5)),
-        panel.background = element_rect(fill = "#0B2232", color = NA),
-        plot.background = element_rect(fill = "#0B2232", color = NA)
+            title = element_text(color = "white", family = "Roboto", face = "bold", size = 24),
+            axis.title.x = element_blank(),
+            axis.text.y = element_text(color = "white", size = 22, hjust = 1, margin = margin(r = -5)),
+            panel.background = element_rect(fill = "#0B2232", color = NA),
+            plot.background = element_rect(fill = "#0B2232", color = NA)
       ) +
       expand_limits(x = c(-0.05 * max_x, 1.2 * max_x))
   })
@@ -415,7 +415,7 @@ server <- function(input, output, session) {
     show_per_unit <- input$unit_plot_toggle_input
     
     filtered_isscaap <- top_isscaap |>
-    filter(year == input$year_slider_input_plot)
+      filter(year == input$year_slider_input_plot)
     
     
     x_var <- if (isTRUE(show_per_unit)) {
@@ -533,13 +533,12 @@ server <- function(input, output, session) {
     paste0(format(round(total, 2), big.mark = ","), " Mt CO₂")
   })
   
-
+  
 }
 
 # END Seafood Emissions Explorer
 
 # END server function
-
 
 
 

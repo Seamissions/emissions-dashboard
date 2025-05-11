@@ -168,7 +168,7 @@ ui <- navbarPage(
                                 icon = icon("angle-left", style = "font-size: 25px;"),
                                 style = "position: absolute;
                                          top: 40%;
-                                         right: -40px;
+                                         right: -35px;
                                          width: 0%;
                                          background-color: #f9f9f9;
                                          border: none;"),
@@ -275,7 +275,7 @@ ui <- navbarPage(
                                         style = "font-size: 25px;"),
                             style = "position: absolute;
                                      top: 40%;
-                                     left: -20px;
+                                     left: -35px;
                                      width: 0%;
                                      background-color: #f9f9f9;
                                      border: none;
@@ -285,6 +285,28 @@ ui <- navbarPage(
                
                # ---- Emissions Map --------------------------------------------
                mapdeckOutput("emissions_map", height = "100%"),
+               
+               # ---- Zoom Control Buttons ----
+               absolutePanel(top = 20,
+                             right = 10,
+                             style = "z-index: 1001;",
+                             tags$style(HTML(".zoom-button {
+                                            background-color: rgba(255, 255, 255, 0.85) !important;
+                                            color: #DA8D03 !important;
+                                            border: 0px solid white !important;
+                                            border-radius: 4px !important;
+                                            width: 40px;
+                                            height: 40px;
+                                            font-size: 20px;
+                                            padding: 0;
+                                            text-align: center;
+                                          }
+                                        ")),
+                 actionButton("zoom_in", "+", class = "zoom-button"),
+                 actionButton("zoom_out", "−", class = "zoom-button")
+               ),
+               
+               
                uiOutput("loading_ui"),
                
                 # ---- Year Slider ----

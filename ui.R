@@ -544,7 +544,7 @@ fluidRow(
 # ---- Usage Guide Page --------------------------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------------------------------------------
 
-  tabPanel("Usage Guide",
+  tabPanel("Learn More",
            # ---- Hero Section ----
            div(style = "background-image: url('images/home-image.jpg');
                         background-size: cover;
@@ -553,8 +553,68 @@ fluidRow(
                         text-align: center;
                         color: #e8fffd;",
                h1("Seamissions Global Fishing Emissions Explorer"),
-               h4("Connecting data to action for sustainable oceans.")) # END hero section
-  ) # END tabPanel (Methods Page)
+               h4("Connecting data to action for sustainable oceans.")), # END hero section
+          
+           fluidRow(
+             column(12,
+                    div(style = "background-color: #1b2a49; padding: 30px; color: white;",
+                             h4(strong("Background")),
+                             tags$p(style = "font-weight: normal; color: white; margin: 30px;",
+                             "This is the background of our project. This is the background of our project.")  
+                      
+                      
+                    )
+                    )
+            
+          ),
+          
+          fluidRow(
+            column(12,
+                   div(style = "background-color: #1b2a49; padding: 30px; color: white;",
+                       h4(strong("Who we are")),
+                       tags$p(style = "font-weight: normal; color: white; margin: 30px;",
+                              "This is who we are. Here we have informatoin about the team.")  
+                   )
+            )
+            
+          ),
+          
+          fluidRow(
+            column(12,
+                   div(style = "background-color: #1b2a49; padding: 30px; color: white;",
+                       h4(strong("About our partners")),
+                       tags$p(style = "font-weight: normal; color: white; margin: 30px;",
+                              "This is information about our project. Here are some details.")  
+                   )
+            )
+            
+          ),
+          
+          fluidRow(
+            column(12,
+                   div(style = "background-color: #1b2a49; padding: 30px; color: white;",
+                       h4(strong("Background")),
+                       tags$p(style = "font-weight: normal; color: white; margin: 30px;",
+                              "This is the background of our project. This is the background of our project.")  
+                   )
+            )
+            
+          ),
+          
+          fluidRow(
+            column(12,
+                   div(style = "background-color: #1b2a49; padding: 30px; color: white;",
+                       h4(strong("Methods")),
+                       tags$p(style = "font-weight: normal; color: white; margin: 30px;",
+                              "These are the methods that we used on this project.")  
+                   )
+            )
+            
+          )
+          
+           ) # END tabPanel (Learn More Page)
+  
+ 
 
 ) # END navbarPage
 

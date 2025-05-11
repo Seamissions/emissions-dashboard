@@ -42,7 +42,7 @@ library(ggimage)
 # Load emissions data
  broadcasting_emissions <- readRDS("data/broadcasting_emissions.rds") |> 
    filter(emissions_co2_mt >= 200)
-
+  
 # Load FAO data
 fao_regions <- st_read("data/fao_region_shapefile/World_Fao_Zones.shp") |>
   st_transform(4326) |>
@@ -65,7 +65,6 @@ top_flags <- readRDS("data/top_flags.rds") |>
   slice_head(n = 10) |>
   ungroup()
 
-
 # --- Read in species data ----
 species_data <- readRDS("data/species_data.rds")
 
@@ -82,7 +81,6 @@ top_isscaap <- species_data |>
   arrange(desc(sum_emissions), .by_group = TRUE) |>
   slice_head(n = 10) |>
   ungroup()
-
 
 
 # ---- Define color palettes -------------------------------------------------

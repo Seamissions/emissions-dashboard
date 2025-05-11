@@ -203,7 +203,7 @@ ui <- navbarPage(
                    column(width = 2,
                           div(
                             style = "text-align: left; align-items: left;",
-                            infoPopup("broadcasting_popup", "this is a very important description of the broadcasting data this is what AIS")
+                            infoPopup("broadcasting_popup", "this is a very important description of the broadcasting data this is what")
                           ) # END div
                    ) # END column
                  ), # END fluid row
@@ -348,8 +348,8 @@ tabPanel("Compare Seafood Emissions",
                  style = "display: inline-block; margin: 0 10px;",
                  actionButton(
                    "compare_species_input",
-                   tagList(
-                     icon("fish", style = "margin-right: 8px;"),
+                   tagList(icon("fish",
+                                style = "margin-right: 8px;"),
                      "Compare Species"),
                    class = "btn btn-lg") # END actionButton (Compare Species)
                ), # END div (Compare Species wrapper)
@@ -357,21 +357,19 @@ tabPanel("Compare Seafood Emissions",
                # Compare countries button ---- 
                div(
                  style = "display: inline-block; margin: 0 10px;",
-                 actionButton(
-                   "compare_countries_input",
-                   tagList(
-                     icon("earth-americas", style = "margin-right: 8px;"),
-                     "Compare Countries"),
+                 actionButton("compare_countries_input",
+                   tagList(icon("earth-americas",
+                                style = "margin-right: 8px;"),
+                           "Compare Countries"),
                    class = "btn btn-lg") # END actionButton (Compare Countries)
                ), # END div (Compare Countries wrapper)
                
                # Select a country button ---- 
                div(
                  style = "display: inline-block; margin: 0 10px;",
-                 actionButton(
-                   "select_country_input",
-                   tagList(
-                     icon("flag", style = "margin-right: 8px;"),
+                 actionButton("select_country_input",
+                   tagList(icon("flag",
+                                style = "margin-right: 8px;"),
                      "Select a Country"),
                    class = "btn btn-lg") # END actionButton (Select a Country)
                ) # END div (Select a Country wrapper)
@@ -439,27 +437,26 @@ fluidRow(
              # ---- Country plot (default visible) ----
              div(
                id = "country_plot",
-               plotOutput("country_plot_output", height = "60vh", fill = TRUE) |> 
+               plotOutput("country_plot_output",
+                          height = "60vh", fill = TRUE) |> 
                  withSpinner(type = 4, color = '#08C4E5')), # END div
              
              # ---- ISSCAAP plot (hidden on load) ----
              shinyjs::hidden(
-               div(
-                 id = "isscaap_plot",
-                 plotOutput("isscaap_plot_output", height = "60vh", fill = TRUE) |> 
+               div(id = "isscaap_plot",
+                 plotOutput("isscaap_plot_output",
+                            height = "60vh", fill = TRUE) |> 
                    withSpinner(type = 4, color = '#08C4E5')) # END div 
              ), # END hidden
              
              # ---- Species plot for selected country (hidden on load) ----
              shinyjs::hidden(
-               div(
-                 id = "species_bar_plot",
-                 plotOutput("species_bar_plot_output", height = "60vh", fill = TRUE) |> 
+               div(id = "species_bar_plot",
+                 plotOutput("species_bar_plot_output",
+                            height = "60vh", fill = TRUE) |> 
                    withSpinner(type = 4, color = '#08C4E5')
-               )
-             )
-             
-            
+               ) # END div
+             ) # END hidden
              
          ) # END row div
   )

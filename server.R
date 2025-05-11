@@ -28,6 +28,27 @@ server <- function(input, output, session) {
   current_view <- reactiveVal(list(zoom = 3, location = c(0, 0)))
   loading <- reactiveVal(TRUE)
   
+  
+  # # --- Zoom control features ----
+  # observeEvent(input$zoom_in_btn, {
+  #   view <- current_view()
+  #   new_zoom <- min(view$zoom + 1, 20)
+  #   current_view(list(zoom = new_zoom, location = view$location))
+  #   
+  #   mapdeck_update(map_id = "emissions_map") %>%
+  #     set_view(location = view$location, zoom = new_zoom)
+  # })
+  # 
+  # observeEvent(input$zoom_out_btn, {
+  #   view <- current_view()
+  #   new_zoom <- max(view$zoom - 1, 0)
+  #   current_view(list(zoom = new_zoom, location = view$location))
+  #   
+  #   mapdeck_update(map_id = "emissions_map") %>%
+  #     set_view(location = view$location, zoom = new_zoom)
+  # })
+  # 
+  
   # Pre-calculate total emissions for the initial year (max year)
   initial_total_broadcasting <- broadcasting_emissions |>
     filter(country_name == "All Countries", year == max(year, na.rm = TRUE)) |>

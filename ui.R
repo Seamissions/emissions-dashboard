@@ -30,7 +30,7 @@ ui <- navbarPage(
   tabPanel("Home",
            
            div(style = "position: relative;
-             height: 600px;
+             height: 500px;
              width: 100vw;
              margin: 0;
              background-image: url('images/ocean-banner.png');
@@ -70,7 +70,6 @@ ui <- navbarPage(
                           "This dashboard combines satellite-based vessel tracking, emissions modeling, and machine learning to map fishing vessel emissions across the globe—both from broadcasting and non-broadcasting fleets. By visualizing emissions at sea, this tool offers a replicable and scalable approach for understanding the climate impact of global fisheries and informing more sustainable ocean governance.")
                )
            ),
-           
            
 
            
@@ -321,9 +320,9 @@ ui <- navbarPage(
                           # Info icon
                           infoPopup(
                             id = "non_broadcasting_popup",
-                            description = "The Non-broadcasting layer is where Global Fishing Watch has classified apparent fishing effort using Automatic Identification System (AIS) data.",
+                            description = "This layer shows vessels detected using Synthetic Aperture Radar (SAR), a satellite-based system that captures images using microwave pulses, allowing detection in all weather and lighting conditions. Vessel positions are identified from Copernicus Sentinel-1 imagery using a combination of classical detection techniques and machine learning.",
                             data_source = "Global Fishing Watch",
-                            learn_more = "https://globalfishingwatch.org/user-guide/#Activity%20-%20Fishing:~:text=methodology%20paper.-,Understanding%20apparent%20fishing%20effort%20using%20AIS%20and%20VMS%20data,-Automatic%20identification%20system"
+                            learn_more = "https://globalfishingwatch.org/user-guide/#Radar%20detections%20-%20Synthetic%20aperture%20radar:~:text=Detections-,Radar%20detections%20%2D%20Synthetic%20aperture%20radar,-Synthetic%20aperture%20radar"
                           )
                         ),
                         value = FALSE,
@@ -378,14 +377,14 @@ ui <- navbarPage(
                           style = "display: flex; align-items: center; gap: 6px; font-size: 18px; font-weight: 400; color: #20404F; margin: 0;",
                           
                           # Label text
-                          tags$span("FAO Major Fishing Zones"),
+                          tags$span("FAO Major Fishing Areas"),
                           
                           # Info icon
                           infoPopup(
                             id = "fao_zone_popup",
-                            description = "The AIS-broadcasting layer is where Global Fishing Watch has classified apparent fishing effort using Automatic Identification System (AIS) data.",
-                            data_source = "Global Fishing Watch",
-                            learn_more = "https://globalfishingwatch.org/user-guide/#Activity%20-%20Fishing:~:text=methodology%20paper.-,Understanding%20apparent%20fishing%20effort%20using%20AIS%20and%20VMS%20data,-Automatic%20identification%20system"
+                            description = "FAO Major Fishing Areas are standardized ocean regions defined by the Food and Agriculture Organization (FAO) of the United Nations to facilitate the global monitoring and reporting of marine fisheries. There are 19 Major Fishing Areas, each representing a large, ecologically or geographically distinct part of the ocean.",
+                            data_source = "Food and Agriculture Organization",
+                            learn_more = "https://www.fao.org/fishery/en/area/search"
                           )
                         ),
                         value = FALSE,

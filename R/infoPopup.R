@@ -69,7 +69,7 @@ infoPopup <- function(id, description, learn_more = NULL, data_source = NULL) {
                  border-radius: 5px;
                  border: 1px solid #08C4E5;
                  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-                 width: 250px;",
+                 width: 400px;",
         description_tag,
         data_source_tag,
         learn_more_tag

@@ -441,8 +441,18 @@ ui <- navbarPage(
                                     border-radius: 8px;
                                     width: 20%;",
                              
+                             # Label text
+                             tags$span("Select Year"),
+                             # Info icon
+                             infoPopup(
+                               id = "year_plot_popup",
+                               description = "Data displayed in the map grid is aggregated by year. Please select a year to view. You can use the play button to animate across the full year range.",
+                               data_source = NULL,
+                               learn_more = NULL
+                             ),
+                             
                              sliderInput("year_slider_input_map",
-                                         "Select Year",
+                                         NULL,
                                          min = year_min,
                                          max = year_max,
                                          value = year_max,
@@ -621,8 +631,19 @@ fluidRow(
                                     padding: 8px;
                                     border-radius: 8px;
                                     width: 40%;",
+             
+             # Label text
+             tags$span("Select Year"),
+             # Info icon
+             infoPopup(
+               id = "year_plot_popup",
+               description = "Data displayed in the plot is aggregated by year. Please select a year to compare.",
+               data_source = NULL,
+               learn_more = NULL
+             ),
+             
                        sliderInput("year_slider_input_plot",
-                                   "Select Year",
+                                   NULL,
                                    min = 2016, # UPDATE to min
                                    max = 2022, # UPDATE to max
                                    value = 2022, # UPDATE to max
@@ -641,13 +662,23 @@ fluidRow(
                 padding-right: 20px;
                 margin-top: 10px;",
       
-      tags$div("Total Emissions", 
-               style = "margin-right: 20px;
+        # Label text
+        tags$span("Total Emissions",
+                  style = "margin-left: 8px;
+                       margin-right: 10px;
                        color: white;
                        font-weight: 500;
                        font-size: 14px;"),
+        # Info icon
+        infoPopup(
+          id = "total_emissions_unit_plot_popup",
+          description = "Data displayed in the map grid is aggregated by year. Please select a year to view. You can use the play button to animate across the full year range.",
+          data_source = NULL,
+          learn_more = NULL
+        ),
       
-      div(style = "display: inline-block;",
+      div(style = "display: inline-block;
+          margin-left: 25px",
         materialSwitch(
           inputId = "unit_plot_toggle_input",
           label = NULL,
@@ -656,12 +687,19 @@ fluidRow(
           inline = TRUE) # END materialSwitch (per unit toggle)
           ), # END div (unit materialSwitch)
       
-      tags$div("Per Unit Catch", 
+      tags$span("Per Unit Catch", 
                style = "margin-left: 8px;
-                       margin-right: 100px;
+                       margin-right: 10px;
                        color: white;
                        font-weight: 500;
-                       font-size: 14px;")
+                       font-size: 14px;"),
+      # Info icon
+      infoPopup(
+        id = "total_emissions_unit_plot_popup",
+        description = "Data displayed in the map grid is aggregated by year. Please select a year to view. You can use the play button to animate across the full year range.",
+        data_source = NULL,
+        learn_more = NULL
+      )
       ) # END div (Unit toggle)
   ) # END column (Unit toggle)
 

@@ -90,7 +90,8 @@ ui <- navbarPage(
                                       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
                                       overflow: visible;
                                       font-family: sans-serif;
-                                      text-align: center;",
+                                      text-align: center;
+                                      height: 100%",
                             
                             div(style = "height: 12px;
                                          background-color: #08C4E5;
@@ -215,7 +216,7 @@ ui <- navbarPage(
                                          border: none;"),
                    
                    # Map title
-                   tags$h3(style = "font-size: 24px; font-weight: bold; color: #20404F; margin-bottom: 5px;", 
+                   tags$h3(style = "font-size: 24px; font-weight: 400; color: #20404F; margin-bottom: 5px;", 
                            "Fishing Vessel Emissions"), 
                    
                    # Map description
@@ -262,7 +263,9 @@ ui <- navbarPage(
                 
                  
                  # Hidden broadcsting legend ---
-                 hidden(div(id = "broadcasting_legend",
+                 hidden(
+  
+                   div(id = "broadcasting_legend",
                             tags$div(style = "display: flex; width: 70%; height: 20px; border: 1px solid #ccc;",
                                      tags$div(style = "flex: 1; background-color: #20404F;"),
                                      tags$div(style = "flex: 1; background-color: #4C9EA6;"),
@@ -280,13 +283,26 @@ ui <- navbarPage(
                               textOutput("total_broadcasting", inline = TRUE)
                             ),
                             
+                       
+                       # Label text
+                       tags$span("Select a Flag State (Country) "),
+                       
+                       # Info icon
+                       infoPopup(
+                         id = "country_popup",
+                         description = "A flag State acts as a vessel's nationality and has jurisdiction over the ship's administrative operations. No matter where the vessel goes, its flag State is responsible for policing it. You can filter the broadcasted emissions for the flag or country resonsible for the vessel. These flag states were identified by Global Fishing Watch.",
+                         data_source = "Global Fishing Watch",
+                         learn_more = "https://globalfishingwatch.org/user-guide/#Activity%20-%20Fishing:~:text=methodology%20paper.-,Understanding%20apparent%20fishing%20effort%20using%20AIS%20and%20VMS%20data,-Automatic%20identification%20system"
+                       ),   
+                       
                               pickerInput(inputId = "country_select_input",
-                                          label = "Select a country",
+                                          label = NULL,
                                           choices = c("All Countries", sort(unique(broadcasting_emissions$country_name[broadcasting_emissions$country_name != "All Countries"]))),
                                           selected = "All Countries",
                                           options = list(`live-search` = TRUE,
                                                          `noneSelectedText` = "All Countries")), # END pickerInput (country select)
-                              
+                          
+                       
                               tags$div(
                                 textOutput("no_data_warning"),
                                 style = "color: #81818F;

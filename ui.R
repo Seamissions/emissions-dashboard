@@ -11,6 +11,19 @@ ui <- navbarPage(
   id = "navbarPage",
   theme = seamissions_theme,
   
+  tags$head(
+    tags$link(
+      href = "https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap",
+      rel = "stylesheet"
+    ),
+    tags$style(HTML("
+    body {
+      font-family: 'Roboto', sans-serif;
+    }
+  "))
+  ),
+  
+  
   # ---- Home Page ----
   useShinyjs(),
   
@@ -24,14 +37,14 @@ ui <- navbarPage(
                         padding: 100px 0;
                         text-align: center;
                         color: #e8fffd;",
-               h1("Seamissions Global Fishing Emissions Explorer"),
+               h1("Seamissions Global Fishing Emissions Explorer",   style = "font-weight: 600 !important;"),
                h4("This is where the short overview goes.")
            ), # END div (hero section)
            
-           tags$p(style = "font-weight: bold; color: white; margin: 40px;", 
+           tags$p(style = "font-weight: regular; color: white; margin: 40px;", 
                   "Fishing vessels play a critical role in feeding the world, but they also contribute significantly to global greenhouse gas emissions. While some vessels broadcast their locations via AIS (Automatic Identification System), many do not—leaving large gaps in how we monitor industrial fishing activity and its environmental footprint. To better understand and manage the ocean's role in climate change, we need new tools that illuminate where emissions are coming from and who is responsible."), 
            
-           tags$p(style = "font-weight: bold; color: white; margin: 40px;", 
+           tags$p(style = "font-weight: regular; color: white; margin: 40px;", 
                   "This dashboard combines satellite-based vessel tracking, emissions modeling, and machine learning to map fishing vessel emissions across the globe—both from broadcasting and non-broadcasting fleets. By visualizing emissions at sea, this tool offers a replicable and scalable approach for understanding the climate impact of global fisheries and informing more sustainable ocean governance."), 
            
            
@@ -146,6 +159,9 @@ ui <- navbarPage(
   tabPanel("Emissions Map",
            
            useShinyjs(), # Initialize shinyjs
+           tags$head(
+             tags$script(src = "R/mapdeck_helpers.js")),
+           
            
            # ---- Map Container ----
            div(style = "position: relative; height: 90vh;",
@@ -178,7 +194,7 @@ ui <- navbarPage(
                            "Fishing Vessel Emissions"), 
                    
                    # Map description
-                   tags$p(style = "font-weight: bold; color: #20404F; margin-bottom: 20px;", 
+                   tags$p(style = "font-weight: regular; color: #20404F; margin-bottom: 20px;", 
                            "Explore where emissions from large-scale fishing vessels occur around the world, using data from Global Fishing Watch."), 
                    
                    # ---- Sidebar Layer Controls -------------------------------
@@ -193,14 +209,17 @@ ui <- navbarPage(
                             inputId = "show_broadcasting_input",
                             label = tags$div(
                               style = "font-size: 18px; font-weight: bold;",
-                              "AIS Broadcasting Emissions"
+                              "Broadcasting Emissions"
                             ),
                             value = TRUE,
                             status = "info"
                           ), # END materialSwitch
                           
                           # info icon (same line)
-                          infoPopup("broadcasting_popup", "This is a very important description of the broadcasting data. This is what.")
+                          infoPopup(id = "broadcasting_popup",
+                                    description = "The AIS-broadcasting layer is where Global Fishing Watch has classified aparent fishing effort using using Automated Identification System (AIS).",
+                                    data_source = "Global Fishing Watch",
+                                    learn_more = "https://globalfishingwatch.org/user-guide/#Activity%20-%20Fishing:~:text=methodology%20paper.-,Understanding%20apparent%20fishing%20effort%20using%20AIS%20and%20VMS%20data,-Automatic%20identification%20system")
                         ) # END div
                  ), # END column
                  
@@ -285,28 +304,7 @@ ui <- navbarPage(
                
                # ---- Emissions Map --------------------------------------------
                mapdeckOutput("emissions_map", height = "100%"),
-               
-               # ---- Zoom Control Buttons ----
-               absolutePanel(top = 20,
-                             right = 10,
-                             style = "z-index: 1001;",
-                             tags$style(HTML(".zoom-button {
-                                            background-color: rgba(255, 255, 255, 0.85) !important;
-                                            color: #DA8D03 !important;
-                                            border: 0px solid white !important;
-                                            border-radius: 4px !important;
-                                            width: 40px;
-                                            height: 40px;
-                                            font-size: 20px;
-                                            padding: 0;
-                                            text-align: center;
-                                          }
-                                        ")),
-                 actionButton("zoom_in", "+", class = "zoom-button"),
-                 actionButton("zoom_out", "−", class = "zoom-button")
-               ),
-               
-               
+               useShinyjs(),
                uiOutput("loading_ui"),
                
                 # ---- Year Slider ----
@@ -560,10 +558,8 @@ fluidRow(
                     div(style = "background-color: #1b2a49; padding: 30px; color: white;",
                              h4(strong("Background")),
                              tags$p(style = "font-weight: normal; color: white; margin: 30px;",
-                             "This is the background of our project. This is the background of our project.")  
-                      
-                      
-                    )
+                             "This is the background of our project. This is the background of our project.")
+                        )
                     )
             
           ),

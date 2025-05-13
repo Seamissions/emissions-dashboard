@@ -2,11 +2,41 @@
 #'
 #' @param id A unique string used to generate element IDs (must be unique per use)
 #' @param description A string of text to show inside the pop-up box
+#' @param learn_more Optional URL to include a "Learn more" link
+#' @param data_source Optional name of the data source to display
 #'
 #' @return A UI tagList containing the info icon and description popup
 
-infoPopup <- function(id, description) {
+infoPopup <- function(id, description, learn_more = NULL, data_source = NULL) {
   ns_id <- function(suffix) paste0(id, "_", suffix)
+  
+  # Description with label
+  description_tag <- tags$p(
+    HTML(paste0('<span style="font-weight: 500;">Description:</span> ', description))
+  )
+  
+  # Optional "Data Source:" label
+  data_source_tag <- if (!is.null(data_source) && nzchar(data_source)) {
+    tags$p(
+      HTML(paste0('<span style="font-weight: 500;">Data Source:</span> ', data_source))
+    )
+  } else {
+    NULL
+  }
+  
+  # Optional "Learn more" link
+  learn_more_tag <- if (!is.null(learn_more) && nzchar(learn_more)) {
+    tags$p(
+      tags$a(
+        "Learn more",
+        href = learn_more,
+        target = "_blank",
+        style = "color: #DA8D03; font-weight: bold; text-decoration: underline;"
+      )
+    )
+  } else {
+    NULL
+  }
   
   tagList(
     tags$div(
@@ -35,7 +65,9 @@ infoPopup <- function(id, description) {
                  border: 1px solid #08C4E5;
                  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
                  width: 250px;",
-        description
+        description_tag,
+        data_source_tag,
+        learn_more_tag
       )
     ),
     
@@ -61,4 +93,3 @@ infoPopup <- function(id, description) {
     ", id)))
   )
 }
-

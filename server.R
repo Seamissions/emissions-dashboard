@@ -52,6 +52,8 @@ server <- function(input, output, session) {
     shinyjs::toggle("toggle_sidebar_open_input")
     shinyjs::toggle("toggle_sidebar_close_input")
   })
+
+            
   # ---- Initialize the map on first render ----
   observe({
     if (first_time() && input$navbarPage == "Emissions Map") {
@@ -255,6 +257,7 @@ server <- function(input, output, session) {
     )
   })
   
+  
   # ---- FAO Zones layer ----
   observe({
     if (input$show_fao_zones_input) {
@@ -300,6 +303,10 @@ server <- function(input, output, session) {
       }
     }) # END isolate
   }) # END observe
+  
+  
+  
+  
   
   # END Emissions Map
   

@@ -672,8 +672,8 @@ fluidRow(
         # Info icon
         infoPopup(
           id = "total_emissions_unit_plot_popup",
-          description = "Data displayed in the map grid is aggregated by year. Please select a year to view. You can use the play button to animate across the full year range.",
-          data_source = NULL,
+          description = "Total CO₂ emission in metric tons based on broadcasted emissions and redistributed non-broadcasted emissions.",
+          data_source = "Global Fishing Watch",
           learn_more = NULL
         ),
       
@@ -695,9 +695,9 @@ fluidRow(
                        font-size: 14px;"),
       # Info icon
       infoPopup(
-        id = "total_emissions_unit_plot_popup",
-        description = "Data displayed in the map grid is aggregated by year. Please select a year to view. You can use the play button to animate across the full year range.",
-        data_source = NULL,
+        id = "per_catch_unit_plot_popup",
+        description = "Per unit catch is the ratio of total emissions (metric tons) per total catch (metric tons). This gives a measurement of how carbon efficient the catch rate is.",
+        data_source = "Global Fishing Watch",
         learn_more = NULL
       )
       ) # END div (Unit toggle)

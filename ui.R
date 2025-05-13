@@ -27,7 +27,7 @@ ui <- navbarPage(
   # ---- Home Page ----
   useShinyjs(),
   
-  tabPanel("Home",
+  shiny::tabPanel("Home",
            
            div(style = "position: relative;
              height: 500px;
@@ -41,7 +41,7 @@ ui <- navbarPage(
              color: #e8fffd;",
                
                # Semi-transparent overlay
-               div(style = "position: absolute;
+               div(style = "position: absolute; 
               top: 0; left: 0; right: 0; bottom: 0;
               background-color: rgba(0, 0, 0, 0.5);
               z-index: 1;"),
@@ -59,7 +59,7 @@ ui <- navbarPage(
                div(style = "position: relative; z-index: 2;
                padding-top: 180px; padding-left: 40px; padding-right: 40px;",
                    
-                   h1("Seamissions Global Fishing Emissions Explorer",
+                   h1("Explore Global Seafood Emissions",
                       style = "font-weight: 600 !important;"),
                    
                    tags$hr(),
@@ -172,7 +172,8 @@ ui <- navbarPage(
                  
                  column(width = 3)  # spacer
                ) # END fluidRow
-           ) # END div (Teaser Sections)
+           ), # END div (Teaser Sections)
+
            
   ), # END tabPanel (Home)
   
@@ -182,7 +183,7 @@ ui <- navbarPage(
   # ---- Emissions Map Page ------------------------------------------------------------------------------------------
   # ------------------------------------------------------------------------------------------------------------------
   
-  tabPanel("Emissions Map",
+  shiny::tabPanel("Emissions Map",
            
            useShinyjs(), # Initialize shinyjs
            tags$head(
@@ -439,6 +440,7 @@ ui <- navbarPage(
                                     padding: 8px;
                                     border-radius: 8px;
                                     width: 20%;",
+                             
                              sliderInput("year_slider_input_map",
                                          "Select Year",
                                          min = year_min,
@@ -457,7 +459,7 @@ ui <- navbarPage(
 # ---- Compare Seafood Emissions Page ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------------------------------------------
 
-tabPanel("Compare Seafood Emissions",
+shiny::tabPanel("Compare Seafood Emissions",
          
          tags$head(
            tags$style(HTML("
@@ -477,7 +479,7 @@ tabPanel("Compare Seafood Emissions",
          
          # Header Row ----
          
-         fluidRow( tags$hr()),
+         fluidRow(tags$hr()),
          fluidRow(
            # Centered button row ----
            column(
@@ -572,10 +574,14 @@ fluidRow(
                      margin-top: 30px;
                      margin-bottom: 30px;
                      margin-left: 20px;
-                     margin-right: 20px;",
+                     margin-right: 20px;
+                     overflow-x: auto;
+                     white-space: nowrap;",
              
              # --- Define plots (hidden when not selected) ----------------------
-             
+             # Inner wrapper for plots (keeps width flexible)
+             div(style = "min-width: 1000px;", 
+                 
              # ---- Country plot (default visible) ----
              div(
                id = "country_plot",
@@ -601,6 +607,7 @@ fluidRow(
              ) # END hidden
              
          ) # END row div
+         )
   )
 ), # END fluid row (plots)
 
@@ -613,7 +620,7 @@ fluidRow(
                                     background-color: rgba(255,255,255,0.8);
                                     padding: 8px;
                                     border-radius: 8px;
-                                    width: 20%;",
+                                    width: 40%;",
                        sliderInput("year_slider_input_plot",
                                    "Select Year",
                                    min = 2016, # UPDATE to min
@@ -666,7 +673,7 @@ fluidRow(
 # ---- Usage Guide Page --------------------------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------------------------------------------
 
-  tabPanel("Learn More",
+  shiny::tabPanel("Learn More",
            # ---- Hero Section ----
            div(style = "background-image: url('images/home-image.jpg');
                         background-size: cover;

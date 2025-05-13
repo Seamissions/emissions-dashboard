@@ -29,24 +29,50 @@ ui <- navbarPage(
   
   tabPanel("Home",
            
-           # ---- Hero Section ----
-           div(style = "background-size: cover;
-                        background-image: url('images/dashboard-hero.png');
-                        background-position: center;
-                        height: 400px;
-                        padding: 100px 0;
-                        text-align: center;
-                        color: #e8fffd;",
-               h1("Seamissions Global Fishing Emissions Explorer",   style = "font-weight: 600 !important;"),
-               h4("This is where the short overview goes.")
-           ), # END div (hero section)
+           div(style = "position: relative;
+             height: 600px;
+             width: 100vw;
+             margin: 0;
+             background-image: url('images/ocean-banner.png');
+             background-size: cover;
+             background-position: center;
+             background-attachment: fixed;
+             text-align: center;
+             color: #e8fffd;",
+               
+               # Semi-transparent overlay
+               div(style = "position: absolute;
+              top: 0; left: 0; right: 0; bottom: 0;
+              background-color: rgba(0, 0, 0, 0.5);
+              z-index: 1;"),
+               
+               # Centered logo
+               tags$img(src = "images/seamissions-logo.png",
+                        style = "position: absolute;
+                    top: 5%;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    height: 150px;
+                    z-index: 2;"),
+               
+               # All foreground content
+               div(style = "position: relative; z-index: 2;
+               padding-top: 180px; padding-left: 40px; padding-right: 40px;",
+                   
+                   h1("Seamissions Global Fishing Emissions Explorer",
+                      style = "font-weight: 600 !important;"),
+                   
+                   tags$hr(),
+                   
+                   tags$p(style = "font-weight: normal; color: white; margin-top: 30px;",
+                          "Global Fishing Watch developed a novel dataset estimating CO₂ emissions from both AIS-broadcasting and non-broadcasting fishing vessels using satellite data, machine learning, and emissions modeling. By linking these emissions estimates with FAO catch data, this dashboard enables users to quantify the climate impact of seafood production by country, fleet, and species group."),
+                   tags$p(style = "font-weight: normal; color: white; margin-top: 20px;",
+                          "This dashboard combines satellite-based vessel tracking, emissions modeling, and machine learning to map fishing vessel emissions across the globe—both from broadcasting and non-broadcasting fleets. By visualizing emissions at sea, this tool offers a replicable and scalable approach for understanding the climate impact of global fisheries and informing more sustainable ocean governance.")
+               )
+           ),
            
-           tags$p(style = "font-weight: regular; color: white; margin: 40px;", 
-                  "Fishing vessels play a critical role in feeding the world, but they also contribute significantly to global greenhouse gas emissions. While some vessels broadcast their locations via AIS (Automatic Identification System), many do not—leaving large gaps in how we monitor industrial fishing activity and its environmental footprint. To better understand and manage the ocean's role in climate change, we need new tools that illuminate where emissions are coming from and who is responsible."), 
            
-           tags$p(style = "font-weight: regular; color: white; margin: 40px;", 
-                  "This dashboard combines satellite-based vessel tracking, emissions modeling, and machine learning to map fishing vessel emissions across the globe—both from broadcasting and non-broadcasting fleets. By visualizing emissions at sea, this tool offers a replicable and scalable approach for understanding the climate impact of global fisheries and informing more sustainable ocean governance."), 
-           
+
            
            # ---- Teaser Sections ----
            div(style = "margin-top: 40px;",
@@ -68,7 +94,7 @@ ui <- navbarPage(
                                       text-align: center;",
                             
                             div(style = "height: 12px;
-                                         background-color: #F9B928;
+                                         background-color: #08C4E5;
                                          border-top-left-radius: 8px;
                                          border-top-right-radius: 8px;
                                          position: absolute;
@@ -78,7 +104,7 @@ ui <- navbarPage(
                                          top: -28px;
                                          left: 50%;
                                          transform: translateX(-50%);
-                                         background-color: black;
+                                         background-color: #08C4E5;
                                          width: 56px;
                                          height: 56px;
                                          border-radius: 50%;
@@ -90,7 +116,7 @@ ui <- navbarPage(
                             ),
                             
                             h4(strong("Fishing Vessel Emissions Map")),
-                            p("Explore where large fishing vessels operate around the world. Many use AIS (Automatic Identification System) to broadcast their location — but over half of the global fleet do not broadcast their location, making them harder to track emissions.",
+                            p("Explore a global map of CO₂ emissions from large-scale fishing, powered by Global Fishing Watch data.",
                               style = "color: #444;
                       padding: 0 20px;")
                         )
@@ -122,7 +148,7 @@ ui <- navbarPage(
                                           top: -28px;
                                           left: 50%;
                                           transform: translateX(-50%);
-                                          background-color: black;
+                                          background-color: #F9B928;
                                           width: 56px;
                                           height: 56px;
                                           border-radius: 50%;
@@ -137,7 +163,7 @@ ui <- navbarPage(
                             ),
                             
                             h4(strong("Compare Seafood Emissions")),
-                            p("This is where the tool description goes.",
+                            p("Use this tool to compare greenhouse gas emissions by country and seafood category, combining Global Fishing Watch activity data with FAO catch statistics.",
                               style = "color: #444;
                                         padding: 0 20px;
                                         margin-bottom: 20px;")

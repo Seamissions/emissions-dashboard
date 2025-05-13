@@ -39,13 +39,14 @@ library(ggimage)
 
 # ---- Emissions map data ----
 
+# Load emissions data
+broadcasting_emissions <- readRDS("data/broadcasting_emissions.rds") |> 
+  filter(emissions_co2_mt >= 200)
+
 # Precompute values used in UI
 year_min <- min(broadcasting_emissions$year, na.rm = TRUE)
 year_max <- max(broadcasting_emissions$year, na.rm = TRUE)
 
-# Load emissions data
-broadcasting_emissions <- readRDS("data/broadcasting_emissions.rds") |> 
-  filter(emissions_co2_mt >= 200)
 
 # ---- Prep FAO data ----
 fao_regions <- st_read("data/fao_region_shapefile/World_Fao_Zones.shp") |>

@@ -8,23 +8,28 @@
 #' @return A UI tagList containing the info icon and description popup
 
 infoPopup <- function(id, description, learn_more = NULL, data_source = NULL) {
-  ns_id <- function(suffix) paste0(id, "_", suffix)
   
-  # Description with label
+  ns_wrapper <- paste0(id, "_wrapper")
+  ns_toggle  <- paste0(id, "_toggle")
+  ns_popup   <- paste0(id, "_popup")
+  
+  # Description section
   description_tag <- tags$p(
-    HTML(paste0('<span style="font-weight: 500;">Description:</span> ', description))
+    tags$span("Description:", style = "font-weight: 500; margin-right: 4px;"),
+    tags$span(description, style = "font-weight: 400;")
   )
   
-  # Optional "Data Source:" label
+  # Optional data source
   data_source_tag <- if (!is.null(data_source) && nzchar(data_source)) {
     tags$p(
-      HTML(paste0('<span style="font-weight: 500;">Data Source:</span> ', data_source))
+      tags$span("Data Source:", style = "font-weight: 500; margin-right: 4px;"),
+      tags$span(data_source, style = "font-weight: 400;")
     )
   } else {
     NULL
   }
   
-  # Optional "Learn more" link
+  # Optional learn more
   learn_more_tag <- if (!is.null(learn_more) && nzchar(learn_more)) {
     tags$p(
       tags$a(
@@ -40,11 +45,11 @@ infoPopup <- function(id, description, learn_more = NULL, data_source = NULL) {
   
   tagList(
     tags$div(
-      id = ns_id("wrapper"),
+      id = ns_wrapper,
       style = "position: relative; display: inline-block;",
       
       actionLink(
-        inputId = ns_id("toggle"),
+        inputId = ns_toggle,
         label = tags$i(
           class = "fas fa-info-circle",
           style = "color:#08C4E5; font-size: 18px; cursor: pointer;"
@@ -52,7 +57,7 @@ infoPopup <- function(id, description, learn_more = NULL, data_source = NULL) {
       ),
       
       tags$div(
-        id = ns_id("popup"),
+        id = ns_popup,
         style = "display: none;
                  position: absolute;
                  top: 25px;
@@ -73,23 +78,24 @@ infoPopup <- function(id, description, learn_more = NULL, data_source = NULL) {
     
     tags$script(HTML(sprintf("
       (function() {
-        let popupVisible_%1$s = false;
-        document.getElementById('%1$s_toggle').addEventListener('click', function(event) {
+        let popupVisible = false;
+        document.getElementById('%s').addEventListener('click', function(event) {
           event.stopPropagation();
-          const popup = document.getElementById('%1$s_popup');
-          popupVisible_%1$s = !popupVisible_%1$s;
-          popup.style.display = popupVisible_%1$s ? 'block' : 'none';
+          const popup = document.getElementById('%s');
+          popupVisible = !popupVisible;
+          popup.style.display = popupVisible ? 'block' : 'none';
         });
 
         document.addEventListener('click', function(event) {
-          const popup = document.getElementById('%1$s_popup');
-          const wrapper = document.getElementById('%1$s_wrapper');
-          if (popupVisible_%1$s && !wrapper.contains(event.target)) {
+          const popup = document.getElementById('%s');
+          const wrapper = document.getElementById('%s');
+          if (popupVisible && !wrapper.contains(event.target)) {
             popup.style.display = 'none';
-            popupVisible_%1$s = false;
+            popupVisible = false;
           }
         });
       })();
-    ", id)))
+    ", ns_toggle, ns_popup, ns_popup, ns_wrapper)))
   )
 }
+

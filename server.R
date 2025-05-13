@@ -259,6 +259,7 @@ server <- function(input, output, session) {
   
   
   # ---- FAO Zones layer ----
+  # ---- FAO Zones layer ----
   observe({
     if (input$show_fao_zones_input) {
       loading(TRUE)
@@ -279,7 +280,7 @@ server <- function(input, output, session) {
           palette = fao_zone_color,
           stroke_width = 4,
           update_view = FALSE
-        )
+        ) 
       
       later::later(function() { loading(FALSE) }, delay = 0.2)
       
@@ -289,6 +290,7 @@ server <- function(input, output, session) {
         clear_path(layer_id = "fao_border_layer")
     }
   })
+  
   
   # ---- Track view so we don’t reset zoom/location ----
   observe({

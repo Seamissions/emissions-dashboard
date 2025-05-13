@@ -197,44 +197,64 @@ ui <- navbarPage(
                    tags$p(style = "font-weight: regular; color: #20404F; margin-bottom: 20px;", 
                            "Explore where emissions from large-scale fishing vessels occur around the world, using data from Global Fishing Watch."), 
                    
-                   # ---- Sidebar Layer Controls -------------------------------
+                   # Horizontal separator
+                   tags$hr(),
                    
-                 # Controls for broadcasting emissions data
-                 column(width = 12,
-                        div(
-                          style = "display: flex; align-items: center; gap: 10px;",
-                          
-                          # materialSwitch (broadcasting)
-                          materialSwitch(
-                            inputId = "show_broadcasting_input",
-                            label = tags$div(
-                              style = "font-size: 18px; font-weight: bold;",
-                              "Broadcasting Emissions"
-                            ),
-                            value = TRUE,
-                            status = "info"
-                          ), # END materialSwitch
-                          
-                          # info icon (same line)
-                          infoPopup(id = "broadcasting_popup",
-                                    description = "The AIS-broadcasting layer is where Global Fishing Watch has classified aparent fishing effort using using Automated Identification System (AIS).",
-                                    data_source = "Global Fishing Watch",
-                                    learn_more = "https://globalfishingwatch.org/user-guide/#Activity%20-%20Fishing:~:text=methodology%20paper.-,Understanding%20apparent%20fishing%20effort%20using%20AIS%20and%20VMS%20data,-Automatic%20identification%20system")
-                        ) # END div
-                 ), # END column
-                 
+                # ---- Sidebar Layer Controls ----------------------------------
                    
+                # ---- Controls for broadcasting emissions data ----
+                column(
+                  width = 12,
+                  
+                  div(
+                    style = "display: flex; align-items: center; gap: 8px;",
+                    
+                    div(
+                      style = "margin-top: -2px;",
+                      materialSwitch(
+                        inputId = "show_broadcasting_input",
+                        label = tags$div(
+                          style = "display: flex; align-items: center; gap: 6px; font-size: 18px; font-weight: 400; color: #20404F; margin: 0;",
+                          
+                          # Label text
+                          tags$span("Broadcasted Emissions"),
+                          
+                          # Info icon
+                          infoPopup(
+                            id = "broadcasting_popup",
+                            description = "The AIS-broadcasting layer is where Global Fishing Watch has classified apparent fishing effort using Automatic Identification System (AIS) data.",
+                            data_source = "Global Fishing Watch",
+                            learn_more = "https://globalfishingwatch.org/user-guide/#Activity%20-%20Fishing:~:text=methodology%20paper.-,Understanding%20apparent%20fishing%20effort%20using%20AIS%20and%20VMS%20data,-Automatic%20identification%20system"
+                          )
+                        ),
+                        value = TRUE,
+                        status = "info"
+                      )
+                    ) # END switch wrapper
+                  ) # END outer flex row
+                ), # END column
+                
+                
                  
-                 # Hidden broadcsting legend
+                 # Hidden broadcsting legend ---
                  hidden(div(id = "broadcasting_legend",
-                            tags$div(style = "background: linear-gradient(to right,#015661, #03C7E8);
-                                               height: 20px;
-                                               width: 70%;
-                                               border: 1px solid #ccc;"),
+                            tags$div(style = "display: flex; width: 70%; height: 20px; border: 1px solid #ccc;",
+                                     tags$div(style = "flex: 1; background-color: #20404F;"),
+                                     tags$div(style = "flex: 1; background-color: #4C9EA6;"),
+                                     tags$div(style = "flex: 1; background-color: #67D6E0;"),
+                                     tags$div(style = "flex: 1; background-color: #76F3FF;"),
+                                     tags$div(style = "flex: 1; background-color: #A9F2FF;"),
+                                     tags$div(style = "flex: 1; background-color: #DAF3FF;"),
+                                     tags$div(style = "flex: 1; background-color: #F6F8FF;")), # tags$div
                               
-                              tags$div(textOutput("total_broadcasting"),
-                                       style = "font-size: 15px; font-weight: bold; color: #053762; margin-bottom: 10px;"),
-                              
+                            tags$div(
+                              style = "display: flex; justify-content: space-between;
+                                      font-size: 15px; font-weight: regular; color: #053762;
+                                      margin-bottom: 10px; width: 100%;",
+                              tags$span("200"),
+                              textOutput("total_broadcasting", inline = TRUE)
+                            ),
+                            
                               pickerInput(inputId = "country_select_input",
                                           label = "Select a country",
                                           choices = c("All Countries", sort(unique(broadcasting_emissions$country_name[broadcasting_emissions$country_name != "All Countries"]))),
@@ -251,40 +271,103 @@ ui <- navbarPage(
                           ), # END hidden (broadcasting emissions legend and text)
                    
                
-                   
+                   # Horizontal separator
+                   tags$hr(),
+
+                
+                # ---- Controls for non-broadcasting emissions data ----
+                
+                column(
+                  width = 12,
+                  
+                  div(
+                    style = "display: flex; align-items: center; gap: 8px;",
+                    div(
+                      style = "margin-top: -2px;",
+                      materialSwitch(
+                        inputId = "show_non_broadcasting_input",
+                        label = tags$div(
+                          style = "display: flex; align-items: center; gap: 6px; font-size: 18px; font-weight: 400; color: #20404F; margin: 0;",
+                          
+                          # Label text
+                          tags$span("Detected Emissions"),
+                          
+                          # Info icon
+                          infoPopup(
+                            id = "non_broadcasting_popup",
+                            description = "The Non-broadcasting layer is where Global Fishing Watch has classified apparent fishing effort using Automatic Identification System (AIS) data.",
+                            data_source = "Global Fishing Watch",
+                            learn_more = "https://globalfishingwatch.org/user-guide/#Activity%20-%20Fishing:~:text=methodology%20paper.-,Understanding%20apparent%20fishing%20effort%20using%20AIS%20and%20VMS%20data,-Automatic%20identification%20system"
+                          )
+                        ),
+                        value = FALSE,
+                        status = "warning"
+                      )
+                    ) # END switch wrapper
+                  ) # END outer flex row
+                ), # END column
+
+                hidden(
+                  div(id = "non_broadcasting_legend",
+                      
+                      # Discrete color blocks
+                      tags$div(
+                        style = "display: flex; width: 70%; height: 20px; border: 1px solid #ccc;",
+                        tags$div(style = "flex: 1; background-color: #7A5100;"),
+                        tags$div(style = "flex: 1; background-color: #B97700;"),
+                        tags$div(style = "flex: 1; background-color: #FFB300;"),
+                        tags$div(style = "flex: 1; background-color: #FFD54F;"),
+                        tags$div(style = "flex: 1; background-color: #FFEB99;"),
+                        tags$div(style = "flex: 1; background-color: #FFF5CC;"),
+                        tags$div(style = "flex: 1; background-color: #FFFEF0;")
+                      ),
+                      
+                      # Min/Max labels
+                      tags$div(
+                        style = "display: flex; justify-content: space-between;
+                 font-size: 15px; font-weight: regular; color: #053762;
+                 margin-bottom: 10px; width: 100%;",
+                        tags$span("200"),
+                        textOutput("total_non_broadcasting", inline = TRUE)
+                      )
+                  )
+                ),
+                
                    # Horizontal separator
                    tags$hr(),
                    
-                   materialSwitch("show_non_broadcasting_input",
-                                  label = tags$div(style = "font-size: 18px;
-                                                   font-weight: bold;",
-                                                   "Non-Broadcasting Emissions"),
-                                  value = FALSE,
-                                  status = "warning"), # END materialSwitch
-                   
-                   hidden(div(id = "non_broadcasting_legend",
-                              tags$div(style = "background: linear-gradient(to right, #805F14, #f9b928);
-                                       height: 20px;
-                                       width: 70%;
-                                       border: 1px solid #ccc;"),
-                              
-                              tags$div(
-                                textOutput("total_non_broadcasting"),
-                                style = "font-size: 15px;
-                                        font-weight: bold;
-                                        color: #053762;
-                                        margin-bottom: 10px;")) # END div
-                          ), # END hidden
-                   
-                   # Horizontal separator
-                   tags$hr(),
-                   
-                   materialSwitch("show_fao_zones_input",
-                                  label = tags$div(style = "font-size: 18px;
-                                                   font-weight: bold;",
-                                                   "FAO Major Fishing Zones"),
-                                  value = FALSE,
-                                  status = "info")
+                
+                # ---- Control for FAO Major Fishing Zones ----
+                column(
+                  width = 12,
+                  
+                  div(
+                    style = "display: flex; align-items: center; gap: 8px;",
+                    
+                    div(
+                      style = "margin-top: -2px;",
+                      materialSwitch(
+                        inputId = "show_fao_zones_input",
+                        label = tags$div(
+                          style = "display: flex; align-items: center; gap: 6px; font-size: 18px; font-weight: 400; color: #20404F; margin: 0;",
+                          
+                          # Label text
+                          tags$span("FAO Major Fishing Zones"),
+                          
+                          # Info icon
+                          infoPopup(
+                            id = "fao_zone_popup",
+                            description = "The AIS-broadcasting layer is where Global Fishing Watch has classified apparent fishing effort using Automatic Identification System (AIS) data.",
+                            data_source = "Global Fishing Watch",
+                            learn_more = "https://globalfishingwatch.org/user-guide/#Activity%20-%20Fishing:~:text=methodology%20paper.-,Understanding%20apparent%20fishing%20effort%20using%20AIS%20and%20VMS%20data,-Automatic%20identification%20system"
+                          )
+                        ),
+                        value = FALSE,
+                        status = "info"
+                      )
+                    ) # END switch wrapper
+                  ) # END outer flex row
+                ), # END column
                    
                ), # END sidebar panel
                

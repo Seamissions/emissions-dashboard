@@ -82,7 +82,8 @@ server <- function(input, output, session) {
           palette = blue_palette,
           fill_opacity = 0.5,
           tooltip = "tooltip_text",
-          highlight_colour = "#FFFFFF80",
+          auto_highlight = TRUE,
+          highlight_colour = "#F8FDFF50",
           update_view = FALSE
         )
       
@@ -175,7 +176,8 @@ server <- function(input, output, session) {
           palette = blue_palette,
           fill_opacity = 0.5,
           tooltip = "tooltip_text",
-          highlight_colour = "#FFFFFF80",
+          auto_highlight = TRUE,
+          highlight_colour = "#F8FDFF50",
           update_view = FALSE
         )
     } else {
@@ -188,9 +190,9 @@ server <- function(input, output, session) {
             layer_id = "country_layer",
             fill_colour = "emissions_co2_mt",
             palette = blue_palette,
-            fill_opacity = 0.6,
             tooltip = "tooltip_text",
-            highlight_colour = "#FFFFFF80",
+            auto_highlight = TRUE,
+            highlight_colour = "#F8FDFF50",
             update_view = FALSE
           )
       } else {
@@ -219,7 +221,8 @@ server <- function(input, output, session) {
           palette = orange_palette,
           fill_opacity = 0.5,
           tooltip = "tooltip_text",
-          highlight_colour = "#FFFFFF80",
+          auto_highlight = TRUE,
+          highlight_colour = "#F8FDFF50",
           update_view = FALSE
         )
       later::later(function() { loading(FALSE) }, delay = 0.2)

@@ -77,25 +77,27 @@ infoPopup <- function(id, description, learn_more = NULL, data_source = NULL) {
     ),
     
     tags$script(HTML(sprintf("
-      (function() {
-        let popupVisible = false;
-        document.getElementById('%s').addEventListener('click', function(event) {
-          event.stopPropagation();
-          const popup = document.getElementById('%s');
-          popupVisible = !popupVisible;
-          popup.style.display = popupVisible ? 'block' : 'none';
-        });
+  (function() {
+    let popupVisible = false;
+    document.getElementById('%s').addEventListener('click', function(event) {
+      event.preventDefault(); // <- add this to stop 'actionLink' redirect
+      event.stopPropagation();
+      const popup = document.getElementById('%s');
+      popupVisible = !popupVisible;
+      popup.style.display = popupVisible ? 'block' : 'none';
+    });
 
-        document.addEventListener('click', function(event) {
-          const popup = document.getElementById('%s');
-          const wrapper = document.getElementById('%s');
-          if (popupVisible && !wrapper.contains(event.target)) {
-            popup.style.display = 'none';
-            popupVisible = false;
-          }
-        });
-      })();
-    ", ns_toggle, ns_popup, ns_popup, ns_wrapper)))
+    document.addEventListener('click', function(event) {
+      const popup = document.getElementById('%s');
+      const wrapper = document.getElementById('%s');
+      if (popupVisible && !wrapper.contains(event.target)) {
+        popup.style.display = 'none';
+        popupVisible = false;
+      }
+    });
+  })();
+", ns_toggle, ns_popup, ns_popup, ns_wrapper)))
+    
   )
 }
 

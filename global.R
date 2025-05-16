@@ -41,7 +41,7 @@ library(ggimage)
 
 # Load emissions data
 broadcasting_emissions <- readRDS("data/broadcasting_emissions.rds") |> 
-  filter(emissions_co2_mt >= 200)
+ filter(emissions_co2_mt >= 200)
 
 # Precompute values used in UI
 year_min <- min(broadcasting_emissions$year, na.rm = TRUE)

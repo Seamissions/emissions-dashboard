@@ -16,11 +16,25 @@ ui <- navbarPage(
   
   # FIX this is adding ghost tabs on mobile version because of the href....
   tags$head(
+    # Roboto font
     tags$link(
       href = "https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap",
       rel = "stylesheet"
     ),
-    tags$style(HTML("body { font-family: 'Roboto', sans-serif; }"))
+    
+    # Favicon (local or web-hosted)
+    tags$link(
+      rel = "icon",
+      type = "image/png",
+      href = "images/fav-icon.png"
+    ),
+    
+    # Font styling
+    tags$style(HTML("
+    body {
+      font-family: 'Roboto', sans-serif;
+    }
+  "))
   ),
   
   useShinyjs(),

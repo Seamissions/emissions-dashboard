@@ -41,7 +41,8 @@ library(ggimage)
 
 # Load emissions data
 broadcasting_emissions <- readRDS("data/broadcasting_emissions.rds") |> 
- filter(emissions_co2_mt >= 200)
+ filter(emissions_co2_mt >= 200) |>
+  mutate(tooltip_text = paste0(scales::comma(round(emissions_co2_mt, 0)), " MT CO₂"))
 
 # Precompute values used in UI
 year_min <- min(broadcasting_emissions$year, na.rm = TRUE)

@@ -27,6 +27,8 @@ server <- function(input, output, session) {
   first_time <- reactiveVal(TRUE)
   current_view <- reactiveVal(list(zoom = 3, location = c(0, 0)))
   loading <- reactiveVal(TRUE)
+  nb_emissions <- readRDS("data/nb_emissions.rds") |>
+    mutate(tooltip_text = paste0(scales::comma(round(emissions_co2_mt, 0)), " MT CO₂"))
   
   # Pre-calculate total emissions for the initial year (max year)
   initial_total_broadcasting <- broadcasting_emissions |>
@@ -53,6 +55,16 @@ server <- function(input, output, session) {
     shinyjs::toggle("toggle_sidebar_close_input")
   })
 
+  # Auto minimize sidebar panel for small screens/mobile devices
+  observeEvent(input$minimize_sidebar_on_mobile, {
+    shinyjs::delay(500, {
+      shinyjs::hide("sidebar-panel")
+      shinyjs::show("toggle_sidebar_close_input")
+      shinyjs::hide("toggle_sidebar_open_input")
+    })
+  })
+  
+  
             
   # ---- Initialize the map on first render ----
   observe({
@@ -69,7 +81,8 @@ server <- function(input, output, session) {
           fill_colour = "emissions_co2_mt",
           palette = blue_palette,
           fill_opacity = 0.5,
-          tooltip = "emissions_co2_mt",
+          tooltip = "tooltip_text",
+          highlight_colour = "#FFFFFF80",
           update_view = FALSE
         )
       
@@ -105,7 +118,7 @@ server <- function(input, output, session) {
       }
       if (input$show_non_broadcasting_input) {
         output$total_non_broadcasting <- renderText({
-          nb_emissions <- readRDS("data/nb_emissions.rds") |> filter(emissions_co2_mt >= 200, year == input$year_slider_input_map)
+          nb_emissions <- nb_emissions |> filter(emissions_co2_mt >= 200, year == input$year_slider_input_map)
           total <- sum(nb_emissions$emissions_co2_mt, na.rm = TRUE)
           paste0(format(round(total, 2), big.mark = ","), " Mt CO2")
         })
@@ -161,7 +174,8 @@ server <- function(input, output, session) {
           fill_colour = "emissions_co2_mt",
           palette = blue_palette,
           fill_opacity = 0.5,
-          tooltip = "emissions_co2_mt",
+          tooltip = "tooltip_text",
+          highlight_colour = "#FFFFFF80",
           update_view = FALSE
         )
     } else {
@@ -175,7 +189,8 @@ server <- function(input, output, session) {
             fill_colour = "emissions_co2_mt",
             palette = blue_palette,
             fill_opacity = 0.6,
-            tooltip = "emissions_co2_mt",
+            tooltip = "tooltip_text",
+            highlight_colour = "#FFFFFF80",
             update_view = FALSE
           )
       } else {
@@ -195,7 +210,7 @@ server <- function(input, output, session) {
       clear_polygon(layer_id = "non_broadcasting_layer")
     if (input$show_non_broadcasting_input) {
       loading(TRUE)
-      nb_emissions <- readRDS("data/nb_emissions.rds") |> filter(emissions_co2_mt >= 200, year == input$year_slider_input_map)
+      nb_emissions <- nb_emissions |> filter(emissions_co2_mt >= 200, year == input$year_slider_input_map)
       mapdeck_update(map_id = "emissions_map") |>
         add_polygon(
           layer_id = "non_broadcasting_layer",
@@ -203,7 +218,8 @@ server <- function(input, output, session) {
           fill_colour = "emissions_co2_mt",
           palette = orange_palette,
           fill_opacity = 0.5,
-          tooltip = "emissions_co2_mt",
+          tooltip = "tooltip_text",
+          highlight_colour = "#FFFFFF80",
           update_view = FALSE
         )
       later::later(function() { loading(FALSE) }, delay = 0.2)
@@ -539,7 +555,7 @@ server <- function(input, output, session) {
       summarize(total = sum(sum_emissions, na.rm = TRUE)) |>
       pull(total)
     
-    paste0(format(round(total, 2), big.mark = ","), " Mt CO₂")
+    paste0(format(round(total, 2), big.mark = ","), " MT CO₂")
   })
   
   

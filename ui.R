@@ -185,9 +185,19 @@ ui <- navbarPage(
   
   shiny::tabPanel("Emissions Map",
            
-           useShinyjs(), # Initialize shinyjs
-           tags$head(
-             tags$script(src = "R/mapdeck_helpers.js")),
+                  useShinyjs(),
+                  
+                  tags$head(
+                    tags$script(src = "R/mapdeck_helpers.js"),
+                    
+                    # Scan screen size, auto-minimize sidebar for small screens (less than 600px)
+                    tags$script(HTML("
+                                      $(document).on('shiny:connected', function() {
+                                        if (window.innerWidth <= 600) {
+                                          Shiny.setInputValue('minimize_sidebar_on_mobile', true);
+                                        }
+                                      });
+                                    "))), # END tags script
            
            
            # ---- Map Container ----
@@ -199,7 +209,7 @@ ui <- navbarPage(
                            top: 0;
                            left: 0;
                            height: 100%;
-                           width: 400px;
+                           width: 390px;
                            background-color: #f9f9f9;
                            padding: 15px;
                            border-right: 0px solid #ccc;
@@ -263,7 +273,7 @@ ui <- navbarPage(
                 
                 
                  
-                 # Hidden broadcsting legend ---
+                 # Hidden broadcasting legend ---
                  hidden(
   
                    div(id = "broadcasting_legend",

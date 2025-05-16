@@ -147,7 +147,9 @@ ui <- navbarPage(
                            top: 0;
                            left: 0;
                            height: 100%;
-                           width: 390px;
+                           width: 20%;
+                           min-width: 300px;
+                           max-width: 400px;
                            background-color: #f9f9f9;
                            padding: 15px;
                            border-right: 0px solid #ccc;

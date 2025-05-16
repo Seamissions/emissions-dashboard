@@ -589,7 +589,8 @@ fluidRow(
                                     background-color: rgba(255,255,255,0.8);
                                     padding: 8px;
                                     border-radius: 8px;
-                                    width: 40%;",
+                                    width: 40%;
+                                    min-width: 250px;",
              
              # Label text
              tags$span("Select Year"),

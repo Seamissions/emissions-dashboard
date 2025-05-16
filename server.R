@@ -56,14 +56,13 @@ server <- function(input, output, session) {
   })
 
   # Auto minimize sidebar panel for small screens/mobile devices
-  observeEvent(input$minimize_sidebar_on_mobile, {
-    shinyjs::delay(500, {
-      shinyjs::hide("sidebar-panel")
-      shinyjs::show("toggle_sidebar_close_input")
-      shinyjs::hide("toggle_sidebar_open_input")
-    })
+  observe({
+    req(input$minimize_sidebar_on_mobile)
+    req(input$navbarPage == "Emissions Map")
+    shinyjs::hide("sidebar-panel")
+    shinyjs::show("toggle_sidebar_close_input")
+    shinyjs::hide("toggle_sidebar_open_input")
   })
-  
   
             
   # ---- Initialize the map on first render ----

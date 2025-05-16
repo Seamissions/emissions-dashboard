@@ -71,110 +71,97 @@ ui <- navbarPage(
                )
            ),
            
-
-           
            # ---- Teaser Sections ----
            div(style = "margin-top: 40px;",
-               fluidRow(
-                 column(width = 3),  # spacer
-                 
-                 # Emissions Map Teaser ----
-                 column(width = 3,
-                        div(id = "explore_map_card",
-                            style = "cursor: pointer;
-                                      position: relative;
-                                      padding-top: 50px;
-                                      padding-bottom: 10px;
-                                      background-color: white;
-                                      border-radius: 8px;
-                                      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-                                      overflow: visible;
-                                      font-family: sans-serif;
-                                      text-align: center;
-                                      height: 100%",
-                            
-                            div(style = "height: 12px;
-                                         background-color: #08C4E5;
-                                         border-top-left-radius: 8px;
-                                         border-top-right-radius: 8px;
-                                         position: absolute;
-                                         top: 0; left: 0; right: 0;"),
-                                              
-                            div(style = "position: absolute;
-                                         top: -28px;
-                                         left: 50%;
-                                         transform: translateX(-50%);
-                                         background-color: #08C4E5;
-                                         width: 56px;
-                                         height: 56px;
-                                         border-radius: 50%;
-                                         display: flex;
-                                         align-items: center;
-                                         justify-content: center;
-                                         z-index: 10;",
-                                tags$i(class = "fas fa-earth-americas", style = "color: white; font-size: 24px;")
-                            ),
-                            
-                            h4(strong("Fishing Vessel Emissions Map")),
-                            p("Explore a global map of CO₂ emissions from large-scale fishing, powered by Global Fishing Watch data.",
-                              style = "color: #444;
-                      padding: 0 20px;")
-                        )
-                 ), # END column
-                 
-                 
-                 # Seafood Explorer Teaser ----
-                 column(width = 3,
-                        div(id = "explore_seafood_card",
-                        style = "cursor: pointer;
-                                  position: relative;
-                                  padding-top: 50px;
-                                  padding-bottom: 10px;
-                                  background-color: white;
-                                  border-radius: 8px;
-                                  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-                                  overflow: visible;
-                                  font-family: sans-serif;
-                                  text-align: center;",
-                            
-                            div(style = "height: 12px;
-                                          background-color: #F9B928;
-                                          border-top-left-radius: 8px;
-                                          border-top-right-radius: 8px;
-                                          position: absolute;
-                                          top: 0; left: 0; right: 0;"),
-                            
-                            div(style = "position: absolute;
-                                          top: -28px;
-                                          left: 50%;
-                                          transform: translateX(-50%);
-                                          background-color: #F9B928;
-                                          width: 56px;
-                                          height: 56px;
-                                          border-radius: 50%;
-                                          display: flex;
-                                          align-items: center;
-                                          justify-content: center;
-                                          z-index: 10;",
-                                
-                                tags$i(class = "fas fa-chart-bar",
-                                       style = "color: white;
-                                       font-size: 24px;")
-                            ),
-                            
-                            h4(strong("Compare Seafood Emissions")),
-                            p("Use this tool to compare greenhouse gas emissions by country and seafood category, combining Global Fishing Watch activity data with FAO catch statistics.",
-                              style = "color: #444;
-                                        padding: 0 20px;
-                                        margin-bottom: 20px;")
-                        )
-                 ), # END column
-                 
-                 column(width = 3)  # spacer
-               ) # END fluidRow
-           ), # END div (Teaser Sections)
-
-           
+               
+               # Flex container for responsive cards
+               div(style = "display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 0 20px;",
+                   
+                   # Emissions Map Teaser
+                   div(id = "explore_map_card",
+                       style = "flex: 1 1 300px;
+                   max-width: 350px;
+                   cursor: pointer;
+                   position: relative;
+                   padding-top: 50px;
+                   padding-bottom: 10px;
+                   background-color: white;
+                   border-radius: 8px;
+                   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                   overflow: visible;
+                   font-family: sans-serif;
+                   text-align: center;",
+                       
+                       div(style = "height: 12px;
+                       background-color: #08C4E5;
+                       border-top-left-radius: 8px;
+                       border-top-right-radius: 8px;
+                       position: absolute;
+                       top: 0; left: 0; right: 0;"),
+                       
+                       div(style = "position: absolute;
+                       top: -28px;
+                       left: 50%;
+                       transform: translateX(-50%);
+                       background-color: #08C4E5;
+                       width: 56px;
+                       height: 56px;
+                       border-radius: 50%;
+                       display: flex;
+                       align-items: center;
+                       justify-content: center;
+                       z-index: 10;",
+                           tags$i(class = "fas fa-earth-americas", style = "color: white; font-size: 24px;")
+                       ),
+                       
+                       h4(strong("Fishing Vessel Emissions Map")),
+                       p("Explore a global map of CO₂ emissions from large-scale fishing, powered by Global Fishing Watch data.",
+                         style = "color: #444; padding: 0 20px;")
+                   ),
+                   
+                   # Seafood Explorer Teaser
+                   div(id = "explore_seafood_card",
+                       style = "flex: 1 1 300px;
+                   max-width: 350px;
+                   cursor: pointer;
+                   position: relative;
+                   padding-top: 50px;
+                   padding-bottom: 10px;
+                   background-color: white;
+                   border-radius: 8px;
+                   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                   overflow: visible;
+                   font-family: sans-serif;
+                   text-align: center;",
+                       
+                       div(style = "height: 12px;
+                       background-color: #F9B928;
+                       border-top-left-radius: 8px;
+                       border-top-right-radius: 8px;
+                       position: absolute;
+                       top: 0; left: 0; right: 0;"),
+                       
+                       div(style = "position: absolute;
+                       top: -28px;
+                       left: 50%;
+                       transform: translateX(-50%);
+                       background-color: #F9B928;
+                       width: 56px;
+                       height: 56px;
+                       border-radius: 50%;
+                       display: flex;
+                       align-items: center;
+                       justify-content: center;
+                       z-index: 10;",
+                           tags$i(class = "fas fa-chart-bar", style = "color: white; font-size: 24px;")
+                       ),
+                       
+                       h4(strong("Compare Seafood Emissions")),
+                       p("Use this tool to compare greenhouse gas emissions by country and seafood category, combining Global Fishing Watch activity data with FAO catch statistics.",
+                         style = "color: #444; padding: 0 20px; margin-bottom: 20px;")
+                   )
+               ) # END flexbox container
+           ) # END div (Teaser Sections)
   ), # END tabPanel (Home)
   
   
@@ -184,20 +171,28 @@ ui <- navbarPage(
   # ------------------------------------------------------------------------------------------------------------------
   
   shiny::tabPanel("Emissions Map",
+                  
            
                   useShinyjs(),
                   
                   tags$head(
-                    tags$script(src = "R/mapdeck_helpers.js"),
-                    
-                    # Scan screen size, auto-minimize sidebar for small screens (less than 600px)
+                    tags$link(
+                      rel = "stylesheet",
+                      href = "https://api.tiles.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css"
+                    ),
                     tags$script(HTML("
-                                      $(document).on('shiny:connected', function() {
-                                        if (window.innerWidth <= 600) {
-                                          Shiny.setInputValue('minimize_sidebar_on_mobile', true);
-                                        }
-                                      });
-                                    "))), # END tags script
+    $(document).on('shiny:connected', function() {
+      console.log('📱 Screen width:', window.innerWidth);
+      if (window.innerWidth <= 600) {
+        console.log('✅ Mobile detected: sending minimize_sidebar_on_mobile');
+        Shiny.setInputValue('minimize_sidebar_on_mobile', true);
+      } else {
+        console.log('🖥️ Large screen: not minimizing sidebar');
+      }
+    });
+  "))
+                  ),         
+                    
            
            
            # ---- Map Container ----
@@ -425,12 +420,13 @@ ui <- navbarPage(
                
                actionButton("toggle_sidebar_close_input",
                             label = NULL,
-                            icon = icon("angle-right",
-                                        style = "font-size: 25px;"),
+                            icon = icon("layer-group",
+                                        style = "font-size: 20px;  padding-right: 6px;"),
                             style = "position: absolute;
                                      top: 40%;
-                                     left: -35px;
-                                     width: 0%;
+                                     left: -30px;
+                                     width: 40px;
+                                     display: flex;
                                      background-color: #f9f9f9;
                                      border: none;
                                      display: none;
@@ -455,7 +451,7 @@ ui <- navbarPage(
                              tags$span("Select Year"),
                              # Info icon
                              infoPopup(
-                               id = "year_plot_popup",
+                               id = "year_map_popup",
                                description = "Data displayed in the map grid is aggregated by year. Please select a year to view. You can use the play button to animate across the full year range.",
                                data_source = NULL,
                                learn_more = NULL

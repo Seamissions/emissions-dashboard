@@ -1,63 +1,62 @@
 # ------------------------------------------------------------------------------------------------------------------
 #     ui.R 
 # ------------------------------------------------------------------------------------------------------------------
-
   
+
 source("theme.R")
 
 ui <- navbarPage(
   title = "Seamissions Explorer",
+  header = NULL, 
   windowTitle = "Seamissions Explorer",
   id = "navbarPage",
   theme = seamissions_theme,
   
+  # ---- Head elements (fonts, styles) ----
+  
+  # FIX this is adding ghost tabs on mobile version because of the href....
   tags$head(
     tags$link(
       href = "https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap",
       rel = "stylesheet"
     ),
-    tags$style(HTML("
-    body {
-      font-family: 'Roboto', sans-serif;
-    }
-  "))
+    tags$style(HTML("body { font-family: 'Roboto', sans-serif; }"))
   ),
   
-  
-  # ---- Home Page ----
   useShinyjs(),
   
+  # ---- Home Panel ----
   shiny::tabPanel("Home",
            
+           # ---- Hero Section ----
            div(style = "position: relative;
-             height: 500px;
-             width: 100vw;
-             margin: 0;
-             background-image: url('images/ocean-banner.png');
-             background-size: cover;
-             background-position: center;
-             background-attachment: fixed;
-             text-align: center;
-             color: #e8fffd;",
+               min-height: 500px;
+               width: 100vw;
+               background-image: url('images/ocean-banner.png');
+               background-size: cover;
+               background-position: center;
+               background-attachment: fixed;
+               text-align: center;
+               color: #e8fffd;",
                
-               # Semi-transparent overlay
+               # Overlay
                div(style = "position: absolute; 
-              top: 0; left: 0; right: 0; bottom: 0;
-              background-color: rgba(0, 0, 0, 0.5);
-              z-index: 1;"),
+                   top: 0; left: 0; right: 0; bottom: 0;
+                   background-color: rgba(0, 0, 0, 0.5);
+                   z-index: 1;"),
                
-               # Centered logo
+               # Logo
                tags$img(src = "images/seamissions-logo.png",
                         style = "position: absolute;
-                    top: 5%;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    height: 150px;
-                    z-index: 2;"),
+                         top: 5%;
+                         left: 50%;
+                         transform: translateX(-50%);
+                         height: 150px;
+                         z-index: 2;"),
                
-               # All foreground content
+               # Hero Text
                div(style = "position: relative; z-index: 2;
-               padding-top: 180px; padding-left: 40px; padding-right: 40px;",
+                    padding-top: 180px; padding-left: 40px; padding-right: 40px;",
                    
                    h1("Explore Global Seafood Emissions",
                       style = "font-weight: 600 !important;"),
@@ -66,51 +65,31 @@ ui <- navbarPage(
                    
                    tags$p(style = "font-weight: normal; color: white; margin-top: 30px;",
                           "Global Fishing Watch developed a novel dataset estimating CO₂ emissions from both AIS-broadcasting and non-broadcasting fishing vessels using satellite data, machine learning, and emissions modeling. By linking these emissions estimates with FAO catch data, this dashboard enables users to quantify the climate impact of seafood production by country, fleet, and species group."),
+                   
                    tags$p(style = "font-weight: normal; color: white; margin-top: 20px;",
                           "This dashboard combines satellite-based vessel tracking, emissions modeling, and machine learning to map fishing vessel emissions across the globe—both from broadcasting and non-broadcasting fleets. By visualizing emissions at sea, this tool offers a replicable and scalable approach for understanding the climate impact of global fisheries and informing more sustainable ocean governance.")
                )
            ),
            
-           # ---- Teaser Sections ----
+           # ---- Teaser Cards ----
            div(style = "margin-top: 40px;",
-               
-               # Flex container for responsive cards
                div(style = "display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 0 20px;",
                    
-                   # Emissions Map Teaser
+                   # ---- Emissions Map Card ----
                    div(id = "explore_map_card",
-                       style = "flex: 1 1 300px;
-                   max-width: 350px;
-                   cursor: pointer;
-                   position: relative;
-                   padding-top: 50px;
-                   padding-bottom: 10px;
-                   background-color: white;
-                   border-radius: 8px;
-                   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-                   overflow: visible;
-                   font-family: sans-serif;
-                   text-align: center;",
+                       style = "flex: 1 1 300px; max-width: 350px; cursor: pointer; position: relative;
+                     padding-top: 50px; padding-bottom: 10px; background-color: white;
+                     border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                     overflow: visible; font-family: sans-serif; text-align: center;",
                        
-                       div(style = "height: 12px;
-                       background-color: #08C4E5;
-                       border-top-left-radius: 8px;
-                       border-top-right-radius: 8px;
-                       position: absolute;
-                       top: 0; left: 0; right: 0;"),
+                       div(style = "height: 12px; background-color: #08C4E5;
+                      border-top-left-radius: 8px; border-top-right-radius: 8px;
+                      position: absolute; top: 0; left: 0; right: 0;"),
                        
-                       div(style = "position: absolute;
-                       top: -28px;
-                       left: 50%;
-                       transform: translateX(-50%);
-                       background-color: #08C4E5;
-                       width: 56px;
-                       height: 56px;
-                       border-radius: 50%;
-                       display: flex;
-                       align-items: center;
-                       justify-content: center;
-                       z-index: 10;",
+                       div(style = "position: absolute; top: -28px; left: 50%; transform: translateX(-50%);
+                      background-color: #08C4E5; width: 56px; height: 56px;
+                      border-radius: 50%; display: flex; align-items: center;
+                      justify-content: center; z-index: 10;",
                            tags$i(class = "fas fa-earth-americas", style = "color: white; font-size: 24px;")
                        ),
                        
@@ -119,40 +98,21 @@ ui <- navbarPage(
                          style = "color: #444; padding: 0 20px;")
                    ),
                    
-                   # Seafood Explorer Teaser
+                   # ---- Seafood Comparison Card ----
                    div(id = "explore_seafood_card",
-                       style = "flex: 1 1 300px;
-                   max-width: 350px;
-                   cursor: pointer;
-                   position: relative;
-                   padding-top: 50px;
-                   padding-bottom: 10px;
-                   background-color: white;
-                   border-radius: 8px;
-                   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-                   overflow: visible;
-                   font-family: sans-serif;
-                   text-align: center;",
+                       style = "flex: 1 1 300px; max-width: 350px; cursor: pointer; position: relative;
+                     padding-top: 50px; padding-bottom: 10px; background-color: white;
+                     border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                     overflow: visible; font-family: sans-serif; text-align: center;",
                        
-                       div(style = "height: 12px;
-                       background-color: #F9B928;
-                       border-top-left-radius: 8px;
-                       border-top-right-radius: 8px;
-                       position: absolute;
-                       top: 0; left: 0; right: 0;"),
+                       div(style = "height: 12px; background-color: #F9B928;
+                      border-top-left-radius: 8px; border-top-right-radius: 8px;
+                      position: absolute; top: 0; left: 0; right: 0;"),
                        
-                       div(style = "position: absolute;
-                       top: -28px;
-                       left: 50%;
-                       transform: translateX(-50%);
-                       background-color: #F9B928;
-                       width: 56px;
-                       height: 56px;
-                       border-radius: 50%;
-                       display: flex;
-                       align-items: center;
-                       justify-content: center;
-                       z-index: 10;",
+                       div(style = "position: absolute; top: -28px; left: 50%; transform: translateX(-50%);
+                      background-color: #F9B928; width: 56px; height: 56px;
+                      border-radius: 50%; display: flex; align-items: center;
+                      justify-content: center; z-index: 10;",
                            tags$i(class = "fas fa-chart-bar", style = "color: white; font-size: 24px;")
                        ),
                        
@@ -160,10 +120,9 @@ ui <- navbarPage(
                        p("Use this tool to compare greenhouse gas emissions by country and seafood category, combining Global Fishing Watch activity data with FAO catch statistics.",
                          style = "color: #444; padding: 0 20px; margin-bottom: 20px;")
                    )
-               ) # END flexbox container
-           ) # END div (Teaser Sections)
-  ), # END tabPanel (Home)
-  
+               ) # END teaser card row
+           ) # END Teaser section
+  ), # END tabPanel(Home)
   
   
   # ------------------------------------------------------------------------------------------------------------------
@@ -171,30 +130,14 @@ ui <- navbarPage(
   # ------------------------------------------------------------------------------------------------------------------
   
   shiny::tabPanel("Emissions Map",
-                  
-           
                   useShinyjs(),
+                      
+                  # FIX this is adding ghost tabs on mobile version because of the href....
+                      tags$head(
+                        tags$link(
+                          rel = "stylesheet",
+                          href = "https://api.tiles.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css")),
                   
-                  tags$head(
-                    tags$link(
-                      rel = "stylesheet",
-                      href = "https://api.tiles.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css"
-                    ),
-                    tags$script(HTML("
-    $(document).on('shiny:connected', function() {
-      console.log('📱 Screen width:', window.innerWidth);
-      if (window.innerWidth <= 600) {
-        console.log('✅ Mobile detected: sending minimize_sidebar_on_mobile');
-        Shiny.setInputValue('minimize_sidebar_on_mobile', true);
-      } else {
-        console.log('🖥️ Large screen: not minimizing sidebar');
-      }
-    });
-  "))
-                  ),         
-                    
-           
-           
            # ---- Map Container ----
            div(style = "position: relative; height: 90vh;",
                
@@ -267,55 +210,64 @@ ui <- navbarPage(
                 ), # END column
                 
                 
-                 
-                 # Hidden broadcasting legend ---
-                 hidden(
-  
-                   div(id = "broadcasting_legend",
-                            tags$div(style = "display: flex; width: 70%; height: 20px; border: 1px solid #ccc;",
-                                     tags$div(style = "flex: 1; background-color: #20404F;"),
-                                     tags$div(style = "flex: 1; background-color: #4C9EA6;"),
-                                     tags$div(style = "flex: 1; background-color: #67D6E0;"),
-                                     tags$div(style = "flex: 1; background-color: #76F3FF;"),
-                                     tags$div(style = "flex: 1; background-color: #A9F2FF;"),
-                                     tags$div(style = "flex: 1; background-color: #DAF3FF;"),
-                                     tags$div(style = "flex: 1; background-color: #F6F8FF;")), # tags$div
-                              
-                            tags$div(
-                              style = "display: flex; justify-content: space-between;
-                                      font-size: 15px; font-weight: regular; color: #053762;
-                                      margin-bottom: 10px; width: 100%;",
-                              tags$span("200"),
-                              textOutput("total_broadcasting", inline = TRUE)
-                            ),
-                            
-                       
-                       # Label text
-                       tags$span("Select a Flag State (Country) "),
-                       
-                       # Info icon
-                       infoPopup(
-                         id = "country_popup",
-                         description = "A flag State acts as a vessel's nationality and has jurisdiction over the ship's administrative operations. No matter where the vessel goes, its flag State is responsible for policing it. You can filter the broadcasted emissions for the flag or country resonsible for the vessel. These flag states were identified by Global Fishing Watch.",
-                         data_source = "Global Fishing Watch",
-                         learn_more = "https://globalfishingwatch.org/user-guide/#Activity%20-%20Fishing:~:text=methodology%20paper.-,Understanding%20apparent%20fishing%20effort%20using%20AIS%20and%20VMS%20data,-Automatic%20identification%20system"
-                       ),   
-                       
-                              pickerInput(inputId = "country_select_input",
-                                          label = NULL,
-                                          choices = c("All Countries", sort(unique(broadcasting_emissions$country_name[broadcasting_emissions$country_name != "All Countries"]))),
-                                          selected = "All Countries",
-                                          options = list(`live-search` = TRUE,
-                                                         `noneSelectedText` = "All Countries")), # END pickerInput (country select)
-                          
-                       
-                              tags$div(
-                                textOutput("no_data_warning"),
-                                style = "color: #81818F;
-                                        margin-top: 10px;"))# END div (no data warning text)
-                          
-                          
-                          ), # END hidden (broadcasting emissions legend and text)
+                # Hidden broadcasting legend ---
+                hidden(
+                  
+                  div(id = "broadcasting_legend",
+                      
+                      # Gradient legend bar
+                      tags$div(style = "display: flex; width: 70%; height: 20px; border: 1px solid #ccc;",
+                               tags$div(style = "flex: 1; background-color: #20404F;"),
+                               tags$div(style = "flex: 1; background-color: #4C9EA6;"),
+                               tags$div(style = "flex: 1; background-color: #67D6E0;"),
+                               tags$div(style = "flex: 1; background-color: #76F3FF;"),
+                               tags$div(style = "flex: 1; background-color: #A9F2FF;"),
+                               tags$div(style = "flex: 1; background-color: #DAF3FF;"),
+                               tags$div(style = "flex: 1; background-color: #F6F8FF;")  # END final color box
+                      ), # END gradient legend bar
+                      
+                      # Min/Max labels and total emissions
+                      tags$div(
+                        style = "display: flex; justify-content: space-between;
+                font-size: 15px; font-weight: regular; color: #053762;
+                margin-bottom: 10px; width: 100%;",
+                        tags$span("200"),
+                        textOutput("total_broadcasting", inline = TRUE)
+                      ),
+                      
+                      # Label text
+                      tags$span("Select a Flag State (Country) "),
+                      
+                      # Info icon
+                      infoPopup(
+                        id = "country_popup",
+                        description = "A flag State acts as a vessel's nationality and has jurisdiction over the ship's administrative operations. No matter where the vessel goes, its flag State is responsible for policing it. You can filter the broadcasted emissions for the flag or country resonsible for the vessel. These flag states were identified by Global Fishing Watch.",
+                        data_source = "Global Fishing Watch",
+                        learn_more = "https://globalfishingwatch.org/user-guide/#Activity%20-%20Fishing:~:text=methodology%20paper.-,Understanding%20apparent%20fishing%20effort%20using%20AIS%20and%20VMS%20data,-Automatic%20identification%20system"
+                      ), # END infoPopup
+                      
+                      # Country select dropdown
+                      pickerInput(inputId = "country_select_input",
+                                  label = NULL,
+                                  choices = c("All Countries", sort(unique(broadcasting_emissions$country_name[broadcasting_emissions$country_name != "All Countries"]))),
+                                  selected = "All Countries",
+                                  options = list(`live-search` = TRUE,
+                                                 `noneSelectedText` = "All Countries")), # END pickerInput (country select)
+                      
+                      # Add no data warning (when a country for a selected year has no emissions)
+                      tags$div(
+                        textOutput("no_data_warning"),
+                        style = "color: #81818F;
+                 margin-top: 10px;"), # END div (no data warning text)
+                      
+                      # Add low emissions warning (when a country for a selected year has low, less than 1000 emissions, and it may be hard to locate)
+                      tags$div(
+                        textOutput("low_emissions_warning"),
+                        style = "color: #81818F;
+                 margin-top: 10px;") # END div (low emissions warning text)
+                      
+                  ) # END div (broadcasting_legend)
+                ), # END hidden (broadcasting emissions legend and text)
                    
                
                    # Horizontal separator
@@ -445,14 +397,15 @@ ui <- navbarPage(
                                     background-color: rgba(255,255,255,0.8);
                                     padding: 8px;
                                     border-radius: 8px;
-                                    width: 20%;",
+                                    width: 20%;
+                                    min-width: 250px;",
                              
                              # Label text
                              tags$span("Select Year"),
                              # Info icon
                              infoPopup(
                                id = "year_map_popup",
-                               description = "Data displayed in the map grid is aggregated by year. Please select a year to view. You can use the play button to animate across the full year range.",
+                               description = "Data displayed in the map grid is aggregated by year. Use the slider to select a year or click the play button to animate emissions trends over time.",
                                data_source = NULL,
                                learn_more = NULL
                              ),
@@ -717,7 +670,7 @@ fluidRow(
 # ---- Usage Guide Page --------------------------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------------------------------------------
 
-  shiny::tabPanel("Learn More",
+shiny::tabPanel("Learn More",
            # ---- Hero Section ----
            div(style = "background-image: url('images/home-image.jpg');
                         background-size: cover;
@@ -777,16 +730,11 @@ fluidRow(
                    div(style = "background-color: #1b2a49; padding: 30px; color: white;",
                        h4(strong("Methods")),
                        tags$p(style = "font-weight: normal; color: white; margin: 30px;",
-                              "These are the methods that we used on this project.")  
-                   )
-            )
-            
-          )
-          
-           ) # END tabPanel (Learn More Page)
-  
- 
-
+                              "These are the methods that we used on this project.")
+                       ) # END div
+                   ) # END column
+            ) # END fluidRow
+  ) # END tabPanel (Learn More Page)
 ) # END navbarPage
 
 

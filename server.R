@@ -17,6 +17,9 @@ server <- function(input, output, session) {
     })
   })
   
+  observe({
+    cat("📌 Active tab:", input$navbarPage, "\n")
+  })
   
   
   # ----------------------------------------------------------------------------
@@ -257,6 +260,18 @@ server <- function(input, output, session) {
     filtered <- country_filtered()
     if (nrow(filtered) == 0) {
       "⚠️ This country does not have emissions for the selected year. Please pick another country or year."
+    } else {
+      ""  # No message if data is present
+    }
+  })
+  
+  # ---- Add low emissions warning ----
+  output$low_emissions_warning <- renderText({
+    filtered <- country_filtered()
+    total <- sum(filtered$emissions_co2_mt, na.rm = TRUE)
+    filtered <- country_filtered()
+    if (total > 0 && total < 5000) {
+      "⚠️ Emissions for this country are low in the selected year and may be difficult to spot on the map. Try scanning the map closely or selecting a different country or year."
     } else {
       ""  # No message if data is present
     }

@@ -69,35 +69,71 @@ infoPopup <- function(id, description, learn_more = NULL, data_source = NULL) {
                  border-radius: 5px;
                  border: 1px solid #08C4E5;
                  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-                 width: 400px;",
+                 width: 400px;
+                 max-height: 60vh;
+                 overflow-y: auto;",
         description_tag,
         data_source_tag,
         learn_more_tag
       )
     ),
     
+    # JS logic to close other popups and reposition as needed
     tags$script(HTML(sprintf("
   (function() {
-    let popupVisible = false;
-    document.getElementById('%s').addEventListener('click', function(event) {
-      event.preventDefault(); // <- add this to stop 'actionLink' redirect
+    const toggle = document.getElementById('%s');
+    const popup = document.getElementById('%s');
+    const wrapper = document.getElementById('%s');
+
+    toggle.addEventListener('click', function(event) {
+      event.preventDefault();
       event.stopPropagation();
-      const popup = document.getElementById('%s');
-      popupVisible = !popupVisible;
-      popup.style.display = popupVisible ? 'block' : 'none';
+
+      // Close any previously open popup
+      if (window.activeInfoPopup && window.activeInfoPopup !== popup) {
+        window.activeInfoPopup.style.display = 'none';
+      }
+
+      const isVisible = popup.style.display === 'block';
+      popup.style.display = isVisible ? 'none' : 'block';
+
+      if (!isVisible) {
+        // Reposition to fit viewport
+        const rect = popup.getBoundingClientRect();
+        const buffer = 10;
+
+        if (rect.right > window.innerWidth - buffer) {
+          popup.style.left = 'auto';
+          popup.style.right = '0px';
+        } else {
+          popup.style.left = '0px';
+          popup.style.right = 'auto';
+        }
+
+        if (rect.bottom > window.innerHeight - buffer) {
+          popup.style.top = 'auto';
+          popup.style.bottom = '25px';
+        } else {
+          popup.style.top = '25px';
+          popup.style.bottom = 'auto';
+        }
+
+        // Set as active popup
+        window.activeInfoPopup = popup;
+      } else {
+        window.activeInfoPopup = null;
+      }
     });
 
     document.addEventListener('click', function(event) {
-      const popup = document.getElementById('%s');
-      const wrapper = document.getElementById('%s');
-      if (popupVisible && !wrapper.contains(event.target)) {
-        popup.style.display = 'none';
-        popupVisible = false;
+      if (window.activeInfoPopup && !wrapper.contains(event.target)) {
+        window.activeInfoPopup.style.display = 'none';
+        window.activeInfoPopup = null;
       }
     });
   })();
-", ns_toggle, ns_popup, ns_popup, ns_wrapper)))
-    
+", ns_toggle, ns_popup, ns_wrapper)))
   )
 }
+
 

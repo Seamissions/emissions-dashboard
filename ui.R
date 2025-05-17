@@ -22,12 +22,11 @@ ui <- navbarPage(
       rel = "stylesheet"
     ),
     
-    # Favicon (local or web-hosted)
+    # Favicon
     tags$link(
       rel = "icon",
       type = "image/png",
-      href = "images/fav-icon.png"
-    ),
+      href = "images/fav-icon.png"),
     
     # Font styling
     tags$style(HTML("
@@ -162,7 +161,7 @@ ui <- navbarPage(
                            left: 0;
                            height: 100%;
                            width: 20%;
-                           min-width: 300px;
+                           min-width: 310px;
                            max-width: 400px;
                            background-color: #f9f9f9;
                            padding: 15px;
@@ -305,7 +304,7 @@ ui <- navbarPage(
                           style = "display: flex; align-items: center; gap: 6px; font-size: 18px; font-weight: 400; color: #20404F; margin: 0;",
                           
                           # Label text
-                          tags$span("Detected Emissions"),
+                          tags$span("Non-Broadcasted Emissions"),
                           
                           # Info icon
                           infoPopup(

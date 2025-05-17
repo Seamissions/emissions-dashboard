@@ -149,11 +149,33 @@ ui <- navbarPage(
                       tags$head(
                         tags$link(
                           rel = "stylesheet",
-                          href = "https://api.tiles.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css")),
-                  
+                          href = "https://api.tiles.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css"),
+                        tags$style(HTML("
+                                  html, body {
+                                    margin: 0;
+                                    padding: 0;
+                                    height: 100%;
+                                    overflow: hidden;
+                                  }
+                                  
+                                  .tab-content {
+                                    padding-left: 0 !important;
+                                    padding-right: 0 !important;
+                                    padding-top: 0 !important;
+                                    padding-bottom: 0 !important;
+                                  }
+                              
+                                  .container-fluid {
+                                    padding-left: 0 !important;
+                                    padding-right: 0 !important;
+                                    padding-top: 0 !important;
+                                    padding-bottom: 0 !important;
+                                  }
+                                "))),
+                                                
            # ---- Map Container ----
            div(style = "position: relative; height: 90vh;",
-               
+        
                # ---- Sidebar Panel --------------------------------------------
                div(id = "sidebar-panel",
                    style = "position: absolute;
@@ -185,7 +207,7 @@ ui <- navbarPage(
                    
                    # Map description
                    tags$p(style = "font-weight: regular; color: #20404F; margin-bottom: 20px;", 
-                           "Explore where emissions from large-scale fishing vessels occur around the world, using data from Global Fishing Watch."), 
+                          "Explore where emissions from large-scale fishing vessels occur around the world, using data from Global Fishing Watch."), 
                    
                    # Horizontal separator
                    tags$hr(),
@@ -204,7 +226,7 @@ ui <- navbarPage(
                       materialSwitch(
                         inputId = "show_broadcasting_input",
                         label = tags$div(
-                          style = "display: flex; align-items: center; gap: 6px; font-size: 18px; font-weight: 400; color: #20404F; margin: 0;",
+                          style = "display: flex; align-items: center; gap: 6px; font-size: 18px; font-weight: 400; color: #20404F; margin: 0; z-index: 1002;",
                           
                           # Label text
                           tags$span("Broadcasted Emissions"),
@@ -385,14 +407,16 @@ ui <- navbarPage(
                    
                ), # END sidebar panel
                
+               # Button - Close sidebar
                actionButton("toggle_sidebar_close_input",
                             label = NULL,
                             icon = icon("layer-group",
                                         style = "font-size: 20px;  padding-right: 6px;"),
                             style = "position: absolute;
                                      top: 40%;
-                                     left: -30px;
+                                     left: -20px;
                                      width: 40px;
+                                     height: 50px;
                                      display: flex;
                                      background-color: #f9f9f9;
                                      border: none;
@@ -407,7 +431,7 @@ ui <- navbarPage(
                
                 # ---- Year Slider ----
                absolutePanel(bottom = 30,
-                             right = 8,
+                             right = 15,
                              style = "z-index: 1000;
                                     background-color: rgba(255,255,255,0.8);
                                     padding: 8px;

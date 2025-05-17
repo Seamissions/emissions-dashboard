@@ -614,6 +614,17 @@ fluidRow(
         shinyjs::hidden(
           div(
             id = "isscaap_plot",
+            
+            tags$h4(
+              "Annual CO₂ Emissions Top Species Groups",
+              style = "color: white;
+                     font-size: 30px;
+                     font-weight: bold;
+                     white-space: normal;
+                     word-break: break-word;
+                     max-width: 100%;
+                     margin-bottom: 10px;"),
+            
             plotOutput("isscaap_plot_output",
                        height = "60vh", fill = TRUE) |> 
               withSpinner(type = 4, color = '#08C4E5')
@@ -621,18 +632,26 @@ fluidRow(
         ),
         
         # ---- Species plot for selected country (hidden on load) ----
-        shinyjs::hidden(
-          div(
-            id = "species_bar_plot",
-            plotOutput("species_bar_plot_output",
-                       height = "60vh", fill = TRUE) |> 
-              withSpinner(type = 4, color = '#08C4E5')
+        div(
+          id = "species_bar_plot_wrapper",
+          
+          # Dynamic heading: always rendered
+          uiOutput("dynamic_country_header"),
+          
+          # Plot hidden on load
+          shinyjs::hidden(
+            div(
+              id = "species_bar_plot",
+              plotOutput("species_bar_plot_output",
+                         height = "60vh", fill = TRUE) |> 
+                withSpinner(type = 4, color = '#08C4E5')
+            )
           )
-        )
+        ) # END species_bar_plot_wrapper
       ) # END inner wrapper
     ) # END outer plot container
   ) # END column
-), # END fluid row (plots)
+), # END fluidRow
 
 
 # ---- Row for units and year slider ----

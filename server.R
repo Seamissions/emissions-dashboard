@@ -408,7 +408,7 @@ server <- function(input, output, session) {
     filtered_flags <- top_flags |>
       filter(year == input$year_slider_input_plot)
     
-    req(nrow(filtered_flags) > 0)  # prevents error if no data for selected year
+    req(nrow(filtered_flags) > 0)
     
     x_var <- if (isTRUE(show_per_unit)) {
       filtered_flags$emissions_per_ton
@@ -490,9 +490,7 @@ server <- function(input, output, session) {
                     label = x_label),
                 color = "white",
                 size = 7) +
-      
-      labs(title = "Annual CO₂ Emissions by ISSCAAP Group") +
-      
+
       theme_void() +
       theme(
         legend.position = "none",
@@ -506,7 +504,18 @@ server <- function(input, output, session) {
   })
   
   
-  # --- Plot for selected country ISSCAAP groups ----
+  # --- Plot for selected country ISSCAAP groups -------------------------------
+  
+  # Save title 
+  output$dynamic_species_header <- renderUI({
+    req(input$selected_country_input)  # Ensure input exists
+    tags$h4(
+      paste("Emissions by Species Group in", input$selected_country_input),
+      style = "color: white; font-weight: bold;"
+    )
+  })
+  
+  # Create plot
   output$species_bar_plot_output <- renderPlot({
     req(input$selected_country_input)
     
@@ -542,7 +551,6 @@ server <- function(input, output, session) {
                     label = x_label),
                 color = "white",
                 size = 7) +
-      labs(title = paste("Emissions by Species Group in", input$selected_country_input)) +
       theme_void() +
       theme(
         legend.position = "none",

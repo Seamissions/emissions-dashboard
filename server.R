@@ -439,7 +439,6 @@ server <- function(input, output, session) {
                     label = x_label),
                 color = "white",
                 size = 7) +
-      labs(title = "Annual CO₂ Emissions from Top Fishing Fleets") +
       theme_void() +
       theme(legend.position = "none",
             title = element_text(color = "white", family = "Roboto", face = "bold", size = 24),

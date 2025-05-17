@@ -446,8 +446,7 @@ ui <- navbarPage(
                                id = "year_map_popup",
                                description = "Data displayed in the map grid is aggregated by year. Use the slider to select a year or click the play button to animate emissions trends over time.",
                                data_source = NULL,
-                               learn_more = NULL
-                             ),
+                               learn_more = NULL),
                              
                              sliderInput("year_slider_input_map",
                                          NULL,
@@ -575,51 +574,68 @@ shiny::tabPanel("Compare Seafood Emissions",
 
 # --- Second Row with ggplot ---------------------------------------------------
 fluidRow(
-  column(width = 12,
-         div(style = "background-color:#0B2232;
-                     height: 60vh;
-                     min-height: 300px;
-                     margin-top: 30px;
-                     margin-bottom: 30px;
-                     margin-left: 20px;
-                     margin-right: 20px;
-                     overflow-x: auto;
-                     white-space: nowrap;",
-             
-             # --- Define plots (hidden when not selected) ----------------------
-             # Inner wrapper for plots (keeps width flexible)
-             div(style = "min-width: 1000px;", 
-                 
-             # ---- Country plot (default visible) ----
-             div(
-               id = "country_plot",
-               plotOutput("country_plot_output",
-                          height = "60vh", fill = TRUE) |> 
-                 withSpinner(type = 4, color = '#08C4E5')), # END div
-             
-             # ---- ISSCAAP plot (hidden on load) ----
-             shinyjs::hidden(
-               div(id = "isscaap_plot",
-                 plotOutput("isscaap_plot_output",
-                            height = "60vh", fill = TRUE) |> 
-                   withSpinner(type = 4, color = '#08C4E5')) # END div 
-             ), # END hidden
-             
-             # ---- Species plot for selected country (hidden on load) ----
-             shinyjs::hidden(
-               div(id = "species_bar_plot",
-                 plotOutput("species_bar_plot_output",
-                            height = "60vh", fill = TRUE) |> 
-                   withSpinner(type = 4, color = '#08C4E5')
-               ) # END div
-             ) # END hidden
-             
-         ) # END row div
-         )
-  )
+  column(
+    width = 12,
+    div(
+      style = "background-color:#0B2232;
+               height: 60vh;
+               min-height: 300px;
+               margin-top: 30px;
+               margin-bottom: 30px;
+               margin-left: 20px;
+               margin-right: 20px;
+               overflow-x: auto;
+               white-space: normal;",
+      
+      # --- Define plots (hidden when not selected) ----------------------
+      div(style = "position: relative; z-index: 2;
+                    padding-top: 10px; padding-left: 40px;",
+          
+        # ---- Country plot (default visible) ----
+        div(
+          id = "country_plot",
+          
+          tags$h4(
+            "Annual CO₂ Emissions Top Fishing Fleets",
+            style = "color: white;
+                     font-size: 30px;
+                     font-weight: bold;
+                     white-space: normal;
+                     word-break: break-word;
+                     max-width: 100%;
+                     margin-bottom: 10px;"),
+          
+          plotOutput("country_plot_output",
+                     height = "60vh", fill = TRUE) |> 
+            withSpinner(type = 4, color = '#08C4E5')
+        ),
+        
+        # ---- ISSCAAP plot (hidden on load) ----
+        shinyjs::hidden(
+          div(
+            id = "isscaap_plot",
+            plotOutput("isscaap_plot_output",
+                       height = "60vh", fill = TRUE) |> 
+              withSpinner(type = 4, color = '#08C4E5')
+          )
+        ),
+        
+        # ---- Species plot for selected country (hidden on load) ----
+        shinyjs::hidden(
+          div(
+            id = "species_bar_plot",
+            plotOutput("species_bar_plot_output",
+                       height = "60vh", fill = TRUE) |> 
+              withSpinner(type = 4, color = '#08C4E5')
+          )
+        )
+      ) # END inner wrapper
+    ) # END outer plot container
+  ) # END column
 ), # END fluid row (plots)
 
 
+# ---- Row for units and year slider ----
 fluidRow(
   column(width = 6,
          # ---- Year Slider ----
@@ -653,6 +669,7 @@ fluidRow(
          ) # END absolutePanel - year
 
          ),
+  
   column(
     width = 6,
     div(style = "display: flex;

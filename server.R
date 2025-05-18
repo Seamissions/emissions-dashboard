@@ -17,10 +17,6 @@ server <- function(input, output, session) {
     })
   })
   
-  observe({
-    cat("📌 Active tab:", input$navbarPage, "\n")
-  })
-  
   
   # ----------------------------------------------------------------------------
   # ---- Emissions map ---------------------------------------------------------
@@ -358,6 +354,7 @@ server <- function(input, output, session) {
   shinyjs::hide("isscaap_plot")
   shinyjs::hide("species_bar_plot")
   shinyjs::hide("country_select_plot_input")
+  shinyjs::hide("dynamic_country_header")
   
   # ---- Toggle barplots on button click ----
   observeEvent(input$compare_species_input, {
@@ -365,6 +362,7 @@ server <- function(input, output, session) {
     shinyjs::hide("country_plot")
     shinyjs::hide("species_bar_plot")
     shinyjs::hide("country_select_plot_input")
+    shinyjs::hide("dynamic_country_header")
     
     runjs("
     $('#compare_species_input').addClass('plot-button-active');
@@ -378,7 +376,8 @@ server <- function(input, output, session) {
     shinyjs::hide("isscaap_plot")
     shinyjs::hide("species_bar_plot")
     shinyjs::hide("country_select_plot_input")
-    
+    shinyjs::hide("dynamic_country_header")
+
     runjs("
     $('#compare_species_input').removeClass('plot-button-active');
     $('#compare_countries_input').addClass('plot-button-active');
@@ -391,6 +390,7 @@ server <- function(input, output, session) {
     shinyjs::hide("isscaap_plot")
     shinyjs::show("species_bar_plot")
     shinyjs::show("country_select_plot_input")
+    shinyjs::show("dynamic_country_header")
     
     runjs("
     $('#compare_species_input').removeClass('plot-button-active');
@@ -506,13 +506,30 @@ server <- function(input, output, session) {
   
   # --- Plot for selected country ISSCAAP groups -------------------------------
   
-  # Save title 
-  output$dynamic_species_header <- renderUI({
-    req(input$selected_country_input)  # Ensure input exists
-    tags$h4(
-      paste("Emissions by Species Group in", input$selected_country_input),
-      style = "color: white; font-weight: bold;"
-    )
+  output$dynamic_country_header <- renderUI({
+    if (is.null(input$selected_country_input) || input$selected_country_input == "" || input$selected_country_input == "All Countries") {
+      tags$h4(
+        "Please select a country.",
+        style = "color: white;
+               font-size: 30px;
+               font-weight: bold;
+               white-space: normal;
+               word-break: break-word;
+               max-width: 100%;
+               margin-bottom: 10px;"
+      )
+    } else {
+      tags$h4(
+        paste("Annual CO₂ Emissions By Species Group -", input$selected_country_input),
+        style = "color: white;
+               font-size: 30px;
+               font-weight: bold;
+               white-space: normal;
+               word-break: break-word;
+               max-width: 100%;
+               margin-bottom: 10px;"
+      )
+    }
   })
   
   # Create plot

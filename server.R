@@ -53,7 +53,7 @@ server <- function(input, output, session) {
     shinyjs::toggle("toggle_sidebar_open_input")
     shinyjs::toggle("toggle_sidebar_close_input")
   })
-
+  
   # Auto minimize sidebar panel for small screens/mobile devices
   observe({
     req(input$minimize_sidebar_on_mobile)
@@ -63,7 +63,7 @@ server <- function(input, output, session) {
     shinyjs::hide("toggle_sidebar_open_input")
   })
   
-            
+  
   # ---- Initialize the map on first render ----
   observe({
     if (first_time() && input$navbarPage == "Emissions Map") {
@@ -377,7 +377,7 @@ server <- function(input, output, session) {
     shinyjs::hide("species_bar_plot")
     shinyjs::hide("country_select_plot_input")
     shinyjs::hide("dynamic_country_header")
-
+    
     runjs("
     $('#compare_species_input').removeClass('plot-button-active');
     $('#compare_countries_input').addClass('plot-button-active');
@@ -403,7 +403,7 @@ server <- function(input, output, session) {
   # --- Plot comparing countries ----
   output$country_plot_output <- renderPlot({
     
-    show_per_unit <- input$unit_plot_toggle_input
+    show_per_unit <- input$unit_plot_toggle_input =="per_unit"
     
     filtered_flags <- top_flags |>
       filter(year == input$year_slider_input_plot)
@@ -453,7 +453,7 @@ server <- function(input, output, session) {
   # --- Plot comparing ISSCAAP groups ----
   output$isscaap_plot_output <- renderPlot({
     
-    show_per_unit <- input$unit_plot_toggle_input
+    show_per_unit <- input$unit_plot_toggle_input =="per_unit"
     
     filtered_isscaap <- top_isscaap |>
       filter(year == input$year_slider_input_plot)
@@ -490,7 +490,7 @@ server <- function(input, output, session) {
                     label = x_label),
                 color = "white",
                 size = 7) +
-
+      
       theme_void() +
       theme(
         legend.position = "none",
@@ -536,7 +536,7 @@ server <- function(input, output, session) {
   output$species_bar_plot_output <- renderPlot({
     req(input$selected_country_input)
     
-    show_per_unit <- input$unit_plot_toggle_input
+    show_per_unit <- input$unit_plot_toggle_input =="per_unit"
     
     # Aggregate across years for selected country
     filtered_select_country <- species_data |>
@@ -605,6 +605,8 @@ server <- function(input, output, session) {
 # END Seafood Emissions Explorer
 
 # END server function
+
+
 
 
 

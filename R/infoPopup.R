@@ -62,7 +62,7 @@ infoPopup <- function(id, description, learn_more = NULL, data_source = NULL) {
                  position: absolute;
                  top: 25px;
                  left: 0;
-                 z-index: 1000;
+                 z-index: 2000;
                  background-color: #f1f9fc;
                  color: #20404F;
                  padding: 10px 15px;

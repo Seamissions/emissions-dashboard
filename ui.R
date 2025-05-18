@@ -22,7 +22,7 @@ ui <-
     )
     
   )
-  navbarPage(
+navbarPage(
   title = "Seamissions Explorer",
   header = NULL, 
   windowTitle = "Seamissions Explorer",
@@ -440,7 +440,7 @@ ui <-
                   
                   # Scrollable body
                   div(
-                    style = "overflow-y: auto; max-height: calc(100vh - 60px); padding-bottom: 120px;",
+                    style = "overflow-y: auto; scrollbar-width: auto; max-height: calc(100vh - 60px); padding-bottom: 120px; overflow: visible;",
                     
                     # Header Row ----
                     fluidRow(tags$hr()),
@@ -537,10 +537,10 @@ ui <-
                     
                     # --- Bottom Responsive Row ------------------------------------------
                     div(
-                      style = "margin-top: 10px; padding: 10px 20px; background-color: #0B2232; overflow-x: auto;",
+                      style = "overflow: visible; overflow-y: visible; position: fixed; bottom: 0; z-index: 2000; width: 100vw; margin-top: 10px; padding: 10px 20px; overflow-x: auto; background-color: rgba(255,255,255);",
                       fluidRow(
                         column(width = 6,
-                               div(style = "background-color: rgba(255,255,255,0.8); padding: 8px; border-radius: 8px; width: 50%; min-width: 150px; max-width: 200px",
+                               div(style = "border-radius: 8px; width: 50%; min-width: 150px; max-width: 200px",
                                    tags$span("Select Year"),
                                    infoPopup(
                                      id = "year_plot_popup",
@@ -555,7 +555,7 @@ ui <-
                                )
                         ),
                         column(width = 6,
-                               div(style = "display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; padding-right: 20px; margin-top: 10px; gap: 10px;",
+                               div(style = "overflow: visible; display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; padding-right: 20px; margin-top: 10px; gap: 10px;",
                                    tags$span("Total Emissions", style = "color: white; font-weight: 500; font-size: 14px;"),
                                    infoPopup(
                                      id = "total_emissions_unit_plot_popup",
@@ -563,14 +563,15 @@ ui <-
                                      data_source = "Global Fishing Watch",
                                      learn_more = NULL
                                    ),
-                                   div(style = "display: inline-block; margin-left: 10px;",
-                                       materialSwitch(
-                                         inputId = "unit_plot_toggle_input",
-                                         label = NULL,
-                                         status = "info",
-                                         right = TRUE,
-                                         inline = TRUE
-                                       )
+                                   div(
+                                     style = "margin-left: 10px; overflow: visible;",
+                                     radioButtons(
+                                       inputId = "unit_plot_toggle_input",
+                                       label = "Plot Unit",
+                                       choices = c("Total Emissions" = "total", "Per Unit Catch" = "per_unit"),
+                                       selected = "total",
+                                       inline = TRUE
+                                     )
                                    ),
                                    tags$span("Per Unit Catch", style = "color: white; font-weight: 500; font-size: 14px;"),
                                    infoPopup(
@@ -658,7 +659,6 @@ ui <-
                            ) # END div
                     ) # END column
                   ) # END fluidRow
-) # END navbarPage
+  ) # END navbarPage
 )
-
 

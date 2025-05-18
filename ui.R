@@ -6,10 +6,22 @@
 source("theme.R")
 
 ui <- 
-  
-
+  tagList(
+    tags$link(
+      rel = "stylesheet",
+      href = "https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap"
+    ),
+    tags$link(
+      rel = "stylesheet",
+      href = "https://api.tiles.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css"
+    ),
+    tags$link(
+      rel = "icon",
+      type = "image/png",
+      href = "images/fav-icon.png"
+    )
     
-  
+  )
   navbarPage(
   title = "Seamissions Explorer",
   header = NULL, 
@@ -19,27 +31,6 @@ ui <-
   
   # ---- Head elements (fonts, styles) ----
   
-  # FIX this is adding ghost tabs on mobile version because of the href....
-  tags$head(
-    # Roboto font
-    tags$link(
-      href = "https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap",
-      rel = "stylesheet"
-    ),
-    
-    # Favicon
-    tags$link(
-      rel = "icon",
-      type = "image/png",
-      href = "images/fav-icon.png"),
-    
-    # Font styling
-    tags$style(HTML("
-    body {
-      font-family: 'Roboto', sans-serif;
-    }
-  "))
-  ),
   
   useShinyjs(),
   
@@ -150,33 +141,6 @@ ui <-
   shiny::tabPanel("Emissions Map",
                   useShinyjs(),
                   
-                  # FIX this is adding ghost tabs on mobile version because of the href....
-                  tags$head(
-                    tags$link(
-                      rel = "stylesheet",
-                      href = "https://api.tiles.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css"),
-                    tags$style(HTML("
-                                  html, body {
-                                    margin: 0;
-                                    padding: 0;
-                                    height: 100%;
-                                    overflow: hidden;
-                                  }
-                                  
-                                  .tab-content {
-                                    padding-left: 0 !important;
-                                    padding-right: 0 !important;
-                                    padding-top: 0 !important;
-                                    padding-bottom: 0 !important;
-                                  }
-                              
-                                  .container-fluid {
-                                    padding-left: 0 !important;
-                                    padding-right: 0 !important;
-                                    padding-top: 0 !important;
-                                    padding-bottom: 0 !important;
-                                  }
-                                "))),
                   
                   # ---- Map Container ----
                   div(style = "position: relative; height: 90vh;",
@@ -473,24 +437,6 @@ ui <-
   
   shiny::tabPanel("Compare Seafood Emissions",
                   
-                  tags$head(
-                    tags$style(HTML("
-      .plot-button {
-        background-color: #08C4E5 !important;
-        color: white !important;
-        border: none !important;
-      }
-      .plot-button-active {
-        background-color: #F9B928 !important;
-        color: black !important;
-      }
-      @media (max-width: 768px) {
-        .responsive-bottom-panel {
-          flex-direction: column !important;
-          align-items: flex-start !important;
-        }
-    "))
-                  ),
                   
                   # Scrollable body
                   div(
@@ -712,7 +658,7 @@ ui <-
                            ) # END div
                     ) # END column
                   ) # END fluidRow
-  ) # END tabPanel (Learn More Page)
 ) # END navbarPage
+)
 
 

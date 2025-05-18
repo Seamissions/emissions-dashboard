@@ -82,7 +82,7 @@ navbarPage(
                   ),
                   
                   # ---- Teaser Cards ----
-                  div(style = "margin-top: 40px;",
+                  div(style = "margin-top: 40px; margin-bottom: 40px;",
                       div(style = "display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 0 20px;",
                           
                           # ---- Emissions Map Card ----
@@ -113,7 +113,7 @@ navbarPage(
                               style = "flex: 1 1 300px; max-width: 350px; cursor: pointer; position: relative;
                      padding-top: 50px; padding-bottom: 10px; background-color: white;
                      border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-                     overflow: visible; font-family: sans-serif; text-align: center; margin: 20px;",
+                     overflow: visible; font-family: sans-serif; text-align: center; margin: 25px;",
                               
                               div(style = "height: 12px; background-color: #F9B928;
                       border-top-left-radius: 8px; border-top-right-radius: 8px;
@@ -132,11 +132,44 @@ navbarPage(
                           )
                       ) # END teaser card row
                   ), # END Teaser section
-                  
-                  # Footer
-                  div(
-                    style = "overflow: visible !important; position: fixed; bottom: 0; z-index: 2000; height: 20px; background-color:pink; width: 100%;",
-                     p("UCSB MEDS Copyright 2025"))
+                  # ---- Hero Section ----
+                  div(style = "position: relative;
+               min-height: 200px;
+               max-height: 300px;
+               width: 100%;
+               padding-left: 0px !important;
+               background-image: url('images/ocean-banner.png');
+               background-size: cover;
+               background-position: center;
+               background-attachment: fixed;
+               text-align: center;
+               color: #e8fffd;",
+                      
+                      # Overlay
+                      div(style = "position: absolute; 
+                   top: 0; left: 0; right: 0; bottom: 0;
+                   background-color: rgba(0, 0, 0, 0.5);
+                   z-index: 1;"),
+                      
+                      # Logo
+                      tags$img(src = "images/seamissions-logo.png",
+                               style = "position: absolute;
+                         top: 5%;
+                         left: 50%;
+                         transform: translateX(-50%);
+                         height: 150px;
+                         z-index: 2;"),
+                      
+                      # Hero Text
+                      div(style = "position: relative; z-index: 2;
+                    padding-top: 180px; padding-left: 40px; padding-right: 40px;",
+                          
+                          h1("INSERT LOGO",
+                             style = "font-weight: 600 !important;"),
+                          
+                      )
+                  )
+                
   ), # END tabPanel(Home)
   
   
@@ -593,28 +626,28 @@ navbarPage(
                         ),
                         column(width = 6,
                                div(style = "display: flex;justify-content: flex-end;",
-                                 div(
-                                 style = "overflow: visible; display: flex; align-items: center; gap: 6px; margin-right: 15px;",
-                                 
-                                 # Plot Units label
-                                 tags$span("Plot Units:", style = "color: black; font-weight: 500; font-size: 17px;"),
-                                 
-                                 # Info icon
-                                 infoPopup(
-                                   id = "total_emissions_unit_plot_popup",
-                                   description = "Total CO₂ emission in metric tons based on broadcasted emissions and redistributed non-broadcasted emissions.",
-                                   data_source = "Global Fishing Watch"
-                                 )),
-                               div( style = "display: flex;  margin-top: 15px; padding: 10px;",
-                                 prettyRadioButtons(
-                                   inputId = "unit_plot_toggle_input",
-                                   label = NULL,
-                                   choices = c("Total Emissions" = "total", "Per Unit Catch" = "per_unit"),
-                                   selected = "total",
-                                   inline = TRUE,
-                                   status = "warning"), # END radio button
-                               )
-                        ))
+                                   div(
+                                     style = "overflow: visible; display: flex; align-items: center; gap: 6px; margin-right: 15px;",
+                                     
+                                     # Plot Units label
+                                     tags$span("Plot Units:", style = "color: black; font-weight: 500; font-size: 17px;"),
+                                     
+                                     # Info icon
+                                     infoPopup(
+                                       id = "total_emissions_unit_plot_popup",
+                                       description = "Total CO₂ emission in metric tons based on broadcasted emissions and redistributed non-broadcasted emissions.",
+                                       data_source = "Global Fishing Watch"
+                                     )),
+                                   div( style = "display: flex;  margin-top: 15px; padding: 10px;",
+                                        prettyRadioButtons(
+                                          inputId = "unit_plot_toggle_input",
+                                          label = NULL,
+                                          choices = c("Total Emissions" = "total", "Per Unit Catch" = "per_unit"),
+                                          selected = "total",
+                                          inline = TRUE,
+                                          status = "warning"), # END radio button
+                                   )
+                               ))
                       )
                     ) # END slider + toggle row
                   ) # END scrollable wrapper

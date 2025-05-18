@@ -62,21 +62,5 @@ seamissions_theme <- bs_add_rules(seamissions_theme, "
     color: #053762;              /* Dark blue text */
     border: 1px solid #08C4E5;   /* Optional: match theme border */
   }
-   /* --- Radio Button Styling for White Theme --- */
- div.white-radio .form-check-label {
-    color: white !important;
-    font-weight: 500;
-  }
-  div.white-radio .form-check-input {
-    background-color: transparent;
-    border: 2px solid white !important;
-  }
-  div.white-radio .form-check-input:checked {
-    background-color: #08C4E5 !important;
-    border-color: #08C4E5 !important;
-  }
-  div.white-radio .form-check-input:hover {
-    box-shadow: 0 0 0 0.15rem rgba(255, 255, 255, 0.4);
-  }
 ")
 

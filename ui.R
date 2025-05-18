@@ -40,7 +40,8 @@ navbarPage(
                   # ---- Hero Section ----
                   div(style = "position: relative;
                min-height: 500px;
-               width: 100vw;
+               width: 100%;
+               padding-left: 0px !important;
                background-image: url('images/ocean-banner.png');
                background-size: cover;
                background-position: center;
@@ -89,7 +90,7 @@ navbarPage(
                               style = "flex: 1 1 300px; max-width: 350px; cursor: pointer; position: relative;
                      padding-top: 50px; padding-bottom: 10px; background-color: white;
                      border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-                     overflow: visible; font-family: sans-serif; text-align: center;",
+                     overflow: visible; font-family: sans-serif; text-align: center; margin: 25px;",
                               
                               div(style = "height: 12px; background-color: #08C4E5;
                       border-top-left-radius: 8px; border-top-right-radius: 8px;
@@ -112,7 +113,7 @@ navbarPage(
                               style = "flex: 1 1 300px; max-width: 350px; cursor: pointer; position: relative;
                      padding-top: 50px; padding-bottom: 10px; background-color: white;
                      border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-                     overflow: visible; font-family: sans-serif; text-align: center;",
+                     overflow: visible; font-family: sans-serif; text-align: center; margin: 20px;",
                               
                               div(style = "height: 12px; background-color: #F9B928;
                       border-top-left-radius: 8px; border-top-right-radius: 8px;
@@ -127,10 +128,15 @@ navbarPage(
                               
                               h4(strong("Compare Seafood Emissions")),
                               p("Use this tool to compare greenhouse gas emissions by country and seafood category, combining Global Fishing Watch activity data with FAO catch statistics.",
-                                style = "color: #444; padding: 0 20px; margin-bottom: 20px;")
+                                style = "color: #444; padding: 0 20px; margin-bottom: 25px;")
                           )
                       ) # END teaser card row
-                  ) # END Teaser section
+                  ), # END Teaser section
+                  
+                  # Footer
+                  div(
+                    style = "overflow: visible !important; position: fixed; bottom: 0; z-index: 2000; height: 20px; background-color:pink; width: 100%;",
+                     p("UCSB MEDS Copyright 2025"))
   ), # END tabPanel(Home)
   
   
@@ -159,16 +165,30 @@ navbarPage(
                            border-right: 0px solid #ccc;
                            z-index: 1001;",
                           
-                          # ---- Toggle Button Inside Sidebar ----
-                          actionButton("toggle_sidebar_open_input",
-                                       label = NULL,
-                                       icon = icon("angle-left", style = "font-size: 25px;"),
-                                       style = "position: absolute;
-                                         top: 40%;
-                                         right: -35px;
-                                         width: 0%;
-                                         background-color: #f9f9f9;
-                                         border: none;"),
+                          # Wrapper around background + icon button
+                          div(style = "position: absolute; top: 40%; right: -30px; width: 40px; height: 50px; z-index: 1000;",
+                              
+                              # Background layer behind the sidebar button (below icon)
+                              div(style = "position: absolute;
+                                           top: 0; left: 0;
+                                           width: 40px; height: 50px;
+                                           background-color: #F9F9F9;
+                                           border-radius: 6px;
+                                           z-index: 1000;"),
+                              
+                              # Actual icon button (higher z-index)
+                              actionButton("toggle_sidebar_open_input",
+                                           label = NULL,
+                                           icon = icon("angle-left", style = "font-size: 25px; color: #DA8D03;margin-left: -15px;"),
+                                           style = "position: absolute;
+                                                    top: 0;
+                                                    left: 0;
+                                                    width: 40px;
+                                                    height: 50px;
+                                                    background-color: transparent;
+                                                    border: none;
+                                                    z-index: 1001;")
+                                                    ),
                           
                           # Map title
                           tags$h3(style = "font-size: 24px; font-weight: 400; color: #20404F; margin-bottom: 5px;", 
@@ -376,6 +396,7 @@ navbarPage(
                           
                       ), # END sidebar panel
                       
+                      
                       # Button - Close sidebar
                       actionButton("toggle_sidebar_close_input",
                                    label = NULL,
@@ -383,7 +404,7 @@ navbarPage(
                                                style = "font-size: 20px;  padding-right: 6px;"),
                                    style = "position: absolute;
                                      top: 40%;
-                                     left: -20px;
+                                     left: -32px;
                                      width: 40px;
                                      height: 50px;
                                      display: flex;
@@ -391,6 +412,7 @@ navbarPage(
                                      border: none;
                                      display: none;
                                      z-index: 1001"), # END actionButton for sidebar to close sidebar
+                      
                       
                       
                       # ---- Emissions Map --------------------------------------------

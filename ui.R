@@ -570,34 +570,29 @@ navbarPage(
                                )
                         ),
                         column(width = 6,
-                               div(style = "overflow: visible !important; display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; padding-right: 20px; margin-top: 10px; gap: 10px;",
-                                   tags$span("Total Emissions", style = "color: white; font-weight: 500; font-size: 14px;"),
-                                   infoPopup(
-                                     id = "total_emissions_unit_plot_popup",
-                                     description = "Total CO₂ emission in metric tons based on broadcasted emissions and redistributed non-broadcasted emissions.",
-                                     data_source = "Global Fishing Watch",
-                                     learn_more = NULL
-                                   ),
-                                   div(
-                                     style = "margin-left: 10px; overflow: visible !important;",
-                                     prettyRadioButtons(
-                                       inputId = "unit_plot_toggle_input",
-                                       label = "Plot Unit",
-                                       choices = c("Total Emissions" = "total", "Per Unit Catch" = "per_unit"),
-                                       selected = "total",
-                                       inline = TRUE,
-                                       status = "warning"
-                                     )
-                                   ),
-                                   tags$span("Per Unit Catch", style = "color: white; font-weight: 500; font-size: 14px;"),
-                                   infoPopup(
-                                     id = "per_catch_unit_plot_popup",
-                                     description = "Per unit catch is the ratio of total emissions (metric tons) per total catch (metric tons). This gives a measurement of how carbon efficient the catch rate is.",
-                                     data_source = "Global Fishing Watch",
-                                     learn_more = NULL
-                                   )
+                               div(style = "display: flex;justify-content: flex-end;",
+                                 div(
+                                 style = "overflow: visible; display: flex; align-items: center; gap: 6px; margin-right: 15px;",
+                                 
+                                 # Plot Units label
+                                 tags$span("Plot Units:", style = "color: black; font-weight: 500; font-size: 17px;"),
+                                 
+                                 # Info icon
+                                 infoPopup(
+                                   id = "total_emissions_unit_plot_popup",
+                                   description = "Total CO₂ emission in metric tons based on broadcasted emissions and redistributed non-broadcasted emissions.",
+                                   data_source = "Global Fishing Watch"
+                                 )),
+                               div( style = "display: flex;  margin-top: 15px; padding: 10px;",
+                                 prettyRadioButtons(
+                                   inputId = "unit_plot_toggle_input",
+                                   label = NULL,
+                                   choices = c("Total Emissions" = "total", "Per Unit Catch" = "per_unit"),
+                                   selected = "total",
+                                   inline = TRUE,
+                                   status = "warning"), # END radio button
                                )
-                        )
+                        ))
                       )
                     ) # END slider + toggle row
                   ) # END scrollable wrapper

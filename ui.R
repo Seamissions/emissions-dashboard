@@ -436,6 +436,21 @@ navbarPage(
   # ------------------------------------------------------------------------------------------------------------------
   
   shiny::tabPanel("Compare Seafood Emissions",
+                  tags$head(
+                    tags$style(HTML("
+      .plot-button {
+        background-color: #08C4E5 !important;
+        color: white !important;
+        border: none !important;
+      }
+      .plot-button-active {
+        background-color: #F9B928 !important;
+        color: black !important;
+      }
+    
+    "))
+                  ),
+                  
                   
                   
                   # Scrollable body

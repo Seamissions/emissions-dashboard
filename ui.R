@@ -455,7 +455,7 @@ navbarPage(
                   
                   # Scrollable body
                   div(
-                    style = "overflow-y: auto; scrollbar-width: auto; max-height: calc(100vh - 60px); padding-bottom: 120px; overflow: visible;",
+                    style = "scrollbar-width: auto; max-height: calc(100vh - 60px); padding-bottom: 120px;",
                     
                     # Header Row ----
                     fluidRow(tags$hr()),
@@ -505,7 +505,7 @@ navbarPage(
                     # --- Plot Section ---------------------------------------------------
                     fluidRow(
                       column(width = 12,
-                             div(style = "background-color:#0B2232; margin: 30px 20px; overflow-x: auto;",
+                             div(style = "background-color:#0B2232; margin: 30px 20px; overflow: visible !important;",
                                  
                                  # ---- Country Plot ----
                                  div(id = "country_plot",
@@ -552,7 +552,7 @@ navbarPage(
                     
                     # --- Bottom Responsive Row ------------------------------------------
                     div(
-                      style = "overflow: visible; overflow-y: visible; position: fixed; bottom: 0; z-index: 2000; width: 100vw; margin-top: 10px; padding: 10px 20px; overflow-x: auto; background-color: rgba(255,255,255);",
+                      style = "overflow: visible !important; position: fixed; bottom: 0; z-index: 2000; width: 100vw; margin-top: 10px; padding: 10px 20px; background-color: rgba(255,255,255);",
                       fluidRow(
                         column(width = 6,
                                div(style = "border-radius: 8px; width: 50%; min-width: 150px; max-width: 200px",
@@ -570,7 +570,7 @@ navbarPage(
                                )
                         ),
                         column(width = 6,
-                               div(style = "overflow: visible; display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; padding-right: 20px; margin-top: 10px; gap: 10px;",
+                               div(style = "overflow: visible !important; display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; padding-right: 20px; margin-top: 10px; gap: 10px;",
                                    tags$span("Total Emissions", style = "color: white; font-weight: 500; font-size: 14px;"),
                                    infoPopup(
                                      id = "total_emissions_unit_plot_popup",
@@ -580,7 +580,7 @@ navbarPage(
                                    ),
                                    div(
                                      class = "white-radio",
-                                     style = "margin-left: 10px; overflow: visible;",
+                                     style = "margin-left: 10px; overflow: visible !important;",
                                      radioButtons(
                                        inputId = "unit_plot_toggle_input",
                                        label = "Plot Unit",

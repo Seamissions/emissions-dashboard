@@ -1,11 +1,16 @@
 # ------------------------------------------------------------------------------------------------------------------
 #     ui.R 
 # ------------------------------------------------------------------------------------------------------------------
-  
+
 
 source("theme.R")
 
-ui <- navbarPage(
+ui <- 
+  
+
+    
+  
+  navbarPage(
   title = "Seamissions Explorer",
   header = NULL, 
   windowTitle = "Seamissions Explorer",
@@ -40,9 +45,9 @@ ui <- navbarPage(
   
   # ---- Home Panel ----
   shiny::tabPanel("Home",
-           
-           # ---- Hero Section ----
-           div(style = "position: relative;
+                  
+                  # ---- Hero Section ----
+                  div(style = "position: relative;
                min-height: 500px;
                width: 100vw;
                background-image: url('images/ocean-banner.png');
@@ -51,90 +56,90 @@ ui <- navbarPage(
                background-attachment: fixed;
                text-align: center;
                color: #e8fffd;",
-               
-               # Overlay
-               div(style = "position: absolute; 
+                      
+                      # Overlay
+                      div(style = "position: absolute; 
                    top: 0; left: 0; right: 0; bottom: 0;
                    background-color: rgba(0, 0, 0, 0.5);
                    z-index: 1;"),
-               
-               # Logo
-               tags$img(src = "images/seamissions-logo.png",
-                        style = "position: absolute;
+                      
+                      # Logo
+                      tags$img(src = "images/seamissions-logo.png",
+                               style = "position: absolute;
                          top: 5%;
                          left: 50%;
                          transform: translateX(-50%);
                          height: 150px;
                          z-index: 2;"),
-               
-               # Hero Text
-               div(style = "position: relative; z-index: 2;
+                      
+                      # Hero Text
+                      div(style = "position: relative; z-index: 2;
                     padding-top: 180px; padding-left: 40px; padding-right: 40px;",
-                   
-                   h1("Explore Global Seafood Emissions",
-                      style = "font-weight: 600 !important;"),
-                   
-                   tags$hr(),
-                   
-                   tags$p(style = "font-weight: normal; color: white; margin-top: 30px;",
-                          "Global Fishing Watch developed a novel dataset estimating CO₂ emissions from both AIS-broadcasting and non-broadcasting fishing vessels using satellite data, machine learning, and emissions modeling. By linking these emissions estimates with FAO catch data, this dashboard enables users to quantify the climate impact of seafood production by country, fleet, and species group."),
-                   
-                   tags$p(style = "font-weight: normal; color: white; margin-top: 20px;",
-                          "This dashboard combines satellite-based vessel tracking, emissions modeling, and machine learning to map fishing vessel emissions across the globe—both from broadcasting and non-broadcasting fleets. By visualizing emissions at sea, this tool offers a replicable and scalable approach for understanding the climate impact of global fisheries and informing more sustainable ocean governance.")
-               )
-           ),
-           
-           # ---- Teaser Cards ----
-           div(style = "margin-top: 40px;",
-               div(style = "display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 0 20px;",
-                   
-                   # ---- Emissions Map Card ----
-                   div(id = "explore_map_card",
-                       style = "flex: 1 1 300px; max-width: 350px; cursor: pointer; position: relative;
+                          
+                          h1("Explore Global Seafood Emissions",
+                             style = "font-weight: 600 !important;"),
+                          
+                          tags$hr(),
+                          
+                          tags$p(style = "font-weight: normal; color: white; margin-top: 30px;",
+                                 "Global Fishing Watch developed a novel dataset estimating CO₂ emissions from both AIS-broadcasting and non-broadcasting fishing vessels using satellite data, machine learning, and emissions modeling. By linking these emissions estimates with FAO catch data, this dashboard enables users to quantify the climate impact of seafood production by country, fleet, and species group."),
+                          
+                          tags$p(style = "font-weight: normal; color: white; margin-top: 20px;",
+                                 "This dashboard combines satellite-based vessel tracking, emissions modeling, and machine learning to map fishing vessel emissions across the globe—both from broadcasting and non-broadcasting fleets. By visualizing emissions at sea, this tool offers a replicable and scalable approach for understanding the climate impact of global fisheries and informing more sustainable ocean governance.")
+                      )
+                  ),
+                  
+                  # ---- Teaser Cards ----
+                  div(style = "margin-top: 40px;",
+                      div(style = "display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 0 20px;",
+                          
+                          # ---- Emissions Map Card ----
+                          div(id = "explore_map_card",
+                              style = "flex: 1 1 300px; max-width: 350px; cursor: pointer; position: relative;
                      padding-top: 50px; padding-bottom: 10px; background-color: white;
                      border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
                      overflow: visible; font-family: sans-serif; text-align: center;",
-                       
-                       div(style = "height: 12px; background-color: #08C4E5;
+                              
+                              div(style = "height: 12px; background-color: #08C4E5;
                       border-top-left-radius: 8px; border-top-right-radius: 8px;
                       position: absolute; top: 0; left: 0; right: 0;"),
-                       
-                       div(style = "position: absolute; top: -28px; left: 50%; transform: translateX(-50%);
+                              
+                              div(style = "position: absolute; top: -28px; left: 50%; transform: translateX(-50%);
                       background-color: #08C4E5; width: 56px; height: 56px;
                       border-radius: 50%; display: flex; align-items: center;
                       justify-content: center; z-index: 10;",
-                           tags$i(class = "fas fa-earth-americas", style = "color: white; font-size: 24px;")
-                       ),
-                       
-                       h4(strong("Fishing Vessel Emissions Map")),
-                       p("Explore a global map of CO₂ emissions from large-scale fishing, powered by Global Fishing Watch data.",
-                         style = "color: #444; padding: 0 20px;")
-                   ),
-                   
-                   # ---- Seafood Comparison Card ----
-                   div(id = "explore_seafood_card",
-                       style = "flex: 1 1 300px; max-width: 350px; cursor: pointer; position: relative;
+                                  tags$i(class = "fas fa-earth-americas", style = "color: white; font-size: 24px;")
+                              ),
+                              
+                              h4(strong("Fishing Vessel Emissions Map")),
+                              p("Explore a global map of CO₂ emissions from large-scale fishing, powered by Global Fishing Watch data.",
+                                style = "color: #444; padding: 0 20px;")
+                          ),
+                          
+                          # ---- Seafood Comparison Card ----
+                          div(id = "explore_seafood_card",
+                              style = "flex: 1 1 300px; max-width: 350px; cursor: pointer; position: relative;
                      padding-top: 50px; padding-bottom: 10px; background-color: white;
                      border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
                      overflow: visible; font-family: sans-serif; text-align: center;",
-                       
-                       div(style = "height: 12px; background-color: #F9B928;
+                              
+                              div(style = "height: 12px; background-color: #F9B928;
                       border-top-left-radius: 8px; border-top-right-radius: 8px;
                       position: absolute; top: 0; left: 0; right: 0;"),
-                       
-                       div(style = "position: absolute; top: -28px; left: 50%; transform: translateX(-50%);
+                              
+                              div(style = "position: absolute; top: -28px; left: 50%; transform: translateX(-50%);
                       background-color: #F9B928; width: 56px; height: 56px;
                       border-radius: 50%; display: flex; align-items: center;
                       justify-content: center; z-index: 10;",
-                           tags$i(class = "fas fa-chart-bar", style = "color: white; font-size: 24px;")
-                       ),
-                       
-                       h4(strong("Compare Seafood Emissions")),
-                       p("Use this tool to compare greenhouse gas emissions by country and seafood category, combining Global Fishing Watch activity data with FAO catch statistics.",
-                         style = "color: #444; padding: 0 20px; margin-bottom: 20px;")
-                   )
-               ) # END teaser card row
-           ) # END Teaser section
+                                  tags$i(class = "fas fa-chart-bar", style = "color: white; font-size: 24px;")
+                              ),
+                              
+                              h4(strong("Compare Seafood Emissions")),
+                              p("Use this tool to compare greenhouse gas emissions by country and seafood category, combining Global Fishing Watch activity data with FAO catch statistics.",
+                                style = "color: #444; padding: 0 20px; margin-bottom: 20px;")
+                          )
+                      ) # END teaser card row
+                  ) # END Teaser section
   ), # END tabPanel(Home)
   
   
@@ -144,13 +149,13 @@ ui <- navbarPage(
   
   shiny::tabPanel("Emissions Map",
                   useShinyjs(),
-                      
+                  
                   # FIX this is adding ghost tabs on mobile version because of the href....
-                      tags$head(
-                        tags$link(
-                          rel = "stylesheet",
-                          href = "https://api.tiles.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css"),
-                        tags$style(HTML("
+                  tags$head(
+                    tags$link(
+                      rel = "stylesheet",
+                      href = "https://api.tiles.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css"),
+                    tags$style(HTML("
                                   html, body {
                                     margin: 0;
                                     padding: 0;
@@ -172,13 +177,13 @@ ui <- navbarPage(
                                     padding-bottom: 0 !important;
                                   }
                                 "))),
-                                                
-           # ---- Map Container ----
-           div(style = "position: relative; height: 90vh;",
-        
-               # ---- Sidebar Panel --------------------------------------------
-               div(id = "sidebar-panel",
-                   style = "position: absolute;
+                  
+                  # ---- Map Container ----
+                  div(style = "position: relative; height: 90vh;",
+                      
+                      # ---- Sidebar Panel --------------------------------------------
+                      div(id = "sidebar-panel",
+                          style = "position: absolute;
                            top: 0;
                            left: 0;
                            height: 100%;
@@ -189,230 +194,230 @@ ui <- navbarPage(
                            padding: 15px;
                            border-right: 0px solid #ccc;
                            z-index: 1001;",
-                   
-                   # ---- Toggle Button Inside Sidebar ----
-                   actionButton("toggle_sidebar_open_input",
-                                label = NULL,
-                                icon = icon("angle-left", style = "font-size: 25px;"),
-                                style = "position: absolute;
+                          
+                          # ---- Toggle Button Inside Sidebar ----
+                          actionButton("toggle_sidebar_open_input",
+                                       label = NULL,
+                                       icon = icon("angle-left", style = "font-size: 25px;"),
+                                       style = "position: absolute;
                                          top: 40%;
                                          right: -35px;
                                          width: 0%;
                                          background-color: #f9f9f9;
                                          border: none;"),
-                   
-                   # Map title
-                   tags$h3(style = "font-size: 24px; font-weight: 400; color: #20404F; margin-bottom: 5px;", 
-                           "Fishing Vessel Emissions"), 
-                   
-                   # Map description
-                   tags$p(style = "font-weight: regular; color: #20404F; margin-bottom: 20px;", 
-                          "Explore where emissions from large-scale fishing vessels occur around the world, using data from Global Fishing Watch."), 
-                   
-                   # Horizontal separator
-                   tags$hr(),
-                   
-                # ---- Sidebar Layer Controls ----------------------------------
-                   
-                # ---- Controls for broadcasting emissions data ----
-                column(
-                  width = 12,
-                  
-                  div(
-                    style = "display: flex; align-items: center; gap: 8px;",
-                    
-                    div(
-                      style = "margin-top: -2px;",
-                      materialSwitch(
-                        inputId = "show_broadcasting_input",
-                        label = tags$div(
-                          style = "display: flex; align-items: center; gap: 6px; font-size: 18px; font-weight: 400; color: #20404F; margin: 0; z-index: 1002;",
                           
-                          # Label text
-                          tags$span("Broadcasted Emissions"),
+                          # Map title
+                          tags$h3(style = "font-size: 24px; font-weight: 400; color: #20404F; margin-bottom: 5px;", 
+                                  "Fishing Vessel Emissions"), 
                           
-                          # Info icon
-                          infoPopup(
-                            id = "broadcasting_popup",
-                            description = "The AIS-broadcasting layer is where Global Fishing Watch has classified apparent fishing effort using Automatic Identification System (AIS) data.",
-                            data_source = "Global Fishing Watch",
-                            learn_more = "https://globalfishingwatch.org/user-guide/#Activity%20-%20Fishing:~:text=methodology%20paper.-,Understanding%20apparent%20fishing%20effort%20using%20AIS%20and%20VMS%20data,-Automatic%20identification%20system"
-                          )
-                        ),
-                        value = TRUE,
-                        status = "info"
-                      )
-                    ) # END switch wrapper
-                  ) # END outer flex row
-                ), # END column
-                
-                
-                # Hidden broadcasting legend ---
-                hidden(
-                  
-                  div(id = "broadcasting_legend",
-                      
-                      # Gradient legend bar
-                      tags$div(style = "display: flex; width: 70%; height: 20px; border: 1px solid #ccc;",
-                               tags$div(style = "flex: 1; background-color: #20404F;"),
-                               tags$div(style = "flex: 1; background-color: #4C9EA6;"),
-                               tags$div(style = "flex: 1; background-color: #67D6E0;"),
-                               tags$div(style = "flex: 1; background-color: #76F3FF;"),
-                               tags$div(style = "flex: 1; background-color: #A9F2FF;"),
-                               tags$div(style = "flex: 1; background-color: #DAF3FF;"),
-                               tags$div(style = "flex: 1; background-color: #F6F8FF;")  # END final color box
-                      ), # END gradient legend bar
-                      
-                      # Min/Max labels and total emissions
-                      tags$div(
-                        style = "display: flex; justify-content: space-between;
+                          # Map description
+                          tags$p(style = "font-weight: regular; color: #20404F; margin-bottom: 20px;", 
+                                 "Explore where emissions from large-scale fishing vessels occur around the world, using data from Global Fishing Watch."), 
+                          
+                          # Horizontal separator
+                          tags$hr(),
+                          
+                          # ---- Sidebar Layer Controls ----------------------------------
+                          
+                          # ---- Controls for broadcasting emissions data ----
+                          column(
+                            width = 12,
+                            
+                            div(
+                              style = "display: flex; align-items: center; gap: 8px;",
+                              
+                              div(
+                                style = "margin-top: -2px;",
+                                materialSwitch(
+                                  inputId = "show_broadcasting_input",
+                                  label = tags$div(
+                                    style = "display: flex; align-items: center; gap: 6px; font-size: 18px; font-weight: 400; color: #20404F; margin: 0; z-index: 1002;",
+                                    
+                                    # Label text
+                                    tags$span("Broadcasted Emissions"),
+                                    
+                                    # Info icon
+                                    infoPopup(
+                                      id = "broadcasting_popup",
+                                      description = "The AIS-broadcasting layer is where Global Fishing Watch has classified apparent fishing effort using Automatic Identification System (AIS) data.",
+                                      data_source = "Global Fishing Watch",
+                                      learn_more = "https://globalfishingwatch.org/user-guide/#Activity%20-%20Fishing:~:text=methodology%20paper.-,Understanding%20apparent%20fishing%20effort%20using%20AIS%20and%20VMS%20data,-Automatic%20identification%20system"
+                                    )
+                                  ),
+                                  value = TRUE,
+                                  status = "info"
+                                )
+                              ) # END switch wrapper
+                            ) # END outer flex row
+                          ), # END column
+                          
+                          
+                          # Hidden broadcasting legend ---
+                          hidden(
+                            
+                            div(id = "broadcasting_legend",
+                                
+                                # Gradient legend bar
+                                tags$div(style = "display: flex; width: 70%; height: 20px; border: 1px solid #ccc;",
+                                         tags$div(style = "flex: 1; background-color: #20404F;"),
+                                         tags$div(style = "flex: 1; background-color: #4C9EA6;"),
+                                         tags$div(style = "flex: 1; background-color: #67D6E0;"),
+                                         tags$div(style = "flex: 1; background-color: #76F3FF;"),
+                                         tags$div(style = "flex: 1; background-color: #A9F2FF;"),
+                                         tags$div(style = "flex: 1; background-color: #DAF3FF;"),
+                                         tags$div(style = "flex: 1; background-color: #F6F8FF;")  # END final color box
+                                ), # END gradient legend bar
+                                
+                                # Min/Max labels and total emissions
+                                tags$div(
+                                  style = "display: flex; justify-content: space-between;
                 font-size: 15px; font-weight: regular; color: #053762;
                 margin-bottom: 10px; width: 100%;",
-                        tags$span("200"),
-                        textOutput("total_broadcasting", inline = TRUE)
-                      ),
-                      
-                      # Label text
-                      tags$span("Select a Flag State (Country) "),
-                      
-                      # Info icon
-                      infoPopup(
-                        id = "country_popup",
-                        description = "A flag State acts as a vessel's nationality and has jurisdiction over the ship's administrative operations. No matter where the vessel goes, its flag State is responsible for policing it. You can filter the broadcasted emissions for the flag or country resonsible for the vessel. These flag states were identified by Global Fishing Watch.",
-                        data_source = "Global Fishing Watch",
-                        learn_more = "https://globalfishingwatch.org/user-guide/#Activity%20-%20Fishing:~:text=methodology%20paper.-,Understanding%20apparent%20fishing%20effort%20using%20AIS%20and%20VMS%20data,-Automatic%20identification%20system"
-                      ), # END infoPopup
-                      
-                      # Country select dropdown
-                      pickerInput(inputId = "country_select_input",
-                                  label = NULL,
-                                  choices = c("All Countries", sort(unique(broadcasting_emissions$country_name[broadcasting_emissions$country_name != "All Countries"]))),
-                                  selected = "All Countries",
-                                  options = list(`live-search` = TRUE,
-                                                 `noneSelectedText` = "All Countries")), # END pickerInput (country select)
-                      
-                      # Add no data warning (when a country for a selected year has no emissions)
-                      tags$div(
-                        textOutput("no_data_warning"),
-                        style = "color: #81818F;
+                                  tags$span("200"),
+                                  textOutput("total_broadcasting", inline = TRUE)
+                                ),
+                                
+                                # Label text
+                                tags$span("Select a Flag State (Country) "),
+                                
+                                # Info icon
+                                infoPopup(
+                                  id = "country_popup",
+                                  description = "A flag State acts as a vessel's nationality and has jurisdiction over the ship's administrative operations. No matter where the vessel goes, its flag State is responsible for policing it. You can filter the broadcasted emissions for the flag or country resonsible for the vessel. These flag states were identified by Global Fishing Watch.",
+                                  data_source = "Global Fishing Watch",
+                                  learn_more = "https://globalfishingwatch.org/user-guide/#Activity%20-%20Fishing:~:text=methodology%20paper.-,Understanding%20apparent%20fishing%20effort%20using%20AIS%20and%20VMS%20data,-Automatic%20identification%20system"
+                                ), # END infoPopup
+                                
+                                # Country select dropdown
+                                pickerInput(inputId = "country_select_input",
+                                            label = NULL,
+                                            choices = c("All Countries", sort(unique(broadcasting_emissions$country_name[broadcasting_emissions$country_name != "All Countries"]))),
+                                            selected = "All Countries",
+                                            options = list(`live-search` = TRUE,
+                                                           `noneSelectedText` = "All Countries")), # END pickerInput (country select)
+                                
+                                # Add no data warning (when a country for a selected year has no emissions)
+                                tags$div(
+                                  textOutput("no_data_warning"),
+                                  style = "color: #81818F;
                  margin-top: 10px;"), # END div (no data warning text)
-                      
-                      # Add low emissions warning (when a country for a selected year has low, less than 1000 emissions, and it may be hard to locate)
-                      tags$div(
-                        textOutput("low_emissions_warning"),
-                        style = "color: #81818F;
+                                
+                                # Add low emissions warning (when a country for a selected year has low, less than 1000 emissions, and it may be hard to locate)
+                                tags$div(
+                                  textOutput("low_emissions_warning"),
+                                  style = "color: #81818F;
                  margin-top: 10px;") # END div (low emissions warning text)
-                      
-                  ) # END div (broadcasting_legend)
-                ), # END hidden (broadcasting emissions legend and text)
-                   
-               
-                   # Horizontal separator
-                   tags$hr(),
-
-                
-                # ---- Controls for non-broadcasting emissions data ----
-                
-                column(
-                  width = 12,
-                  
-                  div(
-                    style = "display: flex; align-items: center; gap: 8px;",
-                    div(
-                      style = "margin-top: -2px;",
-                      materialSwitch(
-                        inputId = "show_non_broadcasting_input",
-                        label = tags$div(
-                          style = "display: flex; align-items: center; gap: 6px; font-size: 18px; font-weight: 400; color: #20404F; margin: 0;",
+                                
+                            ) # END div (broadcasting_legend)
+                          ), # END hidden (broadcasting emissions legend and text)
                           
-                          # Label text
-                          tags$span("Non-Broadcasted Emissions"),
                           
-                          # Info icon
-                          infoPopup(
-                            id = "non_broadcasting_popup",
-                            description = "This layer shows vessels detected using Synthetic Aperture Radar (SAR), a satellite-based system that captures images using microwave pulses, allowing detection in all weather and lighting conditions. Vessel positions are identified from Copernicus Sentinel-1 imagery using a combination of classical detection techniques and machine learning.",
-                            data_source = "Global Fishing Watch",
-                            learn_more = "https://globalfishingwatch.org/user-guide/#Radar%20detections%20-%20Synthetic%20aperture%20radar:~:text=Detections-,Radar%20detections%20%2D%20Synthetic%20aperture%20radar,-Synthetic%20aperture%20radar"
-                          )
-                        ),
-                        value = FALSE,
-                        status = "warning"
-                      )
-                    ) # END switch wrapper
-                  ) # END outer flex row
-                ), # END column
-
-                hidden(
-                  div(id = "non_broadcasting_legend",
-                      
-                      # Discrete color blocks
-                      tags$div(
-                        style = "display: flex; width: 70%; height: 20px; border: 1px solid #ccc;",
-                        tags$div(style = "flex: 1; background-color: #7A5100;"),
-                        tags$div(style = "flex: 1; background-color: #B97700;"),
-                        tags$div(style = "flex: 1; background-color: #FFB300;"),
-                        tags$div(style = "flex: 1; background-color: #FFD54F;"),
-                        tags$div(style = "flex: 1; background-color: #FFEB99;"),
-                        tags$div(style = "flex: 1; background-color: #FFF5CC;"),
-                        tags$div(style = "flex: 1; background-color: #FFFEF0;")
-                      ),
-                      
-                      # Min/Max labels
-                      tags$div(
-                        style = "display: flex; justify-content: space-between;
+                          # Horizontal separator
+                          tags$hr(),
+                          
+                          
+                          # ---- Controls for non-broadcasting emissions data ----
+                          
+                          column(
+                            width = 12,
+                            
+                            div(
+                              style = "display: flex; align-items: center; gap: 8px;",
+                              div(
+                                style = "margin-top: -2px;",
+                                materialSwitch(
+                                  inputId = "show_non_broadcasting_input",
+                                  label = tags$div(
+                                    style = "display: flex; align-items: center; gap: 6px; font-size: 18px; font-weight: 400; color: #20404F; margin: 0;",
+                                    
+                                    # Label text
+                                    tags$span("Non-Broadcasted Emissions"),
+                                    
+                                    # Info icon
+                                    infoPopup(
+                                      id = "non_broadcasting_popup",
+                                      description = "This layer shows vessels detected using Synthetic Aperture Radar (SAR), a satellite-based system that captures images using microwave pulses, allowing detection in all weather and lighting conditions. Vessel positions are identified from Copernicus Sentinel-1 imagery using a combination of classical detection techniques and machine learning.",
+                                      data_source = "Global Fishing Watch",
+                                      learn_more = "https://globalfishingwatch.org/user-guide/#Radar%20detections%20-%20Synthetic%20aperture%20radar:~:text=Detections-,Radar%20detections%20%2D%20Synthetic%20aperture%20radar,-Synthetic%20aperture%20radar"
+                                    )
+                                  ),
+                                  value = FALSE,
+                                  status = "warning"
+                                )
+                              ) # END switch wrapper
+                            ) # END outer flex row
+                          ), # END column
+                          
+                          hidden(
+                            div(id = "non_broadcasting_legend",
+                                
+                                # Discrete color blocks
+                                tags$div(
+                                  style = "display: flex; width: 70%; height: 20px; border: 1px solid #ccc;",
+                                  tags$div(style = "flex: 1; background-color: #7A5100;"),
+                                  tags$div(style = "flex: 1; background-color: #B97700;"),
+                                  tags$div(style = "flex: 1; background-color: #FFB300;"),
+                                  tags$div(style = "flex: 1; background-color: #FFD54F;"),
+                                  tags$div(style = "flex: 1; background-color: #FFEB99;"),
+                                  tags$div(style = "flex: 1; background-color: #FFF5CC;"),
+                                  tags$div(style = "flex: 1; background-color: #FFFEF0;")
+                                ),
+                                
+                                # Min/Max labels
+                                tags$div(
+                                  style = "display: flex; justify-content: space-between;
                  font-size: 15px; font-weight: regular; color: #053762;
                  margin-bottom: 10px; width: 100%;",
-                        tags$span("200"),
-                        textOutput("total_non_broadcasting", inline = TRUE)
-                      )
-                  )
-                ),
-                
-                   # Horizontal separator
-                   tags$hr(),
-                   
-                
-                # ---- Control for FAO Major Fishing Zones ----
-                column(
-                  width = 12,
-                  
-                  div(
-                    style = "display: flex; align-items: center; gap: 8px;",
-                    
-                    div(
-                      style = "margin-top: -2px;",
-                      materialSwitch(
-                        inputId = "show_fao_zones_input",
-                        label = tags$div(
-                          style = "display: flex; align-items: center; gap: 6px; font-size: 18px; font-weight: 400; color: #20404F; margin: 0;",
+                                  tags$span("200"),
+                                  textOutput("total_non_broadcasting", inline = TRUE)
+                                )
+                            )
+                          ),
                           
-                          # Label text
-                          tags$span("FAO Major Fishing Areas"),
+                          # Horizontal separator
+                          tags$hr(),
                           
-                          # Info icon
-                          infoPopup(
-                            id = "fao_zone_popup",
-                            description = "FAO Major Fishing Areas are standardized ocean regions defined by the Food and Agriculture Organization (FAO) of the United Nations to facilitate the global monitoring and reporting of marine fisheries. There are 19 Major Fishing Areas, each representing a large, ecologically or geographically distinct part of the ocean.",
-                            data_source = "Food and Agriculture Organization",
-                            learn_more = "https://www.fao.org/fishery/en/area/search"
-                          )
-                        ),
-                        value = FALSE,
-                        status = "info"
-                      )
-                    ) # END switch wrapper
-                  ) # END outer flex row
-                ), # END column
-                   
-               ), # END sidebar panel
-               
-               # Button - Close sidebar
-               actionButton("toggle_sidebar_close_input",
-                            label = NULL,
-                            icon = icon("layer-group",
-                                        style = "font-size: 20px;  padding-right: 6px;"),
-                            style = "position: absolute;
+                          
+                          # ---- Control for FAO Major Fishing Zones ----
+                          column(
+                            width = 12,
+                            
+                            div(
+                              style = "display: flex; align-items: center; gap: 8px;",
+                              
+                              div(
+                                style = "margin-top: -2px;",
+                                materialSwitch(
+                                  inputId = "show_fao_zones_input",
+                                  label = tags$div(
+                                    style = "display: flex; align-items: center; gap: 6px; font-size: 18px; font-weight: 400; color: #20404F; margin: 0;",
+                                    
+                                    # Label text
+                                    tags$span("FAO Major Fishing Areas"),
+                                    
+                                    # Info icon
+                                    infoPopup(
+                                      id = "fao_zone_popup",
+                                      description = "FAO Major Fishing Areas are standardized ocean regions defined by the Food and Agriculture Organization (FAO) of the United Nations to facilitate the global monitoring and reporting of marine fisheries. There are 19 Major Fishing Areas, each representing a large, ecologically or geographically distinct part of the ocean.",
+                                      data_source = "Food and Agriculture Organization",
+                                      learn_more = "https://www.fao.org/fishery/en/area/search"
+                                    )
+                                  ),
+                                  value = FALSE,
+                                  status = "info"
+                                )
+                              ) # END switch wrapper
+                            ) # END outer flex row
+                          ), # END column
+                          
+                      ), # END sidebar panel
+                      
+                      # Button - Close sidebar
+                      actionButton("toggle_sidebar_close_input",
+                                   label = NULL,
+                                   icon = icon("layer-group",
+                                               style = "font-size: 20px;  padding-right: 6px;"),
+                                   style = "position: absolute;
                                      top: 40%;
                                      left: -20px;
                                      width: 40px;
@@ -422,46 +427,46 @@ ui <- navbarPage(
                                      border: none;
                                      display: none;
                                      z-index: 1001"), # END actionButton for sidebar to close sidebar
-               
-               
-               # ---- Emissions Map --------------------------------------------
-               mapdeckOutput("emissions_map", height = "100%"),
-               useShinyjs(),
-               uiOutput("loading_ui"),
-               
-                # ---- Year Slider ----
-               absolutePanel(bottom = 30,
-                             right = 15,
-                             style = "z-index: 1000;
+                      
+                      
+                      # ---- Emissions Map --------------------------------------------
+                      mapdeckOutput("emissions_map", height = "100%"),
+                      useShinyjs(),
+                      uiOutput("loading_ui"),
+                      
+                      # ---- Year Slider ----
+                      absolutePanel(bottom = 30,
+                                    right = 15,
+                                    style = "z-index: 1000;
                                     background-color: rgba(255,255,255,0.8);
                                     padding: 8px;
                                     border-radius: 8px;
                                     width: 20%;
                                     min-width: 250px;",
-                             
-                             # Label text
-                             tags$span("Select Year"),
-                             # Info icon
-                             infoPopup(
-                               id = "year_map_popup",
-                               description = "Data displayed in the map grid is aggregated by year. Use the slider to select a year or click the play button to animate emissions trends over time.",
-                               data_source = NULL,
-                               learn_more = NULL),
-                             
-                             sliderInput("year_slider_input_map",
-                                         NULL,
-                                         min = year_min,
-                                         max = year_max,
-                                         value = year_max,
-                                         step = 1,
-                                         sep = "",
-                                         width = "100%",
-                                         ticks = TRUE,
-                                         animate = animationOptions(interval = 3000, loop = FALSE)) # END sliderInput (year)
-               ) # END absolutePanel - year
-           ) # END map container
+                                    
+                                    # Label text
+                                    tags$span("Select Year"),
+                                    # Info icon
+                                    infoPopup(
+                                      id = "year_map_popup",
+                                      description = "Data displayed in the map grid is aggregated by year. Use the slider to select a year or click the play button to animate emissions trends over time.",
+                                      data_source = NULL,
+                                      learn_more = NULL),
+                                    
+                                    sliderInput("year_slider_input_map",
+                                                NULL,
+                                                min = year_min,
+                                                max = year_max,
+                                                value = year_max,
+                                                step = 1,
+                                                sep = "",
+                                                width = "100%",
+                                                ticks = TRUE,
+                                                animate = animationOptions(interval = 3000, loop = FALSE)) # END sliderInput (year)
+                      ) # END absolutePanel - year
+                  ) # END map container
   ), # END emissions map tab
-
+  
   # ------------------------------------------------------------------------------------------------------------------
   # ---- Compare Seafood Emissions Page ------------------------------------------------------------------------------
   # ------------------------------------------------------------------------------------------------------------------
@@ -588,48 +593,48 @@ ui <- navbarPage(
                     div(
                       style = "margin-top: 10px; padding: 10px 20px; background-color: #0B2232; overflow-x: auto;",
                       fluidRow(
-                               column(width = 6,
-                                      div(style = "background-color: rgba(255,255,255,0.8); padding: 8px; border-radius: 8px; width: 50%; min-width: 150px; max-width: 200px",
-                                          tags$span("Select Year"),
-                                          infoPopup(
-                                            id = "year_plot_popup",
-                                            description = "Data displayed in the plot is aggregated by year. Please select a year to compare.",
-                                            data_source = NULL,
-                                            learn_more = NULL
-                                          ),
-                                          sliderInput("year_slider_input_plot", NULL,
-                                                      min = 2016, max = 2022, value = 2022,
-                                                      step = 1, sep = "", width = "100%", ticks = TRUE
-                                          )
-                                      )
-                               ),
-                               column(width = 6,
-                                      div(style = "display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; padding-right: 20px; margin-top: 10px; gap: 10px;",
-                                          tags$span("Total Emissions", style = "color: white; font-weight: 500; font-size: 14px;"),
-                                          infoPopup(
-                                            id = "total_emissions_unit_plot_popup",
-                                            description = "Total CO₂ emission in metric tons based on broadcasted emissions and redistributed non-broadcasted emissions.",
-                                            data_source = "Global Fishing Watch",
-                                            learn_more = NULL
-                                          ),
-                                          div(style = "display: inline-block; margin-left: 10px;",
-                                              materialSwitch(
-                                                inputId = "unit_plot_toggle_input",
-                                                label = NULL,
-                                                status = "info",
-                                                right = TRUE,
-                                                inline = TRUE
-                                              )
-                                          ),
-                                          tags$span("Per Unit Catch", style = "color: white; font-weight: 500; font-size: 14px;"),
-                                          infoPopup(
-                                            id = "per_catch_unit_plot_popup",
-                                            description = "Per unit catch is the ratio of total emissions (metric tons) per total catch (metric tons). This gives a measurement of how carbon efficient the catch rate is.",
-                                            data_source = "Global Fishing Watch",
-                                            learn_more = NULL
-                                          )
-                                      )
+                        column(width = 6,
+                               div(style = "background-color: rgba(255,255,255,0.8); padding: 8px; border-radius: 8px; width: 50%; min-width: 150px; max-width: 200px",
+                                   tags$span("Select Year"),
+                                   infoPopup(
+                                     id = "year_plot_popup",
+                                     description = "Data displayed in the plot is aggregated by year. Please select a year to compare.",
+                                     data_source = NULL,
+                                     learn_more = NULL
+                                   ),
+                                   sliderInput("year_slider_input_plot", NULL,
+                                               min = 2016, max = 2022, value = 2022,
+                                               step = 1, sep = "", width = "100%", ticks = TRUE
+                                   )
                                )
+                        ),
+                        column(width = 6,
+                               div(style = "display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; padding-right: 20px; margin-top: 10px; gap: 10px;",
+                                   tags$span("Total Emissions", style = "color: white; font-weight: 500; font-size: 14px;"),
+                                   infoPopup(
+                                     id = "total_emissions_unit_plot_popup",
+                                     description = "Total CO₂ emission in metric tons based on broadcasted emissions and redistributed non-broadcasted emissions.",
+                                     data_source = "Global Fishing Watch",
+                                     learn_more = NULL
+                                   ),
+                                   div(style = "display: inline-block; margin-left: 10px;",
+                                       materialSwitch(
+                                         inputId = "unit_plot_toggle_input",
+                                         label = NULL,
+                                         status = "info",
+                                         right = TRUE,
+                                         inline = TRUE
+                                       )
+                                   ),
+                                   tags$span("Per Unit Catch", style = "color: white; font-weight: 500; font-size: 14px;"),
+                                   infoPopup(
+                                     id = "per_catch_unit_plot_popup",
+                                     description = "Per unit catch is the ratio of total emissions (metric tons) per total catch (metric tons). This gives a measurement of how carbon efficient the catch rate is.",
+                                     data_source = "Global Fishing Watch",
+                                     learn_more = NULL
+                                   )
+                               )
+                        )
                       )
                     ) # END slider + toggle row
                   ) # END scrollable wrapper
@@ -639,76 +644,75 @@ ui <- navbarPage(
   
   
   
-# ------------------------------------------------------------------------------------------------------------------
-# ---- Usage Guide Page --------------------------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------------------------------------------
-
-shiny::tabPanel("Learn More",
-           # ---- Hero Section ----
-           div(style = "background-image: url('images/home-image.jpg');
+  # ------------------------------------------------------------------------------------------------------------------
+  # ---- Usage Guide Page --------------------------------------------------------------------------------------------------
+  # ------------------------------------------------------------------------------------------------------------------
+  
+  shiny::tabPanel("Learn More",
+                  # ---- Hero Section ----
+                  div(style = "background-image: url('images/home-image.jpg');
                         background-size: cover;
                         background-position: center;
                         padding: 100px 0;
                         text-align: center;
                         color: #e8fffd;",
-               h1("Seamissions Global Fishing Emissions Explorer"),
-               h4("Connecting data to action for sustainable oceans.")), # END hero section
-          
-           fluidRow(
-             column(12,
-                    div(style = "background-color: #1b2a49; padding: 30px; color: white;",
-                             h4(strong("Background")),
-                             tags$p(style = "font-weight: normal; color: white; margin: 30px;",
-                             "This is the background of our project. This is the background of our project.")
-                        )
+                      h1("Seamissions Global Fishing Emissions Explorer"),
+                      h4("Connecting data to action for sustainable oceans.")), # END hero section
+                  
+                  fluidRow(
+                    column(12,
+                           div(style = "background-color: #1b2a49; padding: 30px; color: white;",
+                               h4(strong("Background")),
+                               tags$p(style = "font-weight: normal; color: white; margin: 30px;",
+                                      "This is the background of our project. This is the background of our project.")
+                           )
                     )
-            
-          ),
-          
-          fluidRow(
-            column(12,
-                   div(style = "background-color: #1b2a49; padding: 30px; color: white;",
-                       h4(strong("Who we are")),
-                       tags$p(style = "font-weight: normal; color: white; margin: 30px;",
-                              "This is who we are. Here we have informatoin about the team.")  
-                   )
-            )
-            
-          ),
-          
-          fluidRow(
-            column(12,
-                   div(style = "background-color: #1b2a49; padding: 30px; color: white;",
-                       h4(strong("About our partners")),
-                       tags$p(style = "font-weight: normal; color: white; margin: 30px;",
-                              "This is information about our project. Here are some details.")  
-                   )
-            )
-            
-          ),
-          
-          fluidRow(
-            column(12,
-                   div(style = "background-color: #1b2a49; padding: 30px; color: white;",
-                       h4(strong("Background")),
-                       tags$p(style = "font-weight: normal; color: white; margin: 30px;",
-                              "This is the background of our project. This is the background of our project.")  
-                   )
-            )
-            
-          ),
-          
-          fluidRow(
-            column(12,
-                   div(style = "background-color: #1b2a49; padding: 30px; color: white;",
-                       h4(strong("Methods")),
-                       tags$p(style = "font-weight: normal; color: white; margin: 30px;",
-                              "These are the methods that we used on this project.")
-                       ) # END div
-                   ) # END column
-            ) # END fluidRow
+                    
+                  ),
+                  
+                  fluidRow(
+                    column(12,
+                           div(style = "background-color: #1b2a49; padding: 30px; color: white;",
+                               h4(strong("Who we are")),
+                               tags$p(style = "font-weight: normal; color: white; margin: 30px;",
+                                      "This is who we are. Here we have informatoin about the team.")  
+                           )
+                    )
+                    
+                  ),
+                  
+                  fluidRow(
+                    column(12,
+                           div(style = "background-color: #1b2a49; padding: 30px; color: white;",
+                               h4(strong("About our partners")),
+                               tags$p(style = "font-weight: normal; color: white; margin: 30px;",
+                                      "This is information about our project. Here are some details.")  
+                           )
+                    )
+                    
+                  ),
+                  
+                  fluidRow(
+                    column(12,
+                           div(style = "background-color: #1b2a49; padding: 30px; color: white;",
+                               h4(strong("Background")),
+                               tags$p(style = "font-weight: normal; color: white; margin: 30px;",
+                                      "This is the background of our project. This is the background of our project.")  
+                           )
+                    )
+                    
+                  ),
+                  
+                  fluidRow(
+                    column(12,
+                           div(style = "background-color: #1b2a49; padding: 30px; color: white;",
+                               h4(strong("Methods")),
+                               tags$p(style = "font-weight: normal; color: white; margin: 30px;",
+                                      "These are the methods that we used on this project.")
+                           ) # END div
+                    ) # END column
+                  ) # END fluidRow
   ) # END tabPanel (Learn More Page)
 ) # END navbarPage
-
 
 

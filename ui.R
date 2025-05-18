@@ -525,8 +525,8 @@ navbarPage(
                                        div(id = "species_bar_plot",
                                            div(style = "min-width: 900px; min-height: 300px;",
                                                plotOutput("species_bar_plot_output",
-                                                          height = "50vh", width = "100%", fill = TRUE
-                                               ) |> withSpinner(type = 4, color = '#08C4E5')
+                                                          height = "50vh", width = "100%", fill = TRUE)
+                                               |> withSpinner(type = 4, color = '#08C4E5')
                                            )
                                        )
                                      )
@@ -564,6 +564,7 @@ navbarPage(
                                      learn_more = NULL
                                    ),
                                    div(
+                                     class = "white-radio",
                                      style = "margin-left: 10px; overflow: visible;",
                                      radioButtons(
                                        inputId = "unit_plot_toggle_input",

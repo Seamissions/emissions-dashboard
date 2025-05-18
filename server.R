@@ -15,8 +15,14 @@ server <- function(input, output, session) {
     shinyjs::onclick("explore_seafood_card", {
       updateNavbarPage(session, "navbarPage", selected = "Compare Seafood Emissions")
     })
+    
   })
-  
+  observe({
+    shinyjs::onclick("learn_more_link", {
+      updateNavbarPage(session, "navbarPage", selected = "Learn More")
+    })
+    
+  })
   
   # ----------------------------------------------------------------------------
   # ---- Emissions map ---------------------------------------------------------
@@ -511,7 +517,7 @@ server <- function(input, output, session) {
       tags$h4(
         "Please select a country.",
         style = "color: white;
-               font-size: 30px;
+               font-size: 25px;
                font-weight: bold;
                white-space: normal;
                word-break: break-word;
@@ -522,7 +528,7 @@ server <- function(input, output, session) {
       tags$h4(
         paste("Annual CO₂ Emissions By Species Group -", input$selected_country_input),
         style = "color: white;
-               font-size: 30px;
+               font-size: 25px;
                font-weight: bold;
                white-space: normal;
                word-break: break-word;

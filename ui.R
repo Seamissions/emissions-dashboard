@@ -18,7 +18,7 @@ ui <-
     tags$link(
       rel = "icon",
       type = "image/png",
-      href = "images/fav-icon.png"
+      href = "images/logos/fav-icon.png"
     )
     
   )
@@ -56,7 +56,7 @@ navbarPage(
                    z-index: 1;"),
                       
                       # Logo
-                      tags$img(src = "images/seamissions-logo.png",
+                      tags$img(src = "images/logos/seamissions-logo.png",
                                style = "position: absolute;
                          top: 5%;
                          left: 50%;
@@ -134,41 +134,58 @@ navbarPage(
                   ), # END Teaser section
                   # ---- Hero Section ----
                   div(style = "position: relative;
-               min-height: 200px;
-               max-height: 300px;
-               width: 100%;
-               padding-left: 0px !important;
-               background-image: url('images/ocean-banner.png');
-               background-size: cover;
-               background-position: center;
-               background-attachment: fixed;
-               text-align: center;
-               color: #e8fffd;",
+             min-height: 200px;
+             max-height: 300px;
+             width: 100%;
+             padding-left: 0px !important;
+             background-image: url('images/ocean-banner.png');
+             background-size: cover;
+             background-position: center;
+             background-attachment: fixed;
+             text-align: center;
+             color: #e8fffd;",
                       
-                      # Overlay
+                      # Overlay background
                       div(style = "position: absolute; 
-                   top: 0; left: 0; right: 0; bottom: 0;
-                   background-color: rgba(0, 0, 0, 0.5);
-                   z-index: 1;"),
+                 top: 0; left: 0; right: 0; bottom: 0;
+                 background-color: rgba(0, 0, 0, 0.5);
+                 z-index: 1;"),
                       
-                      # Logo
-                      tags$img(src = "images/seamissions-logo.png",
-                               style = "position: absolute;
-                         top: 5%;
-                         left: 50%;
-                         transform: translateX(-50%);
-                         height: 150px;
-                         z-index: 2;"),
+                      # Flexbox for logos
+                      div(style = "position: relative;
+             display: flex;
+             flex-wrap: wrap;
+             justify-content: center;
+             align-items: center;
+             gap: 40px;
+             padding-top: 30px;
+             z-index: 2;",
+                          
+                          tags$img(src = "images/logos/emlab-logo-color.png",
+                                   style = "height: 75px;"),
+                          
+                          tags$img(src = "images/logos/gfw-logo.png",
+                                   style = "height: 70px;")
+                      ),
                       
                       # Hero Text
-                      div(style = "position: relative; z-index: 2;
-                    padding-top: 180px; padding-left: 40px; padding-right: 40px;",
+                      div(style = "position: relative;
+                           z-index: 2;
+                           padding-top: 20px;
+                           padding-left: 40px;
+                           padding-right: 40px;",
                           
-                          h1("INSERT LOGO",
-                             style = "font-weight: 600 !important;"),
+                          div(style = "display: flex; justify-content: center; align-items: center; gap: 15px;",
+                              
+                          tags$p("UCSB Bren School",
+                                 style = "font-weight: 600; color: white;"),
                           
-                      )
-                  )
+                          tags$p("Learn More",
+                                 id = "learn_more_link",
+                                 style = "font-weight: 600; color: white; cursor: pointer; text-decoration: underline; display: flex; flex-wrap: wrap;")
+                      ) # END text div
+                  ) # END div 
+                  ) # END Hero
                 
   ), # END tabPanel(Home)
   
@@ -565,7 +582,7 @@ navbarPage(
                                  # ---- Country Plot ----
                                  div(id = "country_plot",
                                      tags$h4("Annual CO₂ Emissions Top Fishing Fleets",
-                                             style = "color: white; font-size: 30px; font-weight: bold; white-space: normal; word-break: break-word; max-width: 100%; margin-bottom: 10px;"
+                                             style = "color: white; font-size: 25px; font-weight: bold; white-space: normal; word-break: break-word; max-width: 100%; margin-bottom: 10px;"
                                      ),
                                      div(style = "min-width: 900px; min-height: 300px;",
                                          plotOutput("country_plot_output",
@@ -578,7 +595,7 @@ navbarPage(
                                  shinyjs::hidden(
                                    div(id = "isscaap_plot",
                                        tags$h4("Annual CO₂ Emissions Top Species Groups",
-                                               style = "color: white; font-size: 30px; font-weight: bold; white-space: normal; word-break: break-word; max-width: 100%; margin-bottom: 10px;"
+                                               style = "color: white; font-size: 25px; font-weight: bold; white-space: normal; word-break: break-word; max-width: 100%; margin-bottom: 10px;"
                                        ),
                                        div(style = "min-width: 900px; min-height: 300px;",
                                            plotOutput("isscaap_plot_output",

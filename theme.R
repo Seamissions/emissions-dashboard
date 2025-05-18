@@ -3,6 +3,7 @@ library(bslib)
 
 seamissions_theme <- bs_theme(
   version = 5,  # Bootstrap version
+  bootswatch = "flatly",
   bg = "#0B2232",      # Background color
   fg = "#0B2232",       # Foreground (text) color
   primary = "#08C4E5",  # Primary color

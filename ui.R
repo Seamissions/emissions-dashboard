@@ -462,286 +462,183 @@ ui <- navbarPage(
            ) # END map container
   ), # END emissions map tab
 
-# ------------------------------------------------------------------------------------------------------------------
-# ---- Compare Seafood Emissions Page ------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------------------------------------------
-
-shiny::tabPanel("Compare Seafood Emissions",
-         
-         tags$head(
-           tags$style(HTML("
-    .plot-button {
-      background-color: #08C4E5 !important;
-      color: white !important;
-      border: none !important;
-    }
-
-    .plot-button-active {
-      background-color: #F9B928 !important;
-      color: black !important;
-    }
-  "))
-         ),
-         
-         
-         # Header Row ----
-         
-         fluidRow(tags$hr()),
-         fluidRow(
-           # Centered button row ----
-           column(
-             width = 12,
-             div(
-               style = "text-align: center;",
-               
-               # Compare species button ---- 
-               div(
-                 style = "display: inline-block; margin: 0 10px;",
-                 actionButton(
-                   "compare_species_input",
-                   tagList(icon("fish",
-                                style = "margin-right: 8px;"),
-                     "Compare Species"),
-                   class = "btn btn-lg") # END actionButton (Compare Species)
-               ), # END div (Compare Species wrapper)
-               
-               # Compare countries button ---- 
-               div(
-                 style = "display: inline-block; margin: 0 10px;",
-                 actionButton("compare_countries_input",
-                   tagList(icon("earth-americas",
-                                style = "margin-right: 8px;"),
-                           "Compare Countries"),
-                   class = "btn btn-lg") # END actionButton (Compare Countries)
-               ), # END div (Compare Countries wrapper)
-               
-               # Select a country button ---- 
-               div(
-                 style = "display: inline-block; margin: 0 10px;",
-                 actionButton("select_country_input",
-                   tagList(icon("flag",
-                                style = "margin-right: 8px;"),
-                     "Select a Country"),
-                   class = "btn btn-lg") # END actionButton (Select a Country)
-               ) # END div (Select a Country wrapper)
-               
-             ) # END div (centered button container)
-           ) # END column (full-width)
-           
-         ), # END fluidRow
-
-         # Country Selector and Total Emissions (hidden initially)
-         shinyjs::hidden(
-           
-           div(id = "country_select_plot_input", 
-               fluidRow(
-                 column(
-                   width = 12,
-                   div(
-                     style = "text-align: center;",
-                     
-                     # Country dropdown ----
-                     div(
-                       style = "display: inline-block; margin-right: 20px;",
-                       pickerInput(
-                         inputId = "selected_country_input",
-                         label = "Select a Country:",
-                         choices = c("Select a country" = "", sort(unique(species_data$country_name))),
-                         selected = NULL,
-                         options = list(`live-search` = TRUE,
-                                        `noneSelectedText` = "All Countries")
-                       ) # END pickerInput
-                     ), # END div (dropdown wrapper)
-                     
-                     
-                     # Total emissions text ----
-                     div(
-                       style = "display: inline-block;",
-                       tags$h4(
-                         textOutput("selected_country_total"),
-                         style = "color: white; font-weight: bold; margin-top: 25px;"
-                       ) # END h4
-                     ) # END div (text wrapper)
-                     
-                   ) # END center div
-                 ) # END column
-               ) # END fluidRow
-           ) # END div (country_select_plot_input)
-           
-         ),
-         
-
-
-# --- Second Row with ggplot ---------------------------------------------------
-fluidRow(
-  column(
-    width = 12,
-    div(
-      style = "background-color:#0B2232;
-               height: 60vh;
-               min-height: 300px;
-               margin-top: 30px;
-               margin-bottom: 30px;
-               margin-left: 20px;
-               margin-right: 20px;
-               overflow-x: auto;
-               white-space: normal;",
-      
-      # --- Define plots (hidden when not selected) ----------------------
-      div(style = "position: relative; z-index: 2;
-                    padding-top: 10px; padding-left: 40px;",
-          
-        # ---- Country plot (default visible) ----
-        div(
-          id = "country_plot",
-          
-          tags$h4(
-            "Annual CO₂ Emissions Top Fishing Fleets",
-            style = "color: white;
-                     font-size: 30px;
-                     font-weight: bold;
-                     white-space: normal;
-                     word-break: break-word;
-                     max-width: 100%;
-                     margin-bottom: 10px;"),
-          
-          plotOutput("country_plot_output",
-                     height = "60vh", fill = TRUE) |> 
-            withSpinner(type = 4, color = '#08C4E5')
-        ),
-        
-        # ---- ISSCAAP plot (hidden on load) ----
-        shinyjs::hidden(
-          div(
-            id = "isscaap_plot",
-            
-            tags$h4(
-              "Annual CO₂ Emissions Top Species Groups",
-              style = "color: white;
-                     font-size: 30px;
-                     font-weight: bold;
-                     white-space: normal;
-                     word-break: break-word;
-                     max-width: 100%;
-                     margin-bottom: 10px;"),
-            
-            plotOutput("isscaap_plot_output",
-                       height = "60vh", fill = TRUE) |> 
-              withSpinner(type = 4, color = '#08C4E5')
-          )
-        ),
-        
-        # ---- Species plot for selected country (hidden on load) ----
-        div(
-          id = "species_bar_plot_wrapper",
-          
-          # Dynamic heading: always rendered
-          uiOutput("dynamic_country_header"),
-          
-          # Plot hidden on load
-          shinyjs::hidden(
-            div(
-              id = "species_bar_plot",
-              plotOutput("species_bar_plot_output",
-                         height = "60vh", fill = TRUE) |> 
-                withSpinner(type = 4, color = '#08C4E5')
-            )
-          )
-        ) # END species_bar_plot_wrapper
-      ) # END inner wrapper
-    ) # END outer plot container
-  ) # END column
-), # END fluidRow
-
-
-# ---- Row for units and year slider ----
-fluidRow(
-  column(width = 6,
-         # ---- Year Slider ----
-         div(bottom = 30,
-                       style = "z-index: 1000;
-                                    background-color: rgba(255,255,255,0.8);
-                                    padding: 8px;
-                                    border-radius: 8px;
-                                    width: 40%;
-                                    min-width: 250px;",
-             
-             # Label text
-             tags$span("Select Year"),
-             # Info icon
-             infoPopup(
-               id = "year_plot_popup",
-               description = "Data displayed in the plot is aggregated by year. Please select a year to compare.",
-               data_source = NULL,
-               learn_more = NULL
-             ),
-             
-                       sliderInput("year_slider_input_plot",
-                                   NULL,
-                                   min = 2016, # UPDATE to min
-                                   max = 2022, # UPDATE to max
-                                   value = 2022, # UPDATE to max
-                                   step = 1,
-                                   sep = "",
-                                   width = "100%",
-                                   ticks = TRUE) # END sliderInput (year)
-         ) # END absolutePanel - year
-
-         ),
+  # ------------------------------------------------------------------------------------------------------------------
+  # ---- Compare Seafood Emissions Page ------------------------------------------------------------------------------
+  # ------------------------------------------------------------------------------------------------------------------
   
-  column(
-    width = 6,
-    div(style = "display: flex;
-                justify-content: flex-end;
-                align-items: center;
-                padding-right: 20px;
-                margin-top: 10px;",
-      
-        # Label text
-        tags$span("Total Emissions",
-                  style = "margin-left: 8px;
-                       margin-right: 10px;
-                       color: white;
-                       font-weight: 500;
-                       font-size: 14px;"),
-        # Info icon
-        infoPopup(
-          id = "total_emissions_unit_plot_popup",
-          description = "Total CO₂ emission in metric tons based on broadcasted emissions and redistributed non-broadcasted emissions.",
-          data_source = "Global Fishing Watch",
-          learn_more = NULL
-        ),
-      
-      div(style = "display: inline-block;
-          margin-left: 25px",
-        materialSwitch(
-          inputId = "unit_plot_toggle_input",
-          label = NULL,
-          status = "info",
-          right = TRUE,
-          inline = TRUE) # END materialSwitch (per unit toggle)
-          ), # END div (unit materialSwitch)
-      
-      tags$span("Per Unit Catch", 
-               style = "margin-left: 8px;
-                       margin-right: 10px;
-                       color: white;
-                       font-weight: 500;
-                       font-size: 14px;"),
-      # Info icon
-      infoPopup(
-        id = "per_catch_unit_plot_popup",
-        description = "Per unit catch is the ratio of total emissions (metric tons) per total catch (metric tons). This gives a measurement of how carbon efficient the catch rate is.",
-        data_source = "Global Fishing Watch",
-        learn_more = NULL
-      )
-      ) # END div (Unit toggle)
-  ) # END column (Unit toggle)
-
-) # END fluidRow (Unit toggle)
-         
-), # END tabPanel (Seafood Emissions Explorer Page)
-
+  shiny::tabPanel("Compare Seafood Emissions",
+                  
+                  tags$head(
+                    tags$style(HTML("
+      .plot-button {
+        background-color: #08C4E5 !important;
+        color: white !important;
+        border: none !important;
+      }
+      .plot-button-active {
+        background-color: #F9B928 !important;
+        color: black !important;
+      }
+      @media (max-width: 768px) {
+        .responsive-bottom-panel {
+          flex-direction: column !important;
+          align-items: flex-start !important;
+        }
+    "))
+                  ),
+                  
+                  # Scrollable body
+                  div(
+                    style = "overflow-y: auto; max-height: calc(100vh - 60px); padding-bottom: 120px;",
+                    
+                    # Header Row ----
+                    fluidRow(tags$hr()),
+                    fluidRow(
+                      column(width = 12,
+                             div(style = "text-align: center;",
+                                 div(style = "display: inline-block; margin: 0 10px;",
+                                     actionButton("compare_species_input",
+                                                  tagList(icon("fish", style = "margin-right: 8px;"), "Compare Species"),
+                                                  class = "btn btn-lg")),
+                                 div(style = "display: inline-block; margin: 0 10px;",
+                                     actionButton("compare_countries_input",
+                                                  tagList(icon("earth-americas", style = "margin-right: 8px;"), "Compare Countries"),
+                                                  class = "btn btn-lg")),
+                                 div(style = "display: inline-block; margin: 0 10px;",
+                                     actionButton("select_country_input",
+                                                  tagList(icon("flag", style = "margin-right: 8px;"), "Select a Country"),
+                                                  class = "btn btn-lg"))
+                             )
+                      )
+                    ),
+                    
+                    # Country Selector (initially hidden) ----
+                    shinyjs::hidden(
+                      div(id = "country_select_plot_input",
+                          fluidRow(
+                            column(width = 12,
+                                   div(style = "text-align: center;",
+                                       div(style = "display: inline-block; margin-right: 20px;",
+                                           pickerInput("selected_country_input",
+                                                       label = "Select a Country:",
+                                                       choices = c("Select a country" = "", sort(unique(species_data$country_name))),
+                                                       selected = NULL,
+                                                       options = list(`live-search` = TRUE, `noneSelectedText` = "All Countries")
+                                           )
+                                       ),
+                                       div(style = "display: inline-block;",
+                                           tags$h4(textOutput("selected_country_total"),
+                                                   style = "color: white; font-weight: bold; margin-top: 25px;")
+                                       )
+                                   )
+                            )
+                          )
+                      )
+                    ),
+                    
+                    # --- Plot Section ---------------------------------------------------
+                    fluidRow(
+                      column(width = 12,
+                             div(style = "background-color:#0B2232; margin: 30px 20px; overflow-x: auto;",
+                                 
+                                 # ---- Country Plot ----
+                                 div(id = "country_plot",
+                                     tags$h4("Annual CO₂ Emissions Top Fishing Fleets",
+                                             style = "color: white; font-size: 30px; font-weight: bold; white-space: normal; word-break: break-word; max-width: 100%; margin-bottom: 10px;"
+                                     ),
+                                     div(style = "min-width: 900px; min-height: 300px;",
+                                         plotOutput("country_plot_output",
+                                                    height = "50vh", width = "100%", fill = TRUE
+                                         ) |> withSpinner(type = 4, color = '#08C4E5')
+                                     )
+                                 ),
+                                 
+                                 # ---- ISSCAAP Plot ----
+                                 shinyjs::hidden(
+                                   div(id = "isscaap_plot",
+                                       tags$h4("Annual CO₂ Emissions Top Species Groups",
+                                               style = "color: white; font-size: 30px; font-weight: bold; white-space: normal; word-break: break-word; max-width: 100%; margin-bottom: 10px;"
+                                       ),
+                                       div(style = "min-width: 900px; min-height: 300px;",
+                                           plotOutput("isscaap_plot_output",
+                                                      height = "50vh", width = "100%", fill = TRUE
+                                           ) |> withSpinner(type = 4, color = '#08C4E5')
+                                       )
+                                   )
+                                 ),
+                                 
+                                 # ---- Species Plot ----
+                                 div(id = "species_bar_plot_wrapper",
+                                     uiOutput("dynamic_country_header"),
+                                     shinyjs::hidden(
+                                       div(id = "species_bar_plot",
+                                           div(style = "min-width: 900px; min-height: 300px;",
+                                               plotOutput("species_bar_plot_output",
+                                                          height = "50vh", width = "100%", fill = TRUE
+                                               ) |> withSpinner(type = 4, color = '#08C4E5')
+                                           )
+                                       )
+                                     )
+                                 )
+                             )
+                      )
+                    ),
+                    
+                    # --- Bottom Responsive Row ------------------------------------------
+                    div(
+                      style = "margin-top: 10px; padding: 10px 20px; background-color: #0B2232; overflow-x: auto;",
+                      fluidRow(
+                               column(width = 6,
+                                      div(style = "background-color: rgba(255,255,255,0.8); padding: 8px; border-radius: 8px; width: 50%; min-width: 150px; max-width: 200px",
+                                          tags$span("Select Year"),
+                                          infoPopup(
+                                            id = "year_plot_popup",
+                                            description = "Data displayed in the plot is aggregated by year. Please select a year to compare.",
+                                            data_source = NULL,
+                                            learn_more = NULL
+                                          ),
+                                          sliderInput("year_slider_input_plot", NULL,
+                                                      min = 2016, max = 2022, value = 2022,
+                                                      step = 1, sep = "", width = "100%", ticks = TRUE
+                                          )
+                                      )
+                               ),
+                               column(width = 6,
+                                      div(style = "display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; padding-right: 20px; margin-top: 10px; gap: 10px;",
+                                          tags$span("Total Emissions", style = "color: white; font-weight: 500; font-size: 14px;"),
+                                          infoPopup(
+                                            id = "total_emissions_unit_plot_popup",
+                                            description = "Total CO₂ emission in metric tons based on broadcasted emissions and redistributed non-broadcasted emissions.",
+                                            data_source = "Global Fishing Watch",
+                                            learn_more = NULL
+                                          ),
+                                          div(style = "display: inline-block; margin-left: 10px;",
+                                              materialSwitch(
+                                                inputId = "unit_plot_toggle_input",
+                                                label = NULL,
+                                                status = "info",
+                                                right = TRUE,
+                                                inline = TRUE
+                                              )
+                                          ),
+                                          tags$span("Per Unit Catch", style = "color: white; font-weight: 500; font-size: 14px;"),
+                                          infoPopup(
+                                            id = "per_catch_unit_plot_popup",
+                                            description = "Per unit catch is the ratio of total emissions (metric tons) per total catch (metric tons). This gives a measurement of how carbon efficient the catch rate is.",
+                                            data_source = "Global Fishing Watch",
+                                            learn_more = NULL
+                                          )
+                                      )
+                               )
+                      )
+                    ) # END slider + toggle row
+                  ) # END scrollable wrapper
+                  
+  ), # END tabPanel
+  
+  
+  
+  
 # ------------------------------------------------------------------------------------------------------------------
 # ---- Usage Guide Page --------------------------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------------------------------------------

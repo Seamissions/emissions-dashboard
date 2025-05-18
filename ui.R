@@ -579,14 +579,14 @@ navbarPage(
                                      learn_more = NULL
                                    ),
                                    div(
-                                     class = "white-radio",
                                      style = "margin-left: 10px; overflow: visible !important;",
-                                     radioButtons(
+                                     prettyRadioButtons(
                                        inputId = "unit_plot_toggle_input",
                                        label = "Plot Unit",
                                        choices = c("Total Emissions" = "total", "Per Unit Catch" = "per_unit"),
                                        selected = "total",
-                                       inline = TRUE
+                                       inline = TRUE,
+                                       status = "warning"
                                      )
                                    ),
                                    tags$span("Per Unit Catch", style = "color: white; font-weight: 500; font-size: 14px;"),

@@ -41,7 +41,7 @@ server <- function(input, output, session) {
     summarise(total = sum(emissions_co2_mt, na.rm = TRUE)) |>
     pull(total)
   
-  # ---- Sidebar toggle logic ----
+  # ---- Map Sidebar toggle logic ---------------------------------------
   observeEvent(input$toggle_sidebar_open_input, {
     # Toggle the sidebar visibility
     shinyjs::toggle("sidebar-panel")
@@ -606,11 +606,28 @@ server <- function(input, output, session) {
   })
   
   
-}
+  
+  # ----- Bottom bar plot page ----
+  observeEvent(input$toggle_bottom_bar, {
+    shinyjs::toggle(id = "bottom_control_bar", anim = TRUE)
+  })
+  
+
+
+observeEvent(input$toggle_bottom_bar, {
+  shinyjs::toggle(id = "bottom_control_bar", anim = TRUE)
+  shinyjs::toggle(id = "toggle_bottom_bar_open_button", anim = TRUE)
+})
+
+observeEvent(input$toggle_bottom_bar_open, {
+  shinyjs::toggle(id = "bottom_control_bar", anim = TRUE)
+  shinyjs::toggle(id = "toggle_bottom_bar_open_button", anim = TRUE)
+})
+
 
 # END Seafood Emissions Explorer
 
-# END server function
+} # END server function
 
 
 

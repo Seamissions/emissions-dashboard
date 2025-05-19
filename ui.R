@@ -622,9 +622,52 @@ navbarPage(
                       )
                     ),
                     
-                    # --- Bottom Responsive Row ------------------------------------------
+                    # --- Bottom collabsable bar  ------------------------------------------
+                    # ---- Collapsible Bottom Bar Wrapper ----
                     div(
-                      style = "overflow: visible !important; position: fixed; bottom: 0; z-index: 2000; width: 100vw; margin-top: 10px; padding: 10px 20px; background-color: rgba(255,255,255);",
+                      id = "bottom_control_bar",
+                      style = "position: fixed;
+           bottom: 0;
+           width: 100vw;
+           background-color: #F9F9F9;
+           padding: 10px 20px;
+           z-index: 2000;
+           border-top: 1px solid #ccc;",
+                      
+                      # Toggle Button Wrapper (same style as sidebar)
+                      div(style = "position: absolute;
+              top: -55px;  /* places it above the bar */
+              right: 20px;
+              width: 40px;
+              height: 50px;
+              z-index: 2001;",
+                          
+                          # Background behind the icon
+                            div(style = "position: absolute;
+                                          top: 35px;
+                                          right: 50px; 
+                                          width: 45px;
+                                          height: 40px;
+                                          bottom: -10px;
+                                          background-color: #F9F9F9;
+                                          border-radius: 6px;
+                                          z-index: 2000;"),
+                          
+                          # Actual toggle button
+                          actionButton("toggle_bottom_bar",
+                                       label = NULL,
+                                       icon = icon("angle-down", style = "font-size: 25px; color: #DA8D03; margin-left: -2px;"),
+                                       style = "position: absolute;
+                                                top: 25px;
+                                                right: 51px;
+                                                width: 40px;
+                                                height: 40px;
+                                                background-color: transparent;
+                                                border: none;
+                                                z-index: 2001;")
+                                            ),
+                      
+                      # ---- Your Bottom Bar Content ----
                       fluidRow(
                         column(width = 6,
                                div(style = "border-radius: 8px; width: 50%; min-width: 150px; max-width: 200px",
@@ -632,42 +675,76 @@ navbarPage(
                                    infoPopup(
                                      id = "year_plot_popup",
                                      description = "Data displayed in the plot is aggregated by year. Please select a year to compare.",
-                                     data_source = NULL,
-                                     learn_more = NULL
+                                     data_source = NULL
                                    ),
                                    sliderInput("year_slider_input_plot", NULL,
                                                min = 2016, max = 2022, value = 2022,
-                                               step = 1, sep = "", width = "100%", ticks = TRUE
-                                   )
+                                               step = 1, sep = "", width = "100%", ticks = TRUE)
                                )
                         ),
                         column(width = 6,
-                               div(style = "display: flex;justify-content: flex-end;",
-                                   div(
-                                     style = "overflow: visible; display: flex; align-items: center; gap: 6px; margin-right: 15px;",
-                                     
-                                     # Plot Units label
-                                     tags$span("Plot Units:", style = "color: black; font-weight: 500; font-size: 17px;"),
-                                     
-                                     # Info icon
-                                     infoPopup(
-                                       id = "total_emissions_unit_plot_popup",
-                                       description = "Total CO₂ emission in metric tons based on broadcasted emissions and redistributed non-broadcasted emissions.",
-                                       data_source = "Global Fishing Watch"
-                                     )),
-                                   div( style = "display: flex;  margin-top: 15px; padding: 10px;",
-                                        prettyRadioButtons(
-                                          inputId = "unit_plot_toggle_input",
-                                          label = NULL,
-                                          choices = c("Total Emissions" = "total", "Per Unit Catch" = "per_unit"),
-                                          selected = "total",
-                                          inline = TRUE,
-                                          status = "warning"), # END radio button
+                               div(style = "display: flex; justify-content: flex-end;",
+                                   div(style = "display: flex; align-items: center; gap: 6px; margin-right: 15px;",
+                                       tags$span("Plot Units:", style = "color: black; font-weight: 500; font-size: 17px;"),
+                                       infoPopup(
+                                         id = "total_emissions_unit_plot_popup",
+                                         description = "Total CO₂ emission in metric tons based on broadcasted emissions and redistributed non-broadcasted emissions.",
+                                         data_source = "Global Fishing Watch"
+                                       )
+                                   ),
+                                   div(style = "margin-top: 15px; padding: 10px;",
+                                       prettyRadioButtons(
+                                         inputId = "unit_plot_toggle_input",
+                                         label = NULL,
+                                         choices = c("Total Emissions" = "total", "Per Unit Catch" = "per_unit"),
+                                         selected = "total",
+                                         inline = TRUE,
+                                         status = "warning"
+                                       )
                                    )
-                               ))
+                               )
+                        )
                       )
-                    ) # END slider + toggle row
-                  ) # END scrollable wrapper
+                    ), # END bottom bar
+                    
+                    # Floating Toggle Button - Show bottom bar when hidden
+                    div(
+                      id = "toggle_bottom_bar_open_button",
+                      style = "position: fixed;
+           bottom: -15px;
+           right: 20px;  /* match this with the main button */
+           width: 40px;
+           height: 50px;
+           z-index: 1999;
+           display: none;",
+                      
+                      # Background box
+                      div(style = "position: absolute;
+              top: 0;
+              right: 50px;
+              width: 45px;
+              height: 40px;
+              bottom: -10px;
+              background-color: #F9F9F9;
+              border-radius: 6px;
+              z-index: 1998;"),
+                      
+                      # Button (perfectly aligned on top of background)
+                      actionButton("toggle_bottom_bar_open",
+                                   label = NULL,
+                                   icon = icon("layer-group", style = "font-size: 20px; color: #DA8D03; margin-left: -2px; padding-top: 5px;"),
+                                   style = "position: absolute;
+                        top: -10px;
+                        right: 51px;
+                        width: 40px;
+                        height: 40px;
+                        background-color: transparent;
+                        border: none;
+                        z-index: 1999;")
+                    )
+                    
+                    
+                  )
                   
   ), # END tabPanel
   

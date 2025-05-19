@@ -47,17 +47,22 @@ server <- function(input, output, session) {
     shinyjs::toggle("sidebar-panel")
     
     # Show the outside button and hide the inside button
-    shinyjs::toggle("toggle_sidebar_close_input")
-    shinyjs::toggle("toggle_sidebar_open_input")
+    shinyjs::toggle("toggle_sidebar_close_input", anim = TRUE,
+                    animType = "fade")
+    shinyjs::toggle("toggle_sidebar_open_input", anim = TRUE,
+                    animType = "fade")
   })
   
   observeEvent(input$toggle_sidebar_close_input, {
     # Toggle the sidebar visibility
-    shinyjs::toggle("sidebar-panel")
+    shinyjs::toggle("sidebar-panel", anim = TRUE,
+                    animType = "fade")
     
     # Show the inside button and hide the outside button
-    shinyjs::toggle("toggle_sidebar_open_input")
-    shinyjs::toggle("toggle_sidebar_close_input")
+    shinyjs::toggle("toggle_sidebar_open_input", anim = TRUE,
+                    animType = "fade")
+    shinyjs::toggle("toggle_sidebar_close_input", anim = TRUE,
+                    animType = "fade")
   })
   
   # Auto minimize sidebar panel for small screens/mobile devices
@@ -609,18 +614,23 @@ server <- function(input, output, session) {
   
   # ----- Bottom bar plot page ----
   observeEvent(input$toggle_bottom_bar, {
-    shinyjs::toggle(id = "bottom_control_bar")
+    shinyjs::toggle(id = "bottom_control_bar", anim = TRUE,
+                    animType = "fade")
   })
   
 
 observeEvent(input$toggle_bottom_bar, {
-  shinyjs::toggle(id = "bottom_control_bar")
-  shinyjs::toggle(id = "toggle_bottom_bar_open_button", anim = TRUE)
+  shinyjs::toggle(id = "bottom_control_bar", anim = TRUE,
+                  animType = "fade")
+  shinyjs::toggle(id = "toggle_bottom_bar_open_button", anim = TRUE,
+                  animType = "fade")
 })
 
 observeEvent(input$toggle_bottom_bar_open, {
-  shinyjs::toggle(id = "bottom_control_bar")
-  shinyjs::toggle(id = "toggle_bottom_bar_open_button")
+  shinyjs::toggle(id = "bottom_control_bar", anim = TRUE,
+                  animType = "fade")
+  shinyjs::toggle(id = "toggle_bottom_bar_open_button", anim = TRUE,
+                  animType = "fade")
 })
 
 

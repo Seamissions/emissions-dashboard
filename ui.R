@@ -637,18 +637,18 @@ navbarPage(
                       # Toggle Button Wrapper (same style as sidebar)
                       div(style = "position: absolute;
               top: -55px;  /* places it above the bar */
-              right: 20px;
+              right: 15%;
               width: 40px;
               height: 50px;
               z-index: 2001;",
                           
                           # Background behind the icon
                             div(style = "position: absolute;
-                                          top: 35px;
-                                          right: 50px; 
+                                          top: 28px;
+                                          right: 9px; 
                                           width: 45px;
-                                          height: 40px;
-                                          bottom: -10px;
+                                          height: 50px;
+                                          bottom: -2px;
                                           background-color: #F9F9F9;
                                           border-radius: 6px;
                                           z-index: 2000;"),
@@ -658,8 +658,8 @@ navbarPage(
                                        label = NULL,
                                        icon = icon("angle-down", style = "font-size: 25px; color: #DA8D03; margin-left: -2px;"),
                                        style = "position: absolute;
-                                                top: 25px;
-                                                right: 51px;
+                                                top: 20px;
+                                                right: 10px;
                                                 width: 40px;
                                                 height: 40px;
                                                 background-color: transparent;
@@ -711,23 +711,22 @@ navbarPage(
                     div(
                       id = "toggle_bottom_bar_open_button",
                       style = "position: fixed;
-           bottom: -15px;
-           right: 20px;  /* match this with the main button */
-           width: 40px;
-           height: 50px;
-           z-index: 1999;
-           display: none;",
+                               bottom: -15px;
+                               right: 15%;
+                               width: 40px;
+                               height: 50px;
+                               z-index: 1999;
+                               display: none;",
                       
                       # Background box
                       div(style = "position: absolute;
-              top: 0;
-              right: 50px;
-              width: 45px;
-              height: 40px;
-              bottom: -10px;
-              background-color: #F9F9F9;
-              border-radius: 6px;
-              z-index: 1998;"),
+                                  top: 0;
+                                  width: 45px;
+                                  height: 40px;
+                                  bottom: -10px;
+                                  background-color: #F9F9F9;
+                                  border-radius: 6px;
+                                  z-index: 1998;"),
                       
                       # Button (perfectly aligned on top of background)
                       actionButton("toggle_bottom_bar_open",
@@ -735,7 +734,7 @@ navbarPage(
                                    icon = icon("layer-group", style = "font-size: 20px; color: #DA8D03; margin-left: -2px; padding-top: 5px;"),
                                    style = "position: absolute;
                         top: -10px;
-                        right: 51px;
+                        right: -4px;
                         width: 40px;
                         height: 40px;
                         background-color: transparent;

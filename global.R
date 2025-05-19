@@ -19,7 +19,6 @@ library(shinycssloaders)
 library(bs4Dash)
 library(later) # to delay loader
 library(gganimate)
-library(plotly)
 library(tidyverse)
 library(mapdeck)
 library(markdown)

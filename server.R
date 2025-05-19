@@ -609,19 +609,18 @@ server <- function(input, output, session) {
   
   # ----- Bottom bar plot page ----
   observeEvent(input$toggle_bottom_bar, {
-    shinyjs::toggle(id = "bottom_control_bar", anim = TRUE)
+    shinyjs::toggle(id = "bottom_control_bar")
   })
   
 
-
 observeEvent(input$toggle_bottom_bar, {
-  shinyjs::toggle(id = "bottom_control_bar", anim = TRUE)
+  shinyjs::toggle(id = "bottom_control_bar")
   shinyjs::toggle(id = "toggle_bottom_bar_open_button", anim = TRUE)
 })
 
 observeEvent(input$toggle_bottom_bar_open, {
-  shinyjs::toggle(id = "bottom_control_bar", anim = TRUE)
-  shinyjs::toggle(id = "toggle_bottom_bar_open_button", anim = TRUE)
+  shinyjs::toggle(id = "bottom_control_bar")
+  shinyjs::toggle(id = "toggle_bottom_bar_open_button")
 })
 
 

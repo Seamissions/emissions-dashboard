@@ -476,14 +476,34 @@ server <- function(input, output, session) {
     }
     
     x_label <- if (isTRUE(show_per_unit)) {
-      paste0(comma(filtered_isscaap$emissions_per_ton), " MT")
+      paste0(comma(filtered_isscaap$emissions_per_ton))
     } else {
-      paste0(comma(filtered_isscaap$sum_emissions), " MT")
+      paste0(comma(filtered_isscaap$sum_emissions))
     }
     
+    # x_var is already set above correctly
     max_x <- max(x_var, na.rm = TRUE)
     
+    # Dynamic axis breaks and labels
+    if (!show_per_unit) {
+      max_x_axis <- pmin(30000000, ceiling(max_x / 10000000) * 10000000)
+      min_x_axis <- floor(min(x_var, na.rm = TRUE) / 10000000) * 10000000
+      x_breaks <- seq(min_x_axis, max_x_axis, length.out = 5)
+      x_labels <- paste0(x_breaks / 1e6, "M")
+      
+    } else {
+      x_breaks <- seq(1, 4, by = 1)
+      x_labels <- x_breaks
+    }
+      
+    
+    # ---- Create plot -------------------------------------------
     ggplot(data = filtered_isscaap) +
+      geom_vline(xintercept = x_breaks,
+                 linetype = "dotted",
+                 color = "#AAAAAA",
+                 linewidth = 0.3) +
+      
       geom_col(aes(x = x_var,
                    y = reorder(isscaap_group, sum_emissions)),
                fill = "#08C4E5") +
@@ -495,22 +515,36 @@ server <- function(input, output, session) {
         image = image
       ), size = 0.05, asp = 1.5) +  # Adjust size/asp as needed
       
-      geom_text(aes(x = x_var + 0.09 * max_x,
+      geom_text(aes(x = x_var + 0.12 * max_x,
                     y = reorder(isscaap_group, sum_emissions),
                     label = x_label),
                 color = "white",
                 size = 7) +
       
+      scale_x_continuous(
+        breaks = x_breaks,
+        labels = x_labels,
+        expand = c(0, 0),
+        position = "top") +
+      
+      annotate("segment",
+               x =  0,
+               xend = max_x,
+               y = Inf,
+               yend = Inf,
+               color = "white",
+               linewidth = 0.5) +
+      
       theme_void() +
       theme(
         legend.position = "none",
         title = element_text(color = "white", family = "Roboto", face = "bold", size = 24),
-        axis.title.x = element_blank(),
+        axis.text.x = element_text(color = "white", size = 20, family = "Roboto", margin = margin(t = 10)),
         axis.text.y = element_text(color = "white", size = 22, hjust = 1, margin = margin(r = -5)),
         panel.background = element_rect(fill = "#0B2232", color = NA),
         plot.background = element_rect(fill = "#0B2232", color = NA)
       ) +
-      expand_limits(x = c(-0.1 * max_x, 1.2 * max_x))
+      expand_limits(x = c(-0.1 * max_x, 1.5 * max_x))
   })
   
   
@@ -518,19 +552,20 @@ server <- function(input, output, session) {
   
   output$dynamic_country_header <- renderUI({
     if (is.null(input$selected_country_input) || input$selected_country_input == "" || input$selected_country_input == "All Countries") {
-      tags$h4(
-        "Please select a country.",
-        style = "color: white;
-               font-size: 25px;
+      div(style = "width: 100%; text-align: center;",
+          tags$h4(
+            HTML("&#8593; Please select a country."),
+            style = "color: #DA8D03;
+               font-size: 20px;
                font-weight: bold;
                white-space: normal;
                word-break: break-word;
-               max-width: 100%;
                margin-bottom: 10px;"
+          )
       )
     } else {
       tags$h4(
-        paste("Annual CO₂ Emissions By Species Group -", input$selected_country_input),
+        paste(input$selected_country_input, "– Annual CO₂ Emissions By Species Group"),
         style = "color: white;
                font-size: 25px;
                font-weight: bold;

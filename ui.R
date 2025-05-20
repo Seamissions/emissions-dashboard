@@ -560,61 +560,155 @@ fluidRow(
                     div(style = "background-color: #1b2a49; padding: 30px; color: white;",
                              h4(strong("Background")),
                              tags$p(style = "font-weight: normal; color: white; margin: 30px;",
-                             "This is the background of our project. This is the background of our project.")  
-                      
-                      
-                    )
-                    )
+                             "Global fisheries are heavily reliant on fossil fuels, contributing significantly to the rise in global greenhouse gas emissions driving climate change. While satellite technology is commonly used to monitor land-based emissions (and ocean-based emissions of shipping vessels), studies primarily estimating ocean-based emissions in the fishing sector remain limited. In collaboration with the Environmental Markets Lab (emLab) and Global Fishing Watch, this project leverages novel, high-resolution satellite-based datasets to provide precise insights into the emissions associated with global fisheries. We develop a reproducible, extensible, and open-source data processing pipeline to connect emissions data with seafood production data, along with an interactive dashboard to explore the resulting dataset.",
+                             tags$br(),
+                             tags$a(href = "https://github.com/Seamissions", target = "_blank", "https://github.com/Seamissions"))  
+                    ) # END div
+             )
             
-          ),
+          ), # END fluidrow 'background'
+          
+          fluidRow(
+            column(12,
+                   div(
+                     style = "background-color: #1b2a49; padding: 30px; color: white;",
+                     h4(strong("Who we are")),
+                     
+                     tags$p(
+                       style = "font-weight: normal; color: white; margin-bottom: 20px;",
+                       "We are a team of environmental data scientists working to quantify and demystify the emissions contributed through commercial fishing fleets."
+                     ),
+                     
+                     tags$p(
+                       tags$strong("Carmen Hoyt:"), " ",
+                       tags$a(href = "https://bren.ucsb.edu/people/carmen-hoyt", target = "_blank", "Bren Profile"), " | ",
+                       tags$a(href = "https://github.com/orgs/Seamissions/people/ceh58", target = "_blank", "Github"), " | ",
+                       tags$a(href = "https://www.linkedin.com/in/carmen-hoyt-952272153/", target = "_blank", "LinkedIn"), " | ",
+                       tags$a(href = "https://ceh58.github.io/", target = "_blank", "Website")
+                     ),
+                     
+                     tags$p(
+                       tags$strong("Josh Mull:"), " ",
+                       tags$a(href = "https://bren.ucsb.edu/people/joshua-mull", target = "_blank", "Bren Profile"), " | ",
+                       tags$a(href = "https://github.com/orgs/Seamissions/people/llumj", target = "_blank", "Github"), " | ",
+                       tags$a(href = "https://www.linkedin.com/in/joshua-mull-046a7832b/", target = "_blank", "LinkedIn"), " | ",
+                       tags$a(href = "https://llumj.github.io/", target = "_blank", "Website")
+                     ),
+                     
+                     tags$p(
+                       tags$strong("Nicole Pepper:"), " ",
+                       tags$a(href = "https://bren.ucsb.edu/people/nicole-pepper", target = "_blank", "Bren Profile"), " | ",
+                       tags$a(href = "https://github.com/orgs/Seamissions/people/nicolelpepper", target = "_blank", "Github"), " | ",
+                       tags$a(href = "https://www.linkedin.com/in/nicole-pepper/", target = "_blank", "LinkedIn"), " | ",
+                       tags$a(href = "https://nicolelpepper.github.io/", target = "_blank", "Website")
+                     ),
+                     
+                     tags$p(
+                       tags$strong("Stephen Carroll:"), " ",
+                       tags$a(href = "https://bren.ucsb.edu/people/stephen-carroll", target = "_blank", "Bren Profile"), " | ",
+                       tags$a(href = "https://github.com/orgs/Seamissions/people/stephenccodes", target = "_blank", "Github"), " | ",
+                       tags$a(href = "https://www.linkedin.com/in/stephen-carroll-754b5191/", target = "_blank", "LinkedIn"), " | ",
+                       tags$a(href = "https://stephenccodes.github.io/", target = "_blank", "Website")
+                     )
+                   ) # END div
+            )
+            
+          ), # END fluidrow 'Who we are'
+          
+          fluidRow(
+            column(12,
+                   div(
+                     style = "background-color: #1b2a49; padding: 30px; color: white;",
+                     
+                     h4(strong("Our Partners")),
+                     
+                     # emLab section
+                     tags$h5(tags$u("Environmental Markets Lab (emLab)")),
+                     tags$p(
+                       style = "font-weight: normal; color: white; margin-bottom: 15px;",
+                       "A think-and-do tank for market-based approaches to environmental challenges. They are an interdisciplinary team of scientists based at the University of California Santa Barbara that conducts cutting-edge, data-driven research on the power, limitations, and design of market-based approaches to tackle the world's most pressing environmental problems."
+                     ),
+                     tags$p(
+                       style = "font-weight: normal; color: white; margin-bottom: 20px;",
+                       "In collaboration with implementing partners, they aim to better align environmental objectives and economic incentives in support of sustainable livelihoods and a resilient planet."
+                     ),
+                     tags$img(src = "images/gfw-logo.png", style = "width: 100%; max-width: 700px; margin-bottom: 30px;"),
+                     
+                     # Global Fishing Watch section
+                     tags$h5(tags$u("Global Fishing Watch")),
+                     tags$p(
+                       style = "font-weight: normal; color: white; margin-bottom: 15px;",
+                       "Global Fishing Watch seeks to advance ocean governance through increased transparency of human activity at sea, enabling scientific research and driving transformation in ocean management by creating and publicly sharing map visualizations, data, and analysis tools."
+                     ),
+                     tags$p(
+                       style = "font-weight: normal; color: white; margin-bottom: 20px;",
+                       "Global Fishing Watch was founded in 2015 through a collaboration between three partners: ",
+                       tags$strong("Oceana"), ", an international ocean conservation organization; ",
+                       tags$strong("SkyTruth"), ", a technology firm that uses satellite imagery and data to protect the environment; and ",
+                       tags$strong("Google"), ", whose tools and contributions help process big data. ",
+                       "In June 2017, Global Fishing Watch was established as an independent, international nonprofit organization."
+                     ),
+                     tags$img(src = "images/gfw-logo.png", style = "width: 100%; max-width: 700px; margin-bottom: 30px;")
+                   ) # END div
+            )
+            
+          ), # END fluidrow 'About our partners'
           
           fluidRow(
             column(12,
                    div(style = "background-color: #1b2a49; padding: 30px; color: white;",
-                       h4(strong("Who we are")),
-                       tags$p(style = "font-weight: normal; color: white; margin: 30px;",
-                              "This is who we are. Here we have informatoin about the team.")  
-                   )
+                       h4(strong("Methods")),
+                       tags$p(
+                         style = "font-weight: normal; color: white; margin: 30px;",
+                         "Our team developed a structured process that could handle large amounts of data provided by emLab. Our approach was to use emissions data from vessels broadcasting their activity to determine the emissions for the vessels that are non-broadcasting. We then used catch data from the FAO to create a more complete picture of fishing-related emissions worldwide.
+We then combined emissions data from vessels with visible tracking signals (“broadcasting”) and those without (“non-broadcasting”). Each fishing event was linked to a date, location, and national flag, and we calculated emissions for each grid cell on a global map.
+Next, we aligned those emissions with FAO fishing regions. When a single grid cell overlapped multiple regions, we divided the emissions proportionally based on area to ensure fair and accurate regional estimates.
+To make the process efficient and reliable, we built a system that could detect changes and automatically update only the affected parts of the analysis.
+Finally, we double-checked our results to ensure that all emissions were accounted for, allowing for minimal rounding error. This method gives us a transparent, reproducible way to estimate fishing-related emissions at a global scale, helping to understand the climate impact of seafood production.
+Information on how GFW and emLab produced the data we used in our model can be found
+"
+                       ), 
+                       
+                       tags$a(href = "https://emlab-ucsb.github.io/ocean-ghg/", target = "_blank", "here.")
+                   ) # END div
             )
             
-          ),
-          
-          fluidRow(
-            column(12,
-                   div(style = "background-color: #1b2a49; padding: 30px; color: white;",
-                       h4(strong("About our partners")),
-                       tags$p(style = "font-weight: normal; color: white; margin: 30px;",
-                              "This is information about our project. Here are some details.")  
-                   )
-            )
-            
-          ),
-          
-          fluidRow(
-            column(12,
-                   div(style = "background-color: #1b2a49; padding: 30px; color: white;",
-                       h4(strong("Background")),
-                       tags$p(style = "font-weight: normal; color: white; margin: 30px;",
-                              "This is the background of our project. This is the background of our project.")  
-                   )
-            )
-            
-          ),
+          ), # END fluidrow 'Methods'
           
           fluidRow(
             column(12,
                    div(style = "background-color: #1b2a49; padding: 30px; color: white;",
                        h4(strong("Methods")),
                        tags$p(style = "font-weight: normal; color: white; margin: 30px;",
-                              "These are the methods that we used on this project.")  
-                   )
+                              "These are the methods that we used for this project.")  
+                   ) # END div
             )
             
-          )
+          ), # END fluidrow 'Methods'
           
-           ) # END tabPanel (Learn More Page)
-  
- 
+          fluidRow(
+            column(12,
+                   div(style = "background-color: #1b2a49; padding: 30px; color: white;",
+                       h4(strong("Usage guide")),
+                       tags$p(style = "font-weight: normal; color: white; margin: 30px;",
+                              "This is how you can use this dashboard. Here are the steps you can take to use it.")  
+                   ) # END div
+            )
+            
+          ), # END fluidrow 'Usage guide'
+          
+          fluidRow(
+            column(12,
+                   div(style = "background-color: #1b2a49; padding: 30px; color: white;",
+                       h4(strong("Key considerations")),
+                       tags$p(style = "font-weight: normal; color: white; margin: 30px;",
+                              "This is a list of our key considerations.")  
+                   ) # END div
+            )
+            
+          ) # END fluidrow 'Key considerations'
+          
+  ) # END tabPanel (Learn More Page)
 
 ) # END navbarPage
 

@@ -64,4 +64,3 @@ seamissions_theme <- bs_add_rules(seamissions_theme, "
   }
 ")
 
-

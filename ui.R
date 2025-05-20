@@ -665,11 +665,10 @@ We then combined emissions data from vessels with visible tracking signals (“b
 Next, we aligned those emissions with FAO fishing regions. When a single grid cell overlapped multiple regions, we divided the emissions proportionally based on area to ensure fair and accurate regional estimates.
 To make the process efficient and reliable, we built a system that could detect changes and automatically update only the affected parts of the analysis.
 Finally, we double-checked our results to ensure that all emissions were accounted for, allowing for minimal rounding error. This method gives us a transparent, reproducible way to estimate fishing-related emissions at a global scale, helping to understand the climate impact of seafood production.
-Information on how GFW and emLab produced the data we used in our model can be found
-"
-                       ), 
-                       
-                       tags$a(href = "https://emlab-ucsb.github.io/ocean-ghg/", target = "_blank", "here.")
+Information on how GFW and emLab produced the data we used in our model can be found below."
+                       ),
+                        tags$br(),
+                       tags$a(href = "https://emlab-ucsb.github.io/ocean-ghg/", target = "_blank", "https://emlab-ucsb.github.io/ocean-ghg/")
                    ) # END div
             )
             
@@ -678,35 +677,112 @@ Information on how GFW and emLab produced the data we used in our model can be f
           fluidRow(
             column(12,
                    div(style = "background-color: #1b2a49; padding: 30px; color: white;",
-                       h4(strong("Methods")),
+                       h4(strong("Usage Guide")),
                        tags$p(style = "font-weight: normal; color: white; margin: 30px;",
-                              "These are the methods that we used for this project.")  
+                              tags$a(href = "https://globalfishingwatch.org/tutorials/", target = "_blank", "https://globalfishingwatch.org/tutorials/")
+                              )  
                    ) # END div
             )
             
-          ), # END fluidrow 'Methods'
+          ), # END fluidrow 'Usage Guide'
           
           fluidRow(
             column(12,
-                   div(style = "background-color: #1b2a49; padding: 30px; color: white;",
-                       h4(strong("Usage guide")),
-                       tags$p(style = "font-weight: normal; color: white; margin: 30px;",
-                              "This is how you can use this dashboard. Here are the steps you can take to use it.")  
+                   div(
+                     style = "background-color: #1b2a49; padding: 30px; color: white;",
+                     
+                     tags$h4(tags$strong("Key Considerations")),
+                     
+                     fluidRow(
+                       column(
+                         width = 12,
+                         tags$p(
+                           style = "font-weight: normal; color: white; margin-bottom: 20px;",
+                           "The dashboard is intended as an educational and exploratory tool, not an official regulatory product. All results should be interpreted with care due to several key limitations:"
+                         )
+                       )
+                     ),
+                     
+                     tags$ul(
+                       tags$li(
+                         tags$u("Uncertainty in emissions estimates"),
+                         " – particularly from the reattribution of emissions from non-broadcasting vessels to broadcasting vessels, a necessary step to assign emissions to flag states and align with FAO-reported catch data."
+                       ),
+                       tags$li(
+                         tags$u("Ambiguity in catch location and reporting"),
+                         " – stemming from underreporting and inconsistencies between where fish were actually caught, the vessel’s flag state, and the country where landings were reported to the FAO."
+                       ),
+                       tags$li(
+                         tags$u("Dependence on harmonized datasets with different formats and assumptions"),
+                         " – including the integration of FAO catch records and GFW’s fishing vessel emissions dataset, which originate from distinct sources with differing scopes, structures, and assumptions."
+                       )
+                     )
                    ) # END div
             )
             
-          ), # END fluidrow 'Usage guide'
+          ), # END fluidrow 'Key Considerations'
           
           fluidRow(
             column(12,
-                   div(style = "background-color: #1b2a49; padding: 30px; color: white;",
-                       h4(strong("Key considerations")),
-                       tags$p(style = "font-weight: normal; color: white; margin: 30px;",
-                              "This is a list of our key considerations.")  
+                   div(
+                     style = "background-color: #1b2a49; padding: 30px; color: white;",
+                     
+                     tags$h4(tags$strong("Glossary")),
+                     
+                     tags$ul(
+                       tags$li(
+                         tags$u("AIS (Automatic Identification System)"), tags$br(),
+                         "A satellite-based tracking system used by large vessels to broadcast their location and movement. It helps monitor shipping activity, but many fishing vessels do not use it."
+                       ),
+                       tags$li(
+                         tags$u("Broadcasting Vessels"), tags$br(),
+                         "Fishing vessels that transmit their location via AIS, making their movements and emissions trackable."
+                       ),
+                       tags$li(
+                         tags$u("FAO (Food and Agriculture Organization)"), tags$br(),
+                         "A UN agency that collects official fisheries and aquaculture data from countries around the world."
+                       ),
+                       tags$li(
+                         tags$u("FAO Catch Data"), tags$br(),
+                         "Country-reported records of fish and seafood harvested, often used as a global baseline for fisheries research."
+                       ),
+                       tags$li(
+                         tags$u("Flag (of a vessel)"), tags$br(),
+                         "The country under which a fishing vessel is registered. Some vessels use “flags of convenience”, flags associated with different countries to flout regulation or take advantage of favorable legislation."
+                       ),
+                       tags$li(
+                         tags$u("Flag of Convenience"), tags$br(),
+                         "When a vessel registers under a country different from its home country, often to take advantage of looser regulations."
+                       ),
+                       tags$li(
+                         tags$u("GHG (Greenhouse Gas)"), tags$br(),
+                         "Gases that trap heat in the atmosphere and contribute to climate change. This project tracks emissions like CO₂, CH₄, and N₂O."
+                       ),
+                       tags$li(
+                         tags$u("Global Fishing Watch (GFW)"), tags$br(),
+                         "A nonprofit that uses satellite and machine learning data to monitor fishing activities globally."
+                       ),
+                       tags$li(
+                         tags$u("ISSCAAP (International Standard Statistical Classification of Aquatic Animals and Plants)"), tags$br(),
+                         "A classification system used by the FAO to group aquatic species for reporting purposes."
+                       ),
+                       tags$li(
+                         tags$u("Non-Broadcasting Vessels"), tags$br(),
+                         "Fishing vessels that do not transmit AIS signals. Their emissions are harder to track and are estimated using satellite radar."
+                       ),
+                       tags$li(
+                         tags$u("Pipeline"), tags$br(),
+                         "A series of connected data processing steps that clean, merge, and analyze raw data. The emissions pipeline in this project combines emissions and catch data."
+                       ),
+                       tags$li(
+                         tags$u("SAU (Sea Around Us)"), tags$br(),
+                         "A project that reconstructs missing or underreported fisheries data to give a more complete picture of global fish harvests."
+                       )
+                     )
                    ) # END div
             )
             
-          ) # END fluidrow 'Key considerations'
+          ) # END fluidrow 'Glossary'
           
   ) # END tabPanel (Learn More Page)
 

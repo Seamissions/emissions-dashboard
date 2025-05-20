@@ -533,7 +533,11 @@ server <- function(input, output, session) {
     paste0(format(round(total, 2), big.mark = ","), " Mt CO₂")
   })
   
+  #--------------------------------------------------------------------------
+  # ---- Learn More Tab -----------------------------------------------------
+  #--------------------------------------------------------------------------
   
+   # END Learn More
 }
 
 # END Seafood Emissions Explorer

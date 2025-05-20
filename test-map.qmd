@@ -1,9 +1,0 @@
-```{r}
-
-
-# Load emissions data
-broadcasting_emissions <- readRDS("data/broadcasting_emissions.rds") |> 
-  filter(emissions_co2_mt >= 200)
-
-```
-

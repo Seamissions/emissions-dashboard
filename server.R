@@ -299,7 +299,6 @@ server <- function(input, output, session) {
   
   
   # ---- FAO Zones layer ----
-  # ---- FAO Zones layer ----
   observe({
     if (input$show_fao_zones_input) {
       loading(TRUE)

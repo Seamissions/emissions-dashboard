@@ -104,7 +104,7 @@ navbarPage(
                               ),
                               
                               h4(strong("Fishing Vessel Emissions Map")),
-                              p("Explore a global map of CO₂ emissions from large-scale fishing, powered by Global Fishing Watch data.",
+                              p("Explore a global map of CO₂ emissions from large-scale fishing vessels, powered by a novel dataset from Global Fishing Watch and emLab.",
                                 style = "color: #444; padding: 0 20px;")
                           ),
                           
@@ -127,7 +127,7 @@ navbarPage(
                               ),
                               
                               h4(strong("Compare Seafood Emissions")),
-                              p("Use this tool to compare greenhouse gas emissions by country and seafood category, combining Global Fishing Watch activity data with FAO catch statistics.",
+                              p("Use this tool to compare CO₂ emissions by country and seafood category, combining Global Fishing Watch activity data with FAO catch statistics.",
                                 style = "color: #444; padding: 0 20px; margin-bottom: 25px;")
                           )
                       ) # END teaser card row
@@ -245,8 +245,8 @@ navbarPage(
                                   "Fishing Vessel Emissions"), 
                           
                           # Map description
-                          tags$p(style = "font-weight: regular; color: #20404F; margin-bottom: 20px;", 
-                                 "Explore where emissions from large-scale fishing vessels occur around the world, using data from Global Fishing Watch."), 
+                          tags$p(style = "font-weight: 400; color: #20404F; margin-bottom: 5px;font-size: 12px;", 
+                                 "This map features a novel dataset from Global Fishing Watch and emLab that models global fishing vessel emissions by combining Automatic Identification System (AIS, which acts like GPS tracking for ships) with satellite-based Synthetic Aperture Radar (SAR, which functions like radar from space). Together, these technologies allow us to detect both broadcasted and non-broadcasted fishing activity."), 
                           
                           # Horizontal separator
                           tags$hr(),
@@ -261,7 +261,7 @@ navbarPage(
                               style = "display: flex; align-items: center; gap: 8px;",
                               
                               div(
-                                style = "margin-top: -2px;",
+                                style = "margin-top: -20px;",
                                 materialSwitch(
                                   inputId = "show_broadcasting_input",
                                   label = tags$div(
@@ -358,7 +358,7 @@ navbarPage(
                             div(
                               style = "display: flex; align-items: center; gap: 8px;",
                               div(
-                                style = "margin-top: -2px;",
+                                style = "margin-top: -20px;",
                                 materialSwitch(
                                   inputId = "show_non_broadcasting_input",
                                   label = tags$div(
@@ -420,7 +420,7 @@ navbarPage(
                               style = "display: flex; align-items: center; gap: 8px;",
                               
                               div(
-                                style = "margin-top: -2px;",
+                                style = "margin-top: -20px;",
                                 materialSwitch(
                                   inputId = "show_fao_zones_input",
                                   label = tags$div(
@@ -463,8 +463,7 @@ navbarPage(
                                      display: none;
                                      z-index: 1001"), # END actionButton for sidebar to close sidebar
                       
-                      
-                      
+                  
                       # ---- Emissions Map --------------------------------------------
                       mapdeckOutput("emissions_map", height = "100%"),
                       useShinyjs(),

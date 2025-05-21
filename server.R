@@ -418,6 +418,7 @@ server <- function(input, output, session) {
     filtered_flags <- top_flags |>
       filter(year == input$year_slider_input_plot)
     
+    # Remove observations with 0 for the selected year
     req(nrow(filtered_flags) > 0)
     
     x_var <- if (isTRUE(show_per_unit)) {
@@ -434,10 +435,46 @@ server <- function(input, output, session) {
     
     max_x <- max(x_var, na.rm = TRUE)
     
+    # ---- Dynamic axis breaks and labels ----
+    if (!show_per_unit) {
+      # ---- Total Emissions: round down to last full 10M ----
+      raw_max <- max(x_var, na.rm = TRUE)
+      max_x_axis <- floor(raw_max / 1e7) * 1e7  # round down
+      min_x_axis <- floor(min(x_var, na.rm = TRUE) / 1e7) * 1e7
+      x_breaks <- seq(min_x_axis, max_x_axis, by = 1e7)
+      x_labels <- paste0(x_breaks / 1e6, "M")
+      
+    } else {
+      # ---- Per Unit Emissions: round down to last full unit ----
+      raw_max <- max(x_var, na.rm = TRUE)
+      max_x_axis <- floor(raw_max)  # round down to whole number
+      x_breaks <- seq(0, max_x_axis, by = 1)
+      x_labels <- x_breaks
+    }
+    
     filtered_flags$x_var <- x_var
     filtered_flags$x_label <- x_label
     
     ggplot(data = filtered_flags) +
+      
+      geom_vline(xintercept = x_breaks,
+                 linetype = "dotted",
+                 color = "#AAAAAA",
+                 linewidth = 0.3) +
+      
+      scale_x_continuous(
+        breaks = x_breaks,
+        labels = x_labels,
+        expand = c(0, 0),
+        position = "top") +
+      
+      annotate("segment",
+               x =  0,
+               xend = max_x,
+               y = Inf,
+               yend = Inf,
+               color = "white",
+               linewidth = 0.5) +
       geom_col(aes(x = x_var,
                    y = reorder(country_name, sum_emissions)),
                fill = "#08C4E5") +
@@ -450,14 +487,14 @@ server <- function(input, output, session) {
                 color = "white",
                 size = 7) +
       theme_void() +
-      theme(legend.position = "none",
-            title = element_text(color = "white", family = "Roboto", face = "bold", size = 24),
-            axis.title.x = element_blank(),
-            axis.text.y = element_text(color = "white", size = 22, hjust = 1, margin = margin(r = -5)),
-            panel.background = element_rect(fill = "#0B2232", color = NA),
-            plot.background = element_rect(fill = "#0B2232", color = NA)
-      ) +
-      expand_limits(x = c(-0.05 * max_x, 1.2 * max_x))
+      theme(
+        legend.position = "none",
+        title = element_text(color = "white", family = "Roboto", face = "bold", size = 24),
+        axis.text.x = element_text(color = "white", size = 20, family = "Roboto", margin = margin(t = 10)),
+        axis.text.y = element_text(color = "white", size = 22, hjust = 1, margin = margin(r = -5)),
+        panel.background = element_rect(fill = "#0B2232", color = NA),
+        plot.background = element_rect(fill = "#0B2232", color = NA)) +
+      expand_limits(x = c(-0.1 * max_x, 1.5 * max_x))
   })
   
   # --- Plot comparing ISSCAAP groups ----
@@ -484,19 +521,23 @@ server <- function(input, output, session) {
     # x_var is already set above correctly
     max_x <- max(x_var, na.rm = TRUE)
     
-    # Dynamic axis breaks and labels
+    # ---- Dynamic axis breaks and labels ----
     if (!show_per_unit) {
-      max_x_axis <- pmin(30000000, ceiling(max_x / 10000000) * 10000000)
-      min_x_axis <- floor(min(x_var, na.rm = TRUE) / 10000000) * 10000000
-      x_breaks <- seq(min_x_axis, max_x_axis, length.out = 5)
+      # ---- Total Emissions: round down to last full 10M ----
+      raw_max <- max(x_var, na.rm = TRUE)
+      max_x_axis <- floor(raw_max / 1e7) * 1e7  # round down
+      min_x_axis <- floor(min(x_var, na.rm = TRUE) / 1e7) * 1e7
+      x_breaks <- seq(min_x_axis, max_x_axis, by = 1e7)
       x_labels <- paste0(x_breaks / 1e6, "M")
       
     } else {
-      x_breaks <- seq(1, 4, by = 1)
+      # ---- Per Unit Emissions: round down to last full unit ----
+      raw_max <- max(x_var, na.rm = TRUE)
+      max_x_axis <- floor(raw_max)  # round down to whole number
+      x_breaks <- seq(0, max_x_axis, by = 1)
       x_labels <- x_breaks
     }
       
-    
     # ---- Create plot -------------------------------------------
     ggplot(data = filtered_isscaap) +
       geom_vline(xintercept = x_breaks,
@@ -577,34 +618,70 @@ server <- function(input, output, session) {
     }
   })
   
-  # Create plot
+  
+  
+  # Create plot ----------------------------------------------------------------
   output$species_bar_plot_output <- renderPlot({
+    
+    
+    
     req(input$selected_country_input)
     
-    show_per_unit <- input$unit_plot_toggle_input =="per_unit"
+    show_per_unit <- input$unit_plot_toggle_input == "per_unit"
     
-    # Aggregate across years for selected country
+    # Filter by selected country and year
     filtered_select_country <- species_data |>
       filter(country_name == input$selected_country_input,
-             year == input$year_slider_input_plot)
+             year == input$year_slider_input_plot) |>
+      filter(
+        if (show_per_unit) emissions_per_ton >= 1 else sum_emissions >= 1
+      )
     
-    
+    # Define x values
     x_var <- if (isTRUE(show_per_unit)) {
       filtered_select_country$emissions_per_ton
     } else {
       filtered_select_country$sum_emissions
     }
     
+    # Define x-axis text labels for each bar
     x_label <- if (isTRUE(show_per_unit)) {
       paste0(comma(round(filtered_select_country$emissions_per_ton, 2)), " MT")
     } else {
       paste0(comma(round(filtered_select_country$sum_emissions, 2)), " MT")
     }
     
+    # ---- Dynamic axis breaks and labels ----
+    raw_max <- max(x_var, na.rm = TRUE)
     
-    max_x <- max(x_var, na.rm = TRUE)
+    if (!show_per_unit) {
+      base_step <- 10^(floor(log10(raw_max)))
+      step <- base_step
+      
+      # Increase step until we get ≤ 4 breaks *below* or equal to raw_max
+      repeat {
+        candidate_breaks <- seq(0, raw_max, by = step)
+        if (length(candidate_breaks) <= 4) break
+        step <- step * 2
+      }
+      
+      x_breaks <- candidate_breaks
+      x_labels <- if (max(x_breaks) >= 1e6) paste0(x_breaks / 1e6, "M") else comma(x_breaks)
+      
+    } else {
+      max_x_axis <- ceiling(raw_max)
+      step <- if (max_x_axis <= 4) 1 else ceiling(max_x_axis / 4)
+      x_breaks <- seq(0, raw_max, by = step)
+      x_labels <- x_breaks
+    }
+    max_x <- max(x_var, na.rm = TRUE) 
     
     ggplot(data = filtered_select_country) +
+      
+      geom_vline(xintercept = x_breaks,
+                 linetype = "dotted",
+                 color = "#AAAAAA",
+                 linewidth = 0.3) +
       geom_col(aes(x = x_var,
                    y = reorder(isscaap_group, sum_emissions)),
                fill = "#08C4E5") +
@@ -613,22 +690,30 @@ server <- function(input, output, session) {
                     label = x_label),
                 color = "white",
                 size = 7) +
+      
+      scale_x_continuous(
+        breaks = x_breaks,
+        labels = x_labels,
+        expand = c(0, 0),
+        position = "top") +
+      
+      annotate("segment",
+               x =  0,
+               xend = max_x,
+               y = Inf,
+               yend = Inf,
+               color = "white",
+               linewidth = 0.5) +
       theme_void() +
       theme(
         legend.position = "none",
-        title = element_text(color = "white",
-                             family = "Roboto",
-                             face = "bold",
-                             size = 24),
-        axis.title.x = element_blank(),
-        axis.text.y = element_text(color = "white",
-                                   size = 22,
-                                   hjust = 1,
-                                   margin = margin(r = -5)),
+        title = element_text(color = "white", family = "Roboto", face = "bold", size = 24),
+        axis.text.x = element_text(color = "white", size = 20, family = "Roboto", margin = margin(t = 10)),
+        axis.text.y = element_text(color = "white", size = 22, hjust = 1, margin = margin(r = -5)),
         panel.background = element_rect(fill = "#0B2232", color = NA),
         plot.background = element_rect(fill = "#0B2232", color = NA)
       ) +
-      expand_limits(x = c(-0.05 * max_x, 1.2 * max_x))
+      expand_limits(x = c(-0.05 * max_x, 1.5 * max_x))
   })
   
   

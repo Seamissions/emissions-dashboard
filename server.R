@@ -24,6 +24,13 @@ server <- function(input, output, session) {
     
   })
   
+  observe({
+    shinyjs::onclick("learn_more_link2", {
+      updateNavbarPage(session, "navbarPage", selected = "Learn More")
+    })
+    
+  })
+  
   # ----------------------------------------------------------------------------
   # ---- Emissions map ---------------------------------------------------------
   #-----------------------------------------------------------------------------
@@ -617,7 +624,6 @@ server <- function(input, output, session) {
       )
     }
   })
-  
   
   
   # Create plot ----------------------------------------------------------------

@@ -180,7 +180,7 @@ navbarPage(
                           div(style = "display: flex; justify-content: center; align-items: center; gap: 5px; flex-wrap: wrap;",
                               id = "learn_more_link",
                           tags$p("Click here",
-                                 style = "font-weight: 600; color: #08C4E5; cursor: pointer; text-decoration: underline; display: flex; flex-wrap: wrap;"),
+                                 style = "font-weight: 600; color: white; cursor: pointer; text-decoration: underline; display: flex; flex-wrap: wrap;"),
                           
                           tags$p("to learn more about our project, the data behind it, and its intended use.",
                                  style = "font-weight: 400; color: white; cursor: pointer; display: flex; flex-wrap: wrap;")
@@ -533,8 +533,27 @@ navbarPage(
                     # Header Row ----
                     fluidRow(
                       tags$p("Compare Seafood Emissions", style = "color: white; font-size: 30px; font-weight: bold; white-space: normal; padding-left: 50px; padding-right: 50px; text-align: center;"),
-                      tags$p("Explore our dataset combining fishing vessel emissions from Global Fishing Watch with catch data from the FAO. These results are exploratory estimates and should be interpreted with care. Click here to more about the data and its limitations.", style = "color: white; font-size: 18px; font-weight: bold; white-space: normal; ; padding-left: 50px; padding-right: 50px; text-align: center;")
+                      tags$p("Explore our dataset, which links fishing vessel emissions from Global Fishing Watch with catch data from the Food and Agriculture Organization (FAO). To ensure non-broadcasting vessel emissions — an important share of total fishing emissions — were not excluded, we redistributed them across all countries that reported catch for a given region. This approach allowed us to include all emissions in our per-species estimates. As a result, AIS-broadcasting countries may appear to have higher emissions than they are actually responsible for.", style = "color: white; font-size: 18px; font-weight: bold; white-space: normal; ; padding-left: 50px; padding-right: 50px; text-align: center;"),
+                      ),
+                    
+                    
+                    fluidRow(
+                      div(
+                        style = "display: flex; justify-content: center; align-items: center; gap: 5px; flex-wrap: wrap;",
+                        id = "learn_more_link2",
+                        
+                        tags$p(
+                          "Click here",
+                          style = "font-weight: 600; color: white; cursor: pointer; text-decoration: underline; display: flex; flex-wrap: wrap;"
+                        ),
+                        
+                        tags$p(
+                          "to learn more about the data and its limitations.",
+                          style = "font-weight: 400; color: white; cursor: pointer; display: flex; flex-wrap: wrap;"
+                        )
+                      )
                     ),
+                    
                     fluidRow(
                       column(width = 12,
                              div(style = "text-align: center;",
@@ -773,7 +792,6 @@ navbarPage(
   # ------------------------------------------------------------------------------------------------------------------
   
   tabPanel("Learn More",
-           # ---- Hero Section ----
            # ---- Hero Section ----
            div(style = "position: relative;
                min-height: 200px;

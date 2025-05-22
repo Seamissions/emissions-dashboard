@@ -533,7 +533,7 @@ navbarPage(
                     # Header Row ----
                     fluidRow(
                       tags$p("Compare Seafood Emissions", style = "color: white; font-size: 30px; font-weight: bold; white-space: normal; padding-left: 50px; padding-right: 50px; text-align: center;"),
-                      tags$p("Explore our dataset combining fishing vessel emissions from Global Fishing Watch with catch data from the FAO.", style = "color: white; font-size: 18px; font-weight: bold; white-space: normal; ; padding-left: 50px; padding-right: 50px; text-align: center;")
+                      tags$p("Explore our dataset combining fishing vessel emissions from Global Fishing Watch with catch data from the FAO. These results are exploratory estimates and should be interpreted with care. Click here to more about the data and its limitations.", style = "color: white; font-size: 18px; font-weight: bold; white-space: normal; ; padding-left: 50px; padding-right: 50px; text-align: center;")
                     ),
                     fluidRow(
                       column(width = 12,
@@ -585,9 +585,15 @@ navbarPage(
                                  
                                  # ---- Country Plot ----
                                  div(id = "country_plot",
-                                     tags$h4("Annual CO₂ Emissions Top Fishing Fleets",
+
+                                     tags$h4("Top Emitting Fishing Fleets",
                                              style = "color: white; font-size: 25px; font-weight: bold; white-space: normal; word-break: break-word; max-width: 100%; margin-bottom: 10px;"
                                      ),
+                                     
+                                     tags$h4("Annual CO₂ Emissions",
+                                             style = "color: white; font-size: 25px; font-weight: regular; white-space: normal; word-break: break-word; max-width: 100%; margin-bottom: 10px;"
+                                     ),
+                                     
                                      div(style = "min-width: 900px; min-height: 300px;",
                                          plotOutput("country_plot_output",
                                                     height = "50vh", width = "100%", fill = TRUE

@@ -538,15 +538,15 @@ navbarPage(
                     fluidRow(
                       column(width = 12,
                              div(style = "text-align: center;",
-                                 div(style = "display: inline-block; margin: 0 10px;",
+                                 div(style = "display: inline-block; margin: 10px;",
                                      actionButton("compare_species_input",
                                                   tagList(icon("fish", style = "margin-right: 8px;"), "Compare Species"),
                                                   class = "btn btn-lg")),
-                                 div(style = "display: inline-block; margin: 0 10px;",
+                                 div(style = "display: inline-block; margin: 10px;",
                                      actionButton("compare_countries_input",
                                                   tagList(icon("earth-americas", style = "margin-right: 8px;"), "Compare Countries"),
                                                   class = "btn btn-lg")),
-                                 div(style = "display: inline-block; margin: 0 10px;",
+                                 div(style = "display: inline-block; margin: 10px;",
                                      actionButton("select_country_input",
                                                   tagList(icon("flag", style = "margin-right: 8px;"), "Select a Country"),
                                                   class = "btn btn-lg"))

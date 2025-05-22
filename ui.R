@@ -531,7 +531,10 @@ navbarPage(
                     style = "scrollbar-width: auto; max-height: calc(100vh - 60px); padding-bottom: 120px;",
                     
                     # Header Row ----
-                    fluidRow(tags$hr()),
+                    fluidRow(
+                      tags$p("Compare Seafood Emissions", style = "color: white; font-size: 30px; font-weight: bold; white-space: normal; padding-left: 50px; padding-right: 50px; text-align: center;"),
+                      tags$p("Explore our dataset combining fishing vessel emissions from Global Fishing Watch with catch data from the FAO.", style = "color: white; font-size: 18px; font-weight: bold; white-space: normal; ; padding-left: 50px; padding-right: 50px; text-align: center;")
+                    ),
                     fluidRow(
                       column(width = 12,
                              div(style = "text-align: center;",
@@ -623,25 +626,27 @@ navbarPage(
                       )
                     ),
                     
+                    
                     # --- Bottom collabsable bar  ------------------------------------------
+                    
                     # ---- Collapsible Bottom Bar Wrapper ----
                     div(
                       id = "bottom_control_bar",
                       style = "position: fixed;
-           bottom: 0;
-           width: 100vw;
-           background-color: #F9F9F9;
-           padding: 10px 20px;
-           z-index: 2000;
-           border-top: 1px solid #ccc;",
+                               bottom: 0;
+                               width: 100vw;
+                               background-color: #F9F9F9;
+                               padding: 10px 20px;
+                               z-index: 2000;
+                               border-top: 1px solid #ccc;",
                       
                       # Toggle Button Wrapper (same style as sidebar)
                       div(style = "position: absolute;
-              top: -55px;  /* places it above the bar */
-              right: 15%;
-              width: 40px;
-              height: 50px;
-              z-index: 2001;",
+                                  top: -55px;
+                                  right: 15%;
+                                  width: 40px;
+                                  height: 50px;
+                                  z-index: 2001;",
                           
                           # Background behind the icon
                             div(style = "position: absolute;
@@ -668,10 +673,10 @@ navbarPage(
                                                 z-index: 2001;")
                                             ),
                       
-                      # ---- Your Bottom Bar Content ----
+                      # ---- Bottom collapsible bar ----
                       fluidRow(
                         column(width = 6,
-                               div(style = "border-radius: 8px; width: 50%; min-width: 150px; max-width: 200px",
+                               div(style = "border-radius: 8px; width: 50%; min-width: 150px; max-width: 200px;",
                                    tags$span("Select Year"),
                                    infoPopup(
                                      id = "year_plot_popup",
@@ -683,6 +688,9 @@ navbarPage(
                                                step = 1, sep = "", width = "100%", ticks = TRUE)
                                )
                         ),
+                        
+                        
+                        
                         column(width = 6,
                                div(style = "display: flex; justify-content: flex-end;",
                                    div(style = "display: flex; align-items: center; gap: 6px; margin-right: 15px;",
@@ -697,7 +705,7 @@ navbarPage(
                                        prettyRadioButtons(
                                          inputId = "unit_plot_toggle_input",
                                          label = NULL,
-                                         choices = c("Total Emissions" = "total", "Per Unit Catch" = "per_unit"),
+                                         choices = c("Total Emissions" = "total", "Emissions Per Unit Catch" = "per_unit"),
                                          selected = "total",
                                          inline = TRUE,
                                          status = "warning"

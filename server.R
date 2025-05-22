@@ -596,7 +596,7 @@ server <- function(input, output, session) {
       div(style = "width: 100%; text-align: center;",
           tags$h4(
             HTML("&#8593; Please select a country."),
-            style = "color: #DA8D03;
+            style = "color: #08C4E5;
                font-size: 20px;
                font-weight: bold;
                white-space: normal;
@@ -623,8 +623,6 @@ server <- function(input, output, session) {
   # Create plot ----------------------------------------------------------------
   output$species_bar_plot_output <- renderPlot({
     
-    
-    
     req(input$selected_country_input)
     
     show_per_unit <- input$unit_plot_toggle_input == "per_unit"
@@ -632,10 +630,13 @@ server <- function(input, output, session) {
     # Filter by selected country and year
     filtered_select_country <- species_data |>
       filter(country_name == input$selected_country_input,
-             year == input$year_slider_input_plot) |>
-      filter(
-        if (show_per_unit) emissions_per_ton >= 1 else sum_emissions >= 1
-      )
+             year == input$year_slider_input_plot) 
+    
+    # ---- Safety check: Abort if no usable data ----
+    validate(
+      need(nrow(filtered_select_country) > 0,
+           " ⚠️ This country does not have catch reported for the selected year. Please pick another country or year.")
+    )
     
     # Define x values
     x_var <- if (isTRUE(show_per_unit)) {
@@ -643,6 +644,7 @@ server <- function(input, output, session) {
     } else {
       filtered_select_country$sum_emissions
     }
+
     
     # Define x-axis text labels for each bar
     x_label <- if (isTRUE(show_per_unit)) {
@@ -653,12 +655,20 @@ server <- function(input, output, session) {
     
     # ---- Dynamic axis breaks and labels ----
     raw_max <- max(x_var, na.rm = TRUE)
+    raw_min <- min(x_var, na.rm = TRUE)
+    
+    # fallback: if raw_max == raw_min (flat bars or 1 value)
+    if (raw_max == raw_min || raw_max == 0 || is.infinite(raw_max)) {
+      raw_max <- raw_max + 1
+      raw_min <- 0
+    }
     
     if (!show_per_unit) {
       base_step <- 10^(floor(log10(raw_max)))
       step <- base_step
       
-      # Increase step until we get ≤ 4 breaks *below* or equal to raw_max
+      if (step == 0) step <- 1  # avoid zero step
+      
       repeat {
         candidate_breaks <- seq(0, raw_max, by = step)
         if (length(candidate_breaks) <= 4) break
@@ -674,8 +684,10 @@ server <- function(input, output, session) {
       x_breaks <- seq(0, raw_max, by = step)
       x_labels <- x_breaks
     }
-    max_x <- max(x_var, na.rm = TRUE) 
     
+    max_x <- raw_max  # safe for use later
+      
+
     ggplot(data = filtered_select_country) +
       
       geom_vline(xintercept = x_breaks,

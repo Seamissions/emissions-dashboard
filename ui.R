@@ -587,7 +587,7 @@ navbarPage(
                                  div(id = "country_plot",
 
                                      tags$h4("Top Emitting Fishing Fleets",
-                                             style = "color: white; font-size: 25px; font-weight: bold; white-space: normal; word-break: break-word; max-width: 100%; margin-bottom: 10px;"
+                                             style = "color: #DA8D03; font-size: 25px; font-weight: bold; white-space: normal; word-break: break-word; max-width: 100%; margin-bottom: 10px;"
                                      ),
                                      
                                      tags$h4("Annual CO₂ Emissions",
@@ -604,8 +604,12 @@ navbarPage(
                                  # ---- ISSCAAP Plot ----
                                  shinyjs::hidden(
                                    div(id = "isscaap_plot",
-                                       tags$h4("Annual CO₂ Emissions Top Species Groups",
-                                               style = "color: white; font-size: 25px; font-weight: bold; white-space: normal; word-break: break-word; max-width: 100%; margin-bottom: 10px;"
+                                       tags$h4("Top Emitting Species Groups",
+                                               style = "color: #DA8D03; font-size: 25px; font-weight: bold; white-space: normal; word-break: break-word; max-width: 100%; margin-bottom: 10px;"
+                                       ),
+                                       
+                                       tags$h4("Annual CO₂ Emissions",
+                                               style = "color: white; font-size: 25px; font-weight: regular; white-space: normal; word-break: break-word; max-width: 100%; margin-bottom: 10px;"
                                        ),
                                        div(style = "min-width: 900px; min-height: 300px;",
                                            plotOutput("isscaap_plot_output",

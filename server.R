@@ -686,7 +686,7 @@ server <- function(input, output, session) {
     }
     
     max_x <- raw_max  # safe for use later
-      
+    min_x <- raw_min  
 
     ggplot(data = filtered_select_country) +
       

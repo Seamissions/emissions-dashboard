@@ -748,28 +748,6 @@ server <- function(input, output, session) {
   })
   
   
-  
-  # ----- Bottom bar plot page ----
-  observeEvent(input$toggle_bottom_bar, {
-    shinyjs::toggle(id = "bottom_control_bar", anim = TRUE,
-                    animType = "fade")
-  })
-  
-
-observeEvent(input$toggle_bottom_bar, {
-  shinyjs::toggle(id = "bottom_control_bar", anim = TRUE,
-                  animType = "fade")
-  shinyjs::toggle(id = "toggle_bottom_bar_open_button", anim = TRUE,
-                  animType = "fade")
-})
-
-observeEvent(input$toggle_bottom_bar_open, {
-  shinyjs::toggle(id = "bottom_control_bar", anim = TRUE,
-                  animType = "fade")
-  shinyjs::toggle(id = "toggle_bottom_bar_open_button", anim = TRUE,
-                  animType = "fade")
-})
-
 
 # END Seafood Emissions Explorer
 

@@ -22,6 +22,7 @@ ui <-
     )
     
   )
+
 navbarPage(
   title = "Seamissions Explorer",
   header = NULL, 
@@ -222,7 +223,7 @@ navbarPage(
                               
                               # Background layer behind the sidebar button (below icon)
                               div(style = "position: absolute;
-                                           top: 0; left: 0;
+                                           top: 0px; left: 0px;
                                            width: 40px; height: 50px;
                                            background-color: #F9F9F9;
                                            border-radius: 6px;
@@ -233,8 +234,8 @@ navbarPage(
                                            label = NULL,
                                            icon = icon("angle-left", style = "font-size: 25px; color: #DA8D03;margin-left: -15px;"),
                                            style = "position: absolute;
-                                                    top: 0;
-                                                    left: 0;
+                                                    top: 0px;
+                                                    left: 0px;
                                                     width: 40px;
                                                     height: 50px;
                                                     background-color: transparent;
@@ -504,287 +505,192 @@ navbarPage(
                   ) # END map container
   ), # END emissions map tab
   
+  
   # ------------------------------------------------------------------------------------------------------------------
   # ---- Compare Seafood Emissions Page ------------------------------------------------------------------------------
   # ------------------------------------------------------------------------------------------------------------------
   
-  shiny::tabPanel("Compare Seafood Emissions",
-                  tags$head(
-                    tags$style(HTML("
-      .plot-button {
-        background-color: #08C4E5 !important;
-        color: white !important;
-        border: none !important;
-      }
-      .plot-button-active {
-        background-color: #F9B928 !important;
-        color: black !important;
-      }
-    
-    "))
-                  ),
-                  
-                  
-                  
-                  # Scrollable body
-                  div(
-                    style = "scrollbar-width: auto; max-height: calc(100vh - 60px); padding-bottom: 120px;",
-                    
-                    # Header Row ----
-                    fluidRow(
-                      tags$p("Compare Seafood Emissions", style = "color: white; font-size: 30px; font-weight: bold; white-space: normal; padding-left: 50px; padding-right: 50px; text-align: center;"),
-                      tags$p("Explore our dataset, which links fishing vessel emissions from Global Fishing Watch with catch data from the Food and Agriculture Organization (FAO). To ensure non-broadcasting vessel emissions — an important share of total fishing emissions — were not excluded, we redistributed them across all countries that reported catch for a given region. This approach allowed us to include all emissions in our per-species estimates. As a result, AIS-broadcasting countries may appear to have higher emissions than they are actually responsible for.", style = "color: white; font-size: 18px; font-weight: bold; white-space: normal; ; padding-left: 50px; padding-right: 50px; text-align: center;"),
-                      ),
-                    
-                    
-                    fluidRow(
-                      div(
-                        style = "display: flex; justify-content: center; align-items: center; gap: 5px; flex-wrap: wrap;",
-                        id = "learn_more_link2",
-                        
-                        tags$p(
-                          "Click here",
-                          style = "font-weight: 600; color: white; cursor: pointer; text-decoration: underline; display: flex; flex-wrap: wrap;"
-                        ),
-                        
-                        tags$p(
-                          "to learn more about the data and its limitations.",
-                          style = "font-weight: 400; color: white; cursor: pointer; display: flex; flex-wrap: wrap;"
-                        )
-                      )
-                    ),
-                    
-                    fluidRow(
-                      column(width = 12,
-                             div(style = "text-align: center;",
-                                 div(style = "display: inline-block; margin: 10px;",
-                                     actionButton("compare_species_input",
-                                                  tagList(icon("fish", style = "margin-right: 8px;"), "Compare Species"),
-                                                  class = "btn btn-lg")),
-                                 div(style = "display: inline-block; margin: 10px;",
-                                     actionButton("compare_countries_input",
-                                                  tagList(icon("earth-americas", style = "margin-right: 8px;"), "Compare Countries"),
-                                                  class = "btn btn-lg")),
-                                 div(style = "display: inline-block; margin: 10px;",
-                                     actionButton("select_country_input",
-                                                  tagList(icon("flag", style = "margin-right: 8px;"), "Select a Country"),
-                                                  class = "btn btn-lg"))
-                             )
-                      )
-                    ),
-                    
-                    # Country Selector (initially hidden) ----
-                    shinyjs::hidden(
-                      div(id = "country_select_plot_input",
-                          fluidRow(
-                            column(width = 12,
-                                   div(style = "text-align: center;",
-                                       div(style = "display: inline-block; margin-right: 20px;",
-                                           pickerInput("selected_country_input",
-                                                       label = "Select a Country:",
-                                                       choices = c("Select a country" = "", sort(unique(species_data$country_name))),
-                                                       selected = NULL,
-                                                       options = list(`live-search` = TRUE, `noneSelectedText` = "All Countries")
-                                           )
-                                       ),
-                                       div(style = "display: inline-block;",
-                                           tags$h4(textOutput("selected_country_total"),
-                                                   style = "color: white; font-weight: bold; margin-top: 25px;")
-                                       )
-                                   )
-                            )
-                          )
-                      )
-                    ),
-                    
-                    # --- Plot Section ---------------------------------------------------
-                    fluidRow(
-                      column(width = 12,
-                             div(style = "background-color:#0B2232; margin: 30px 20px; overflow: visible !important;",
-                                 
-                                 # ---- Country Plot ----
-                                 div(id = "country_plot",
-
-                                     tags$h4("Top Emitting Fishing Fleets",
-                                             style = "color: #DA8D03; font-size: 25px; font-weight: bold; white-space: normal; word-break: break-word; max-width: 100%; margin-bottom: 10px;"
-                                     ),
-                                     
-                                     tags$h4("Annual CO₂ Emissions",
-                                             style = "color: white; font-size: 25px; font-weight: regular; white-space: normal; word-break: break-word; max-width: 100%; margin-bottom: 10px;"
-                                     ),
-                                     
-                                     div(style = "min-width: 900px; min-height: 300px;",
-                                         plotOutput("country_plot_output",
-                                                    height = "50vh", width = "100%", fill = TRUE
-                                         ) |> withSpinner(type = 4, color = '#08C4E5')
-                                     )
-                                 ),
-                                 
-                                 # ---- ISSCAAP Plot ----
-                                 shinyjs::hidden(
-                                   div(id = "isscaap_plot",
-                                       tags$h4("Top Emitting Species Groups",
-                                               style = "color: #DA8D03; font-size: 25px; font-weight: bold; white-space: normal; word-break: break-word; max-width: 100%; margin-bottom: 10px;"
-                                       ),
-                                       
-                                       tags$h4("Annual CO₂ Emissions",
-                                               style = "color: white; font-size: 25px; font-weight: regular; white-space: normal; word-break: break-word; max-width: 100%; margin-bottom: 10px;"
-                                       ),
-                                       div(style = "min-width: 900px; min-height: 300px;",
-                                           plotOutput("isscaap_plot_output",
-                                                      height = "50vh", width = "100%", fill = TRUE
-                                           ) |> withSpinner(type = 4, color = '#08C4E5')
-                                       )
-                                   )
-                                 ),
-                                 
-                                 # ---- Species Plot ----
-                                 div(id = "species_bar_plot_wrapper",
-                                     uiOutput("dynamic_country_header"),
-                                     shinyjs::hidden(
-                                       div(id = "species_bar_plot",
-                                           div(style = "min-width: 900px; min-height: 300px;",
-                                               plotOutput("species_bar_plot_output",
-                                                          height = "50vh", width = "100%", fill = TRUE)
-                                               |> withSpinner(type = 4, color = '#08C4E5')
-                                           )
-                                       )
-                                     )
-                                 )
-                             )
-                      )
-                    ),
-                    
-                    
-                    # --- Bottom collabsable bar  ------------------------------------------
-                    
-                    # ---- Collapsible Bottom Bar Wrapper ----
-                    div(
-                      id = "bottom_control_bar",
-                      style = "position: fixed;
-                               bottom: 0;
-                               width: 100vw;
-                               background-color: #F9F9F9;
-                               padding: 10px 20px;
-                               z-index: 2000;
-                               border-top: 1px solid #ccc;",
-                      
-                      # Toggle Button Wrapper (same style as sidebar)
-                      div(style = "position: absolute;
-                                  top: -55px;
-                                  right: 15%;
-                                  width: 40px;
-                                  height: 50px;
-                                  z-index: 2001;",
-                          
-                          # Background behind the icon
-                            div(style = "position: absolute;
-                                          top: 28px;
-                                          right: 9px; 
-                                          width: 45px;
-                                          height: 50px;
-                                          bottom: -2px;
-                                          background-color: #F9F9F9;
-                                          border-radius: 6px;
-                                          z-index: 2000;"),
-                          
-                          # Actual toggle button
-                          actionButton("toggle_bottom_bar",
-                                       label = NULL,
-                                       icon = icon("angle-down", style = "font-size: 25px; color: #DA8D03; margin-left: -2px;"),
-                                       style = "position: absolute;
-                                                top: 20px;
-                                                right: 10px;
-                                                width: 40px;
-                                                height: 40px;
-                                                background-color: transparent;
-                                                border: none;
-                                                z-index: 2001;")
-                                            ),
-                      
-                      # ---- Bottom collapsible bar ----
-                      fluidRow(
-                        column(width = 6,
-                               div(style = "border-radius: 8px; width: 50%; min-width: 150px; max-width: 200px;",
-                                   tags$span("Select Year"),
-                                   infoPopup(
-                                     id = "year_plot_popup",
-                                     description = "Data displayed in the plot is aggregated by year. Please select a year to compare.",
-                                     data_source = NULL
-                                   ),
-                                   sliderInput("year_slider_input_plot", NULL,
-                                               min = 2016, max = 2022, value = 2022,
-                                               step = 1, sep = "", width = "100%", ticks = TRUE)
-                               )
-                        ),
-                        
-                        
-                        
-                        column(width = 6,
-                               div(style = "display: flex; justify-content: flex-end;",
-                                   div(style = "display: flex; align-items: center; gap: 6px; margin-right: 15px;",
-                                       tags$span("Plot Units:", style = "color: black; font-weight: 500; font-size: 17px;"),
-                                       infoPopup(
-                                         id = "total_emissions_unit_plot_popup",
-                                         description = "Total CO₂ emission in metric tons based on broadcasted emissions and redistributed non-broadcasted emissions.",
-                                         data_source = "Global Fishing Watch"
-                                       )
-                                   ),
-                                   div(style = "margin-top: 15px; padding: 10px;",
-                                       prettyRadioButtons(
-                                         inputId = "unit_plot_toggle_input",
-                                         label = NULL,
-                                         choices = c("Total Emissions" = "total", "Emissions Per Unit Catch" = "per_unit"),
-                                         selected = "total",
-                                         inline = TRUE,
-                                         status = "warning"
-                                       )
-                                   )
-                               )
-                        )
-                      )
-                    ), # END bottom bar
-                    
-                    # Floating Toggle Button - Show bottom bar when hidden
-                    div(
-                      id = "toggle_bottom_bar_open_button",
-                      style = "position: fixed;
-                               bottom: -15px;
-                               right: 15%;
-                               width: 40px;
-                               height: 50px;
-                               z-index: 1999;
-                               display: none;",
-                      
-                      # Background box
-                      div(style = "position: absolute;
-                                  top: 0;
-                                  width: 45px;
-                                  height: 40px;
-                                  bottom: -10px;
-                                  background-color: #F9F9F9;
-                                  border-radius: 6px;
-                                  z-index: 1998;"),
-                      
-                      # Button (perfectly aligned on top of background)
-                      actionButton("toggle_bottom_bar_open",
-                                   label = NULL,
-                                   icon = icon("layer-group", style = "font-size: 20px; color: #DA8D03; margin-left: -2px; padding-top: 5px;"),
-                                   style = "position: absolute;
-                        top: -10px;
-                        right: -4px;
-                        width: 40px;
-                        height: 40px;
-                        background-color: transparent;
-                        border: none;
-                        z-index: 1999;")
-                    )
-                    
-                    
-                  )
-                  
-  ), # END tabPanel
+shiny::tabPanel("Compare Seafood Emissions",
   
+  useShinyjs(),
+  tags$style(HTML("
+  /* Darken the circle border */
+  .pretty.p-default input[type='radio'] ~ .state label:before {
+    border: 1px solid black !important;
+  }
+
+  /* Make the selected dot black */
+  .pretty.p-default input[type='radio']:checked ~ .state label:after {
+    background-color: #08C4E5 !important;
+  }
+
+  /* Add spacing between inline radio buttons */
+  .pretty.p-default {
+    margin-bottom: 8px;
+    margin-top: 8px;
+  }
+")),
+  
+  
+  
+  # Main Content ----------------------------------------------------------------
+  div(id = "plot_main_content",
+      div(
+        style = "scrollbar-width: auto; min-height: 100px;",
+        
+        # Header Row ----
+        fluidRow(
+          tags$p("Compare Seafood Emissions", style = "color: white; font-size: 30px; font-weight: bold; white-space: normal; padding-left: 50px; padding-right: 50px; text-align: center;"),
+          tags$p("Explore our dataset, which links fishing vessel emissions from Global Fishing Watch with catch data from the Food and Agriculture Organization (FAO).", style = "color: white; font-size: 18px; font-weight: bold; white-space: normal; padding-left: 50px; padding-right: 50px; text-align: center;")
+        ),
+        
+        fluidRow(
+          div(
+            style = "display: flex; justify-content: center; align-items: center; gap: 5px; flex-wrap: wrap;",
+            id = "learn_more_link2",
+            tags$p("Click here", style = "font-weight: 600; color: white; cursor: pointer; text-decoration: underline; display: flex; flex-wrap: wrap;"),
+            tags$p("to learn more about the data and its limitations.", style = "font-weight: 400; color: white; cursor: pointer; display: flex; flex-wrap: wrap;")
+          )
+        ),
+        
+        fluidRow(
+          column(width = 12,
+                 div(style = "text-align: center;",
+                     div(style = "display: inline-block; margin: 10px;",
+                         actionButton("compare_species_input",
+                                      tagList(icon("fish", style = "margin-right: 8px;"), "Compare Species"),
+                                      class = "btn btn-lg"
+                         )
+                     ),
+                     div(style = "display: inline-block; margin: 10px;",
+                         actionButton("compare_countries_input",
+                                      tagList(icon("earth-americas", style = "margin-right: 8px;"), "Compare Countries"),
+                                      class = "btn btn-lg"
+                         )
+                     ),
+                     div(style = "display: inline-block; margin: 10px;",
+                         actionButton("select_country_input",
+                                      tagList(icon("flag", style = "margin-right: 8px;"), "Select a Country"),
+                                      class = "btn btn-lg"
+                         )
+                     )
+                 )
+          )
+        ),
+        
+        shinyjs::hidden(
+          div(id = "country_select_plot_input",
+              fluidRow(
+                column(width = 12,
+                       div(style = "text-align: center;",
+                           div(style = "display: inline-block; margin-right: 20px;",
+                               pickerInput("selected_country_input", "Select a Country:", choices = c("Select a country" = "", sort(unique(species_data$country_name))), selected = NULL, options = list(`live-search` = TRUE, `noneSelectedText` = "All Countries"))
+                           ),
+                           div(style = "display: inline-block;",
+                               tags$h4(textOutput("selected_country_total"), style = "color: white; font-weight: bold; margin-top: 25px;")
+                           )
+                       )
+                )
+              )
+          )
+        ),
+        
+        fluidRow(
+          column(width = 12,
+                 div(style = "background-color:#0B2232; margin: 30px 20px; overflow: visible !important;",
+                     div(id = "country_plot",
+                         tags$h4("Top Emitting Fishing Fleets", style = "color: #DA8D03; font-size: 25px; font-weight: bold;"),
+                         tags$h4("Annual CO₂ Emissions", style = "color: white; font-size: 25px;"),
+                         div(style = "min-width: 900px; min-height: 300px;",
+                             plotOutput("country_plot_output", height = "50vh", width = "100%") |> withSpinner(type = 4, color = '#08C4E5')
+                         )
+                     ),
+                     shinyjs::hidden(
+                       div(id = "isscaap_plot",
+                           tags$h4("Top Emitting Species Groups", style = "color: #DA8D03; font-size: 25px; font-weight: bold;"),
+                           tags$h4("Annual CO₂ Emissions", style = "color: white; font-size: 25px;"),
+                           div(style = "min-width: 900px; min-height: 300px;",
+                               plotOutput("isscaap_plot_output", height = "50vh", width = "100%") |> withSpinner(type = 4, color = '#08C4E5')
+                           )
+                       )
+                     ),
+                     div(id = "species_bar_plot_wrapper",
+                         uiOutput("dynamic_country_header"),
+                         shinyjs::hidden(
+                           div(id = "species_bar_plot",
+                               div(style = "min-width: 900px; min-height: 300px;",
+                                   plotOutput("species_bar_plot_output", height = "50vh", width = "100%") |> withSpinner(type = 4, color = '#08C4E5')
+                               )
+                           )
+                         )
+                     )
+                 )
+          )
+        )
+      )
+  ),
+  
+  fluidRow(
+    # ---- Controls Row -----------------------------------------------------
+    div(style = "display: flex; justify-content: center; flex-wrap: wrap;",
+        
+        # ---- Plot Unit Toggle -----------------------------------------------
+        div(style = "z-index: 1000;
+              background-color: rgba(249, 249, 249, 0.9);
+              padding: 8px 16px;
+              border-radius: 8px;
+              width: 250px;
+              margin: 10px;",
+            
+            tags$span("Select Plot Unit"),
+            infoPopup(
+              id = "plot_unit_popup",
+              description = "Update this....",
+              data_source = NULL,
+              learn_more = NULL
+            ),
+            
+            prettyRadioButtons(
+              inputId = "unit_plot_toggle_input",
+              label = NULL,
+              choices = c("Total Emissions" = "total", "Emissions Per Unit Catch" = "per_unit"),
+              selected = "total",
+              inline = FALSE,
+              status = "primary"
+            )
+        ), # END plot unit box
+        
+        # ---- Year Selector ---------------------------------------------------
+        div(style = "z-index: 1000;
+              background-color: rgba(249, 249, 249, 0.9);
+              padding: 8px 16px;
+              border-radius: 8px;
+              width: 250px;
+              margin: 10px;",
+            
+            tags$span("Select Year"),
+            infoPopup(
+              id = "year_plot_popup",
+              description = "Data displayed in the map grid is aggregated by year. Use the slider to select a year or click the play button to animate emissions trends over time.",
+              data_source = NULL,
+              learn_more = NULL
+            ),
+            
+            sliderInput("year_slider_input_plot",
+                        NULL,
+                        min = 2016,
+                        max = 2022,
+                        value = 2022,
+                        step = 1,
+                        sep = "",
+                        width = "100%",
+                        ticks = TRUE)
+        ) # END year box
+    )
+    
+  ) # END Fluid Row
+  
+  ), # END tabPanel
   
 
   # ------------------------------------------------------------------------------------------------------------------

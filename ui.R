@@ -529,6 +529,17 @@ shiny::tabPanel("Compare Seafood Emissions",
     margin-bottom: 8px;
     margin-top: 8px;
   }
+  
+     .plot-button {
+        background-color: #08C4E5 !important;
+        color: white !important;
+        border: none !important;
+      }
+      .plot-button-active {
+        background-color: #F9B928 !important;
+        color: black !important;
+      }
+
 ")),
   
   

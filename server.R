@@ -655,9 +655,9 @@ server <- function(input, output, session) {
     
     # Define x-axis text labels for each bar
     x_label <- if (isTRUE(show_per_unit)) {
-      paste0(comma(round(filtered_select_country$emissions_per_ton, 2)), " MT")
+      paste0(comma(round(filtered_select_country$emissions_per_ton, 2)))
     } else {
-      paste0(comma(round(filtered_select_country$sum_emissions, 2)), " MT")
+      paste0(comma(round(filtered_select_country$sum_emissions, 2)))
     }
     
     # ---- Dynamic axis breaks and labels ----
@@ -705,13 +705,7 @@ server <- function(input, output, session) {
                    y = reorder(isscaap_group, sum_emissions)),
                fill = "#08C4E5") +
       
-      # Add image aligned under the bar
-      geom_image(aes(
-        x = 0,
-        y = reorder(isscaap_group, sum_emissions),
-        image = image
-      ), size = .12, asp = 1) +  # Adjust size/asp as needed
-      
+
       geom_text(aes(x = x_var + 0.15 * max_x,
                     y = reorder(isscaap_group, sum_emissions),
                     label = x_label),

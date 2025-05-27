@@ -186,7 +186,7 @@ navbarPage(
                           tags$p("to learn more about our project, the data behind it, and its intended use.",
                                  style = "font-weight: 400; color: white; cursor: pointer; display: flex; flex-wrap: wrap;")
                       ) # END text div
-                          )
+                          ) # END fluidRow
                   ) # END div 
                   ) # END Hero
                 
@@ -514,6 +514,12 @@ shiny::tabPanel("Compare Seafood Emissions",
   
   useShinyjs(),
   tags$style(HTML("
+  .dropdown-menu.inner {
+    max-height: 300px !important;
+    overflow-y: auto !important;
+  }
+")),
+  tags$style(HTML("
   /* Darken the circle border */
   .pretty.p-default input[type='radio'] ~ .state label:before {
     border: 1px solid black !important;
@@ -552,17 +558,9 @@ shiny::tabPanel("Compare Seafood Emissions",
         # Header Row ----
         fluidRow(
           tags$p("Compare Seafood Emissions", style = "color: white; font-size: 30px; font-weight: bold; white-space: normal; padding-left: 50px; padding-right: 50px; text-align: center;"),
-          tags$p("Explore our dataset, which links fishing vessel emissions from Global Fishing Watch with catch data from the Food and Agriculture Organization (FAO).", style = "color: white; font-size: 18px; font-weight: bold; white-space: normal; padding-left: 50px; padding-right: 50px; text-align: center;")
+          tags$p("Explore our dataset, which links fishing vessel emissions from Global Fishing Watch with annual catch report data from the Food and Agriculture Organization (FAO) of the United Nations.", style = "color: white; font-size: 18px; font-weight: bold; white-space: normal; padding-left: 50px; padding-right: 50px; text-align: center;")
         ),
         
-        fluidRow(
-          div(
-            style = "display: flex; justify-content: center; align-items: center; gap: 5px; flex-wrap: wrap;",
-            id = "learn_more_link2",
-            tags$p("Click here", style = "font-weight: 600; color: white; cursor: pointer; text-decoration: underline; display: flex; flex-wrap: wrap;"),
-            tags$p("to learn more about the data and its limitations.", style = "font-weight: 400; color: white; cursor: pointer; display: flex; flex-wrap: wrap;")
-          )
-        ),
         
         fluidRow(
           column(width = 12,
@@ -610,18 +608,18 @@ shiny::tabPanel("Compare Seafood Emissions",
           column(width = 12,
                  div(style = "background-color:#0B2232; margin: 30px 20px; overflow: visible !important;",
                      div(id = "country_plot",
-                         tags$h4("Top Emitting Fishing Fleets", style = "color: #DA8D03; font-size: 25px; font-weight: bold;"),
-                         tags$h4("Annual CO₂ Emissions", style = "color: white; font-size: 25px;"),
+                         tags$h4("Top Emitting Fishing Fleets", style = "color: #DA8D03; font-size: 25px; font-weight: bold; text-align: center;"),
+                         tags$h4("Annual CO₂ Emissions", style = "color: white; font-size: 25px; text-align: center;"),
                          div(style = "min-width: 1500px; min-height: 300px;",
-                             plotOutput("country_plot_output", height = "50vh", width = "100%") |> withSpinner(type = 4, color = '#08C4E5')
+                             plotOutput("country_plot_output", height = "60vh", width = "100%") |> withSpinner(type = 4, color = '#08C4E5')
                          )
                      ),
                      shinyjs::hidden(
                        div(id = "isscaap_plot",
-                           tags$h4("Top Emitting Species Groups", style = "color: #DA8D03; font-size: 25px; font-weight: bold;"),
-                           tags$h4("Annual CO₂ Emissions", style = "color: white; font-size: 25px;"),
+                           tags$h4("Top Emitting Species Groups", style = "color: #DA8D03; font-size: 25px; font-weight: bold; text-align: center;"),
+                           tags$h4("Annual CO₂ Emissions", style = "color: white; font-size: 25px; text-align: center;"),
                            div(style = "min-width: 1500px; min-height: 300px;",
-                               plotOutput("isscaap_plot_output", height = "50vh", width = "100%") |> withSpinner(type = 4, color = '#08C4E5')
+                               plotOutput("isscaap_plot_output", height = "60vh", width = "100%") |> withSpinner(type = 4, color = '#08C4E5')
                            )
                        )
                      ),
@@ -629,8 +627,8 @@ shiny::tabPanel("Compare Seafood Emissions",
                          uiOutput("dynamic_country_header"),
                          shinyjs::hidden(
                            div(id = "species_bar_plot",
-                               div(style = "min-width: 150px; min-height: 300px;",
-                                   plotOutput("species_bar_plot_output", height = "50vh", width = "100%") |> withSpinner(type = 4, color = '#08C4E5')
+                               div(style = "min-width: 1600px; min-height: 300px;",
+                                   uiOutput("species_bar_plot_ui") |> withSpinner(type = 4, color = '#08C4E5')
                                )
                            )
                          )
@@ -698,8 +696,18 @@ shiny::tabPanel("Compare Seafood Emissions",
                         ticks = TRUE)
         ) # END year box
     )
-    
-  ) # END Fluid Row
+   
+  ), # END Fluid Row
+  
+  fluidRow(
+    div(style = "display: flex; justify-content: center; align-items: center; gap: 5px; flex-wrap: wrap;",
+        id = "learn_more_link",
+        tags$p("Click here",
+               style = "font-weight: 600; color: white; cursor: pointer; text-decoration: underline; display: flex; flex-wrap: wrap;"),
+        tags$p("to learn more about our project, the data behind it, and its intended use.",
+               style = "font-weight: 400; color: white; cursor: pointer; display: flex; flex-wrap: wrap;")
+    ) # END text div
+  ) # END fluidRow
   
   ), # END tabPanel
   

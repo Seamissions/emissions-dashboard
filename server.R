@@ -605,66 +605,98 @@ server <- function(input, output, session) {
           tags$h4(
             HTML("&#8593; Please select a country."),
             style = "color: #08C4E5;
-               font-size: 20px;
-               font-weight: bold;
-               white-space: normal;
-               word-break: break-word;
-               margin-bottom: 10px;"
+             font-size: 20px;
+             font-weight: bold;
+             white-space: normal;
+             word-break: break-word;
+             margin-bottom: 10px;"
           )
       )
     } else {
-      tags$h4(
-        paste(input$selected_country_input, "– Annual CO₂ Emissions By Species Group"),
-        style = "color: white;
-               font-size: 25px;
-               font-weight: bold;
-               white-space: normal;
-               word-break: break-word;
-               max-width: 100%;
-               margin-bottom: 10px;"
+      div(style = "width: 100%; text-align: center;",
+          tags$div(input$selected_country_input,
+                   style = "color: #DA8D03;
+                          font-size: 28px;
+                          font-weight: bold;
+                          margin-bottom: 4px;"
+          ),
+          tags$div("Annual CO₂ Emissions by Species Group",
+                   style = "color: white;
+                          font-size: 24px;
+                          font-weight: normal;"
+          )
       )
     }
   })
   
   
-  # Create plot ----------------------------------------------------------------
-  output$species_bar_plot_output <- renderPlot({
+  # ---- Selected County ISSCAAP Plots ---
+  # ---- Dynamic UI with height based on row count ----
+  output$species_bar_plot_ui <- renderUI({
+    req(input$selected_country_input)
     
+    filtered_data <- species_data |>
+      filter(
+        country_name == input$selected_country_input,
+        year == input$year_slider_input_plot
+      )
+    
+    # Estimate height: 60px per bar + 100px padding
+    dynamic_height <- 60 * nrow(filtered_data) + 100
+    
+    # Render plotOutput with dynamically calculated height
+    plotOutput("species_bar_plot_output", height = paste0(dynamic_height, "px"))
+  })
+  
+  # ---- Render Plot ----
+  output$species_bar_plot_output <- renderPlot({
     req(input$selected_country_input)
     
     show_per_unit <- input$unit_plot_toggle_input == "per_unit"
     
-    # Filter by selected country and year
+    # Filter for selected country/year
     filtered_select_country <- species_data |>
-      filter(country_name == input$selected_country_input,
-             year == input$year_slider_input_plot) 
+      filter(
+        country_name == input$selected_country_input,
+        year == input$year_slider_input_plot
+      )
     
-    # ---- Safety check: Abort if no usable data ----
     validate(
       need(nrow(filtered_select_country) > 0,
            " ⚠️ This country does not have catch reported for the selected year. Please pick another country or year.")
     )
     
+    # Number of species for selected country
+    num_species <- nrow(filtered_select_country)
+    
+    image_size <- case_when(
+      num_species <= 2  ~ 0.5,
+      num_species <= 5  ~ 0.25,
+      num_species <= 10  ~ 0.12,
+      num_species <= 15 ~ 0.08,
+      num_species <= 25 ~ 0.05,
+      TRUE              ~ 0.05
+    )
+    
+    
     # Define x values
-    x_var <- if (isTRUE(show_per_unit)) {
+    x_var <- if (show_per_unit) {
       filtered_select_country$emissions_per_ton
     } else {
       filtered_select_country$sum_emissions
     }
-
     
-    # Define x-axis text labels for each bar
-    x_label <- if (isTRUE(show_per_unit)) {
+    # Define x-axis text labels
+    x_label <- if (show_per_unit) {
       paste0(comma(round(filtered_select_country$emissions_per_ton, 2)))
     } else {
       paste0(comma(round(filtered_select_country$sum_emissions, 2)))
     }
     
-    # ---- Dynamic axis breaks and labels ----
+    # Dynamic axis setup
     raw_max <- max(x_var, na.rm = TRUE)
     raw_min <- min(x_var, na.rm = TRUE)
     
-    # fallback: if raw_max == raw_min (flat bars or 1 value)
     if (raw_max == raw_min || raw_max == 0 || is.infinite(raw_max)) {
       raw_max <- raw_max + 1
       raw_min <- 0
@@ -673,18 +705,14 @@ server <- function(input, output, session) {
     if (!show_per_unit) {
       base_step <- 10^(floor(log10(raw_max)))
       step <- base_step
-      
-      if (step == 0) step <- 1  # avoid zero step
-      
+      if (step == 0) step <- 1
       repeat {
         candidate_breaks <- seq(0, raw_max, by = step)
         if (length(candidate_breaks) <= 4) break
         step <- step * 2
       }
-      
       x_breaks <- candidate_breaks
       x_labels <- if (max(x_breaks) >= 1e6) paste0(x_breaks / 1e6, "M") else comma(x_breaks)
-      
     } else {
       max_x_axis <- ceiling(raw_max)
       step <- if (max_x_axis <= 4) 1 else ceiling(max_x_axis / 4)
@@ -693,38 +721,42 @@ server <- function(input, output, session) {
     }
     
     max_x <- raw_max
-    min_x <- raw_min  
-
+    
+    # ---- ggplot ----
     ggplot(data = filtered_select_country) +
+      geom_vline(xintercept = x_breaks, linetype = "dotted", color = "#AAAAAA", linewidth = 0.3) +
+      geom_col(aes(x = x_var, y = reorder(isscaap_group, sum_emissions)), fill = "#08C4E5") +
       
-      geom_vline(xintercept = x_breaks,
-                 linetype = "dotted",
-                 color = "#AAAAAA",
-                 linewidth = 0.3) +
-      geom_col(aes(x = x_var,
-                   y = reorder(isscaap_group, sum_emissions)),
-               fill = "#08C4E5") +
+      # Dynamically sized image icons
+      geom_image(
+        aes(x = 0, y = reorder(isscaap_group, sum_emissions), image = image),
+        size = image_size,
+        asp = 1
+      ) +
       
-
-      geom_text(aes(x = x_var + 0.15 * max_x,
-                    y = reorder(isscaap_group, sum_emissions),
-                    label = x_label),
-                color = "white",
-                size = 7) +
+      geom_text(
+        aes(x = x_var + 0.15 * max_x,
+            y = reorder(isscaap_group, sum_emissions),
+            label = x_label),
+        color = "white",
+        size = 7
+      ) +
       
       scale_x_continuous(
         breaks = x_breaks,
         labels = x_labels,
         expand = c(0, 0),
-        position = "top") +
+        position = "top"
+      ) +
       
       annotate("segment",
-               x =  0,
+               x = 0,
                xend = max_x,
                y = Inf,
                yend = Inf,
                color = "white",
                linewidth = 0.5) +
+      
       theme_void() +
       theme(
         legend.position = "none",
@@ -737,8 +769,7 @@ server <- function(input, output, session) {
       expand_limits(x = c(-0.05 * max_x, 1.5 * max_x))
   }, res = 100)
   
-  
-  # --- Text box for selected country’s total emissions ----
+  # ---- Emissions total text ----
   output$selected_country_total <- renderText({
     req(input$selected_country_input)
     
@@ -749,6 +780,7 @@ server <- function(input, output, session) {
     
     paste0(format(round(total, 2), big.mark = ","), " MT CO₂")
   })
+  
   
   
 

@@ -612,7 +612,7 @@ shiny::tabPanel("Compare Seafood Emissions",
                      div(id = "country_plot",
                          tags$h4("Top Emitting Fishing Fleets", style = "color: #DA8D03; font-size: 25px; font-weight: bold;"),
                          tags$h4("Annual CO₂ Emissions", style = "color: white; font-size: 25px;"),
-                         div(style = "min-width: 900px; min-height: 300px;",
+                         div(style = "min-width: 1500px; min-height: 300px;",
                              plotOutput("country_plot_output", height = "50vh", width = "100%") |> withSpinner(type = 4, color = '#08C4E5')
                          )
                      ),
@@ -620,7 +620,7 @@ shiny::tabPanel("Compare Seafood Emissions",
                        div(id = "isscaap_plot",
                            tags$h4("Top Emitting Species Groups", style = "color: #DA8D03; font-size: 25px; font-weight: bold;"),
                            tags$h4("Annual CO₂ Emissions", style = "color: white; font-size: 25px;"),
-                           div(style = "min-width: 900px; min-height: 300px;",
+                           div(style = "min-width: 1500px; min-height: 300px;",
                                plotOutput("isscaap_plot_output", height = "50vh", width = "100%") |> withSpinner(type = 4, color = '#08C4E5')
                            )
                        )
@@ -629,7 +629,7 @@ shiny::tabPanel("Compare Seafood Emissions",
                          uiOutput("dynamic_country_header"),
                          shinyjs::hidden(
                            div(id = "species_bar_plot",
-                               div(style = "min-width: 900px; min-height: 300px;",
+                               div(style = "min-width: 150px; min-height: 300px;",
                                    plotOutput("species_bar_plot_output", height = "50vh", width = "100%") |> withSpinner(type = 4, color = '#08C4E5')
                                )
                            )

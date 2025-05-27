@@ -488,7 +488,7 @@ server <- function(input, output, session) {
       ggflags::geom_flag(aes(x = 0,
                              y = reorder(country_name, sum_emissions),
                              country = iso2), size = 15) +
-      geom_text(aes(x = x_var + 0.09 * max_x,
+      geom_text(aes(x = x_var + 0.15 * max_x,
                     y = reorder(country_name, sum_emissions),
                     label = x_label),
                 color = "white",
@@ -502,7 +502,7 @@ server <- function(input, output, session) {
         panel.background = element_rect(fill = "#0B2232", color = NA),
         plot.background = element_rect(fill = "#0B2232", color = NA)) +
       expand_limits(x = c(-0.1 * max_x, 1.5 * max_x))
-  })
+  }, res = 100)
   
   # --- Plot comparing ISSCAAP groups ----
   output$isscaap_plot_output <- renderPlot({
@@ -511,6 +511,7 @@ server <- function(input, output, session) {
     
     filtered_isscaap <- top_isscaap |>
       filter(year == input$year_slider_input_plot)
+
     
     
     x_var <- if (isTRUE(show_per_unit)) {
@@ -558,10 +559,10 @@ server <- function(input, output, session) {
       
       # Add image aligned under the bar
       geom_image(aes(
-        x = -0.05 * max_x,
+        x = 0,
         y = reorder(isscaap_group, sum_emissions),
         image = image
-      ), size = 0.05, asp = 1.5) +  # Adjust size/asp as needed
+      ), size = .12, asp = 1) +  # Adjust size/asp as needed
       
       geom_text(aes(x = x_var + 0.12 * max_x,
                     y = reorder(isscaap_group, sum_emissions),
@@ -593,7 +594,7 @@ server <- function(input, output, session) {
         plot.background = element_rect(fill = "#0B2232", color = NA)
       ) +
       expand_limits(x = c(-0.1 * max_x, 1.5 * max_x))
-  })
+  }, res = 100)
   
   
   # --- Plot for selected country ISSCAAP groups -------------------------------
@@ -691,7 +692,7 @@ server <- function(input, output, session) {
       x_labels <- x_breaks
     }
     
-    max_x <- raw_max  # safe for use later
+    max_x <- raw_max
     min_x <- raw_min  
 
     ggplot(data = filtered_select_country) +
@@ -703,7 +704,15 @@ server <- function(input, output, session) {
       geom_col(aes(x = x_var,
                    y = reorder(isscaap_group, sum_emissions)),
                fill = "#08C4E5") +
-      geom_text(aes(x = x_var + 0.09 * max_x,
+      
+      # Add image aligned under the bar
+      geom_image(aes(
+        x = 0,
+        y = reorder(isscaap_group, sum_emissions),
+        image = image
+      ), size = .12, asp = 1) +  # Adjust size/asp as needed
+      
+      geom_text(aes(x = x_var + 0.15 * max_x,
                     y = reorder(isscaap_group, sum_emissions),
                     label = x_label),
                 color = "white",
@@ -732,7 +741,7 @@ server <- function(input, output, session) {
         plot.background = element_rect(fill = "#0B2232", color = NA)
       ) +
       expand_limits(x = c(-0.05 * max_x, 1.5 * max_x))
-  })
+  }, res = 100)
   
   
   # --- Text box for selected country’s total emissions ----

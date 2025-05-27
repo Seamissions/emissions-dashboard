@@ -33,6 +33,7 @@ library(rsconnect)
 library(pryr)
 library(ggflags)
 library(ggimage)
+library(magick)
 
 # ---- Load & prep data ---------------------------------------------------------------
 
@@ -71,6 +72,18 @@ species_data <- readRDS("data/species_data.rds")
 
 # --- Prep top isscaap data ----
 top_isscaap <- species_data |>
+  filter(
+    !isscaap_group %in% c(
+      "Miscellaneous aquatic invertebrates",
+      "Miscellaneous coastal fishes",
+      "Miscellaneous pelagic fishes",
+      "Miscellaneous demersal fishes",
+      "Miscellaneous diadromous fishes",
+      "Miscellaneous marine crustaceans",
+      "Miscellaneous marine molluscs"
+    )
+  ) |>
+ 
   group_by(isscaap_group, year, image) |>
   summarize(
     sum_emissions = sum(sum_emissions, na.rm = TRUE),
@@ -82,7 +95,6 @@ top_isscaap <- species_data |>
   arrange(desc(sum_emissions), .by_group = TRUE) |>
   slice_head(n = 10) |>
   ungroup()
-
 
 # ---- Define color palettes -------------------------------------------------
 blue_palette <- colorRamp(c("#20404F", "#4C9EA6", "#67D6E0", "#76F3FF", "#A9F2FF", "#DAF3FF", "#F6F8FF"))((1:256) / 256)

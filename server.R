@@ -435,9 +435,9 @@ server <- function(input, output, session) {
     }
     
     x_label <- if (isTRUE(show_per_unit)) {
-      paste0(comma(filtered_flags$emissions_per_ton), " MT")
+      paste0(comma(filtered_flags$emissions_per_ton))
     } else {
-      paste0(comma(filtered_flags$sum_emissions), " MT")
+      paste0(comma(filtered_flags$sum_emissions))
     }
     
     max_x <- max(x_var, na.rm = TRUE)

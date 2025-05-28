@@ -38,157 +38,137 @@ navbarPage(
   # ---- Home Panel ----
   shiny::tabPanel("Home",
                   
-                  # ---- Hero Section ----
+                  # ---- Unified Hero Section ----
                   div(style = "position: relative;
-               min-height: 500px;
-               width: 100%;
-               padding-left: 0px !important;
-               background-image: url('images/ocean-banner.png');
-               background-size: cover;
-               background-position: center;
-               background-attachment: fixed;
-               text-align: center;
-               color: #e8fffd;",
+            min-height: 100vh;
+            width: 100%;
+            background-image: url('images/ocean-banner.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            text-align: center;
+            color: #e8fffd;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 40px 20px 60px 20px;",
                       
                       # Overlay
-                      div(style = "position: absolute; 
-                   top: 0; left: 0; right: 0; bottom: 0;
-                   background-color: rgba(0, 0, 0, 0.5);
-                   z-index: 1;"),
-                      
-                      # Logo
-                      tags$img(src = "images/logos/seamissions-logo.png",
-                               style = "position: absolute;
-                         top: 5%;
-                         left: 50%;
-                         transform: translateX(-50%);
-                         height: 150px;
-                         z-index: 2;"),
-                      
-                      # Hero Text
-                      div(style = "position: relative; z-index: 2;
-                    padding-top: 180px; padding-left: 40px; padding-right: 40px;",
-                          
-                          h1("Explore Global Seafood Emissions",
-                             style = "font-weight: 600 !important;"),
-                          
-                          tags$hr(),
-                          
-                          tags$p(style = "font-weight: normal; color: white; margin-top: 30px;",
-                                 "Understanding carbon emissions from fishing vessels is essential to understanding the full environmental impact of wild caught seafood — but tracking vessel activity at sea has long been a challenge... until now."),
-                          
-                          tags$p(style = "font-weight: normal; color: white; margin-top: 20px;",
-                                 "This dashboard links CO₂ emissions estimates from Global Fishing Watch’s novel vessel emissions dataset with seafood catch data from the UN Food and Agriculture Organization (FAO). Users can track where fishing vessel emissions occur and compare how emissions for seafood production vary. Understanding where fishing activity and CO₂ emissions are concentrated is about more than just reducing CO₂. Improving the carbon efficiency of fisheries can also lead to better-managed fish stocks, healthier oceans, and cleaner air.")
-                          
-                          ) # END div
-                  ),
-                  
-                  # ---- Teaser Cards ----
-                  div(style = "margin-top: 40px; margin-bottom: 40px;",
-                      div(style = "display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 0 20px;",
-                          
-                          # ---- Emissions Map Card ----
-                          div(id = "explore_map_card",
-                              style = "flex: 1 1 300px; max-width: 350px; cursor: pointer; position: relative;
-                     padding-top: 50px; padding-bottom: 10px; background-color: white;
-                     border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-                     overflow: visible; font-family: sans-serif; text-align: center; margin: 25px;",
-                              
-                              div(style = "height: 12px; background-color: #08C4E5;
-                      border-top-left-radius: 8px; border-top-right-radius: 8px;
-                      position: absolute; top: 0; left: 0; right: 0;"),
-                              
-                              div(style = "position: absolute; top: -28px; left: 50%; transform: translateX(-50%);
-                      background-color: #08C4E5; width: 56px; height: 56px;
-                      border-radius: 50%; display: flex; align-items: center;
-                      justify-content: center; z-index: 10;",
-                                  tags$i(class = "fas fa-earth-americas", style = "color: white; font-size: 24px;")
-                              ),
-                              
-                              h4(strong("Fishing Vessel Emissions Map")),
-                              p("Explore a global map of CO₂ emissions from large-scale fishing vessels, powered by a novel dataset from Global Fishing Watch and emLab.",
-                                style = "color: #444; padding: 0 20px;")
-                          ),
-                          
-                          # ---- Seafood Comparison Card ----
-                          div(id = "explore_seafood_card",
-                              style = "flex: 1 1 300px; max-width: 350px; cursor: pointer; position: relative;
-                     padding-top: 50px; padding-bottom: 10px; background-color: white;
-                     border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-                     overflow: visible; font-family: sans-serif; text-align: center; margin: 25px;",
-                              
-                              div(style = "height: 12px; background-color: #F9B928;
-                      border-top-left-radius: 8px; border-top-right-radius: 8px;
-                      position: absolute; top: 0; left: 0; right: 0;"),
-                              
-                              div(style = "position: absolute; top: -28px; left: 50%; transform: translateX(-50%);
-                      background-color: #F9B928; width: 56px; height: 56px;
-                      border-radius: 50%; display: flex; align-items: center;
-                      justify-content: center; z-index: 10;",
-                                  tags$i(class = "fas fa-chart-bar", style = "color: white; font-size: 24px;")
-                              ),
-                              
-                              h4(strong("Compare Seafood Emissions")),
-                              p("Use this tool to compare CO₂ emissions by country and seafood category, combining Global Fishing Watch activity data with FAO catch statistics.",
-                                style = "color: #444; padding: 0 20px; margin-bottom: 25px;")
-                          )
-                      ) # END teaser card row
-                  ), # END Teaser section
-                  # ---- Hero Section ----
-                  div(style = "position: relative;
-             min-height: 200px;
-             max-height: 300px;
-             width: 100%;
-             padding-left: 0px !important;
-             background-image: url('images/ocean-banner.png');
-             background-size: cover;
-             background-position: center;
-             background-attachment: fixed;
-             text-align: center;
-             color: #e8fffd;",
-                      
-                      # Overlay background
                       div(style = "position: absolute; 
                  top: 0; left: 0; right: 0; bottom: 0;
                  background-color: rgba(0, 0, 0, 0.5);
                  z-index: 1;"),
                       
-                      # Flexbox for logos
-                      div(style = "position: relative;
-             display: flex;
-             flex-wrap: wrap;
-             justify-content: center;
-             align-items: center;
-             gap: 40px;
-             padding-top: 30px;
-             z-index: 2;",
-                          
-                          tags$img(src = "images/logos/emlab-logo-color.png",
-                                   style = "height: 75px;"),
-                          
-                          tags$img(src = "images/logos/gfw-logo.png",
-                                   style = "height: 70px;")
-                      ),
+                      # Logo centered near the top
+                      tags$img(src = "images/logos/seamissions-logo.png",
+                               style = "position: relative;
+                      height: 150px;
+                      z-index: 2;
+                      margin-bottom: 20px;"),
                       
                       # Hero Text
+                      div(style = "position: relative; z-index: 2; max-width: 900px;",
+                          h1("Explore Global Seafood Emissions",
+                             style = "font-weight: 600 !important;"),
+                          
+                          tags$hr(style = "border-color: white;"),
+                          
+                          tags$p("Understanding carbon emissions from fishing vessels is essential to understanding the full environmental impact of wild-caught seafood — but tracking vessel activity at sea has long been a challenge... until now.",
+                                 style = "font-weight: normal; color: white; margin-top: 30px;"),
+                          
+                          tags$p("This dashboard links CO₂ emissions estimates from Global Fishing Watch’s novel vessel emissions dataset with seafood catch data from the UN Food and Agriculture Organization (FAO). Users can track where fishing vessel emissions occur and compare how emissions for seafood production vary. Improving the carbon efficiency of fisheries can also lead to better-managed fish stocks, healthier oceans, and cleaner air.",
+                                 style = "font-weight: normal; color: white; margin-top: 20px;")
+                      ),
+                      
+                      # Teaser Cards Inside Hero Section
+                      div(style = "position: relative; z-index: 2; margin-top: 50px; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 0 20px;",
+                          
+                          # Emissions Map Card
+                          div(id = "explore_map_card",
+                              style = "flex: 1 1 300px; max-width: 350px; cursor: pointer; position: relative;
+                     padding-top: 50px; padding-bottom: 10px; background-color: white;
+                     border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                     overflow: visible; font-family: sans-serif; text-align: center;",
+                              
+                              div(style = "height: 12px; background-color: #08C4E5;
+                        border-top-left-radius: 8px; border-top-right-radius: 8px;
+                        position: absolute; top: 0; left: 0; right: 0;"),
+                              
+                              div(style = "position: absolute; top: -28px; left: 50%; transform: translateX(-50%);
+                        background-color: #08C4E5; width: 56px; height: 56px;
+                        border-radius: 50%; display: flex; align-items: center;
+                        justify-content: center; z-index: 10;",
+                                  tags$i(class = "fas fa-earth-americas", style = "color: white; font-size: 24px;")
+                              ),
+                              
+                              h4("Fishing Vessel Emissions Map", style = "color: #0B2232; font-weight: 600;"),
+                              p("Explore a global map of CO₂ emissions from large-scale fishing vessels, powered by a novel dataset from Global Fishing Watch and emLab.",
+                                style = "color: #444; padding: 0 20px;")
+                          ),
+                          
+                          # Seafood Comparison Card
+                          div(id = "explore_seafood_card",
+                              style = "flex: 1 1 300px; max-width: 350px; cursor: pointer; position: relative;
+                     padding-top: 50px; padding-bottom: 10px; background-color: white;
+                     border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                     overflow: visible; font-family: sans-serif; text-align: center;",
+                              
+                              div(style = "height: 12px; background-color: #F9B928;
+                        border-top-left-radius: 8px; border-top-right-radius: 8px;
+                        position: absolute; top: 0; left: 0; right: 0;"),
+                              
+                              div(style = "position: absolute; top: -28px; left: 50%; transform: translateX(-50%);
+                        background-color: #F9B928; width: 56px; height: 56px;
+                        border-radius: 50%; display: flex; align-items: center;
+                        justify-content: center; z-index: 10;",
+                                  tags$i(class = "fas fa-chart-bar", style = "color: white; font-size: 24px;")
+                              ),
+                              
+                              h4("Compare Seafood Emissions", style = "color: #0B2232; font-weight: 600;"),
+                              p("Use this tool to compare CO₂ emissions by country and seafood category, combining Global Fishing Watch activity data with FAO catch statistics.",
+                                style = "color: #444; padding: 0 20px; margin-bottom: 25px;")
+                          )
+                      ), # END Teaser Cards
+                      
+                      # Flexbox for logos at the top
                       div(style = "position: relative;
-                           z-index: 2;
-                           padding-top: 20px;
-                           padding-left: 40px;
-                           padding-right: 40px;",
+                 display: flex;
+                 flex-wrap: wrap;
+                 justify-content: center;
+                 align-items: center;
+                 gap: 40px;
+                 padding-top: 40px;
+                 z-index: 2;",
                           
+                          tags$img(src = "images/logos/emlab-logo-color.png",
+                                   style = "height: 85px;"),
+                          
+                          tags$img(src = "images/logos/gfw-logo.png",
+                                   style = "height: 80px;")
+                      ),
+                      
+                      # ---- Learn More Link ----
+                      div(style = "position: relative; z-index: 2; margin-top: 40px;",
                           fluidRow(
-                          div(style = "display: flex; justify-content: center; align-items: center; gap: 5px; flex-wrap: wrap;",
-                              id = "learn_more_link",
-                          tags$p("Click here",
-                                 style = "font-weight: 600; color: white; cursor: pointer; text-decoration: underline; display: flex; flex-wrap: wrap;"),
-                          
-                          tags$p("to learn more about our project, the data behind it, and its intended use.",
-                                 style = "font-weight: 400; color: white; cursor: pointer; display: flex; flex-wrap: wrap;")
-                      ) # END text div
+                            div(id = "learn_more_link",
+                                style = "display: flex; 
+                         justify-content: center; 
+                         align-items: center; 
+                         gap: 5px; 
+                         flex-wrap: wrap;",
+                                
+                                tags$p("Click here",
+                                       style = "font-weight: 600; color: white; cursor: pointer; text-decoration: underline; display: flex; flex-wrap: wrap;"),
+                                
+                                tags$p("to learn more about our project, the data behind it, and its intended use.",
+                                       style = "font-weight: 400; color: white; display: flex; flex-wrap: wrap;")
+                            ) # END learn_more_link div
                           ) # END fluidRow
-                  ) # END div 
-                  ) # END Hero
+                      ) # END learn more section
+                  ) # END Unified Hero Section
+                  
+                  
                 
   ), # END tabPanel(Home)
   

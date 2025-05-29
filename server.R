@@ -342,7 +342,8 @@ server <- function(input, output, session) {
     } else {
       mapdeck_update(map_id = "emissions_map") |>
         clear_polygon(layer_id = "fao_layer") |>
-        clear_path(layer_id = "fao_border_layer")
+        clear_path(layer_id = "fao_border_layer")|>
+        clear_text(layer_id = "fao_text_layer")
     }
   })
   

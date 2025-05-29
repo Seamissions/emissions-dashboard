@@ -12,6 +12,7 @@ infoPopup <- function(id, description, learn_more = NULL, data_source = NULL) {
   ns_wrapper <- paste0(id, "_wrapper")
   ns_toggle  <- paste0(id, "_toggle")
   ns_popup   <- paste0(id, "_popup")
+  ns_close   <- paste0(id, "_close")
   
   # Description section
   description_tag <- tags$p(
@@ -19,17 +20,13 @@ infoPopup <- function(id, description, learn_more = NULL, data_source = NULL) {
     tags$span(description, style = "font-weight: 400;")
   )
   
-  # Optional data source
   data_source_tag <- if (!is.null(data_source) && nzchar(data_source)) {
     tags$p(
       tags$span("Data Source:", style = "font-weight: 500; margin-right: 4px;"),
       tags$span(data_source, style = "font-weight: 400;")
     )
-  } else {
-    NULL
-  }
+  } else NULL
   
-  # Optional learn more
   learn_more_tag <- if (!is.null(learn_more) && nzchar(learn_more)) {
     tags$p(
       tags$a(
@@ -39,9 +36,7 @@ infoPopup <- function(id, description, learn_more = NULL, data_source = NULL) {
         style = "color: #DA8D03; font-weight: bold; text-decoration: underline;"
       )
     )
-  } else {
-    NULL
-  }
+  } else NULL
   
   tagList(
     tags$div(
@@ -59,81 +54,98 @@ infoPopup <- function(id, description, learn_more = NULL, data_source = NULL) {
       tags$div(
         id = ns_popup,
         style = "display: none;
-                 position: absolute;
-                 top: 25px;
-                 left: 0;
-                 z-index: 2000;
-                 background-color: #f1f9fc;
-                 color: #20404F;
-                 padding: 10px 15px;
-                 border-radius: 5px;
-                 border: 1px solid #08C4E5;
-                 box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-                 width: 400px;
-                 max-height: 60vh;
-                 overflow-y: auto;",
-        description_tag,
-        data_source_tag,
-        learn_more_tag
+           position: fixed;
+           top: 50%%;
+           left: 50%%;
+           transform: translate(-50%%, -50%%);
+           z-index: 2000;
+           background-color: #f1f9fc;
+           color: #20404F;
+           padding: 30px;
+           border-radius: 8px;
+           border: 1px solid #08C4E5;
+           box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+           width: 90vw;
+           max-width: 500px;
+           max-height: 70vh;
+           overflow-y: auto;",
+        
+        # Floating Close Icon
+        tags$div(
+          id = ns_close,
+          style = "position: absolute; top: 8px; right: 12px; padding: 8px; margin: 5px; cursor: pointer;",
+          tags$i(class = "fas fa-times", style = "color: #DA8D03; font-size: 16px;")
+        ),
+        
+        # Content wrapper to push text down
+        tags$div(
+          style = "margin-top: 16px;",
+          description_tag,
+          data_source_tag,
+          learn_more_tag
+        )
       )
     ),
-    
-    # JS logic to close other popups and reposition as needed
+
+    # JavaScript
     tags$script(HTML(sprintf("
-  (function() {
-    const toggle = document.getElementById('%s');
-    const popup = document.getElementById('%s');
-    const wrapper = document.getElementById('%s');
+      (function() {
+        const toggle = document.getElementById('%s');
+        const popup = document.getElementById('%s');
+        const wrapper = document.getElementById('%s');
+        const closeBtn = document.getElementById('%s');
 
-    toggle.addEventListener('click', function(event) {
-      event.preventDefault();
-      event.stopPropagation();
+        toggle.addEventListener('click', function(event) {
+          event.preventDefault();
+          event.stopPropagation();
 
-      // Close any previously open popup
-      if (window.activeInfoPopup && window.activeInfoPopup !== popup) {
-        window.activeInfoPopup.style.display = 'none';
-      }
+          if (window.activeInfoPopup && window.activeInfoPopup !== popup) {
+            window.activeInfoPopup.style.display = 'none';
+          }
 
-      const isVisible = popup.style.display === 'block';
-      popup.style.display = isVisible ? 'none' : 'block';
+          const isVisible = popup.style.display === 'block';
+          popup.style.display = isVisible ? 'none' : 'block';
 
-      if (!isVisible) {
-        // Reposition to fit viewport
-        const rect = popup.getBoundingClientRect();
-        const buffer = 10;
+          if (!isVisible) {
+            const rect = popup.getBoundingClientRect();
+            const buffer = 10;
 
-        if (rect.right > window.innerWidth - buffer) {
-          popup.style.left = 'auto';
-          popup.style.right = '0px';
-        } else {
-          popup.style.left = '0px';
-          popup.style.right = 'auto';
-        }
+            if (rect.right > window.innerWidth - buffer) {
+              popup.style.left = 'auto';
+              popup.style.right = '0px';
+            } else {
+              popup.style.left = '0px';
+              popup.style.right = 'auto';
+            }
 
-        if (rect.bottom > window.innerHeight - buffer) {
-          popup.style.top = 'auto';
-          popup.style.bottom = '25px';
-        } else {
-          popup.style.top = '25px';
-          popup.style.bottom = 'auto';
-        }
+            if (rect.bottom > window.innerHeight - buffer) {
+              popup.style.top = 'auto';
+              popup.style.bottom = '25px';
+            } else {
+              popup.style.top = '25px';
+              popup.style.bottom = 'auto';
+            }
 
-        // Set as active popup
-        window.activeInfoPopup = popup;
-      } else {
-        window.activeInfoPopup = null;
-      }
-    });
+            window.activeInfoPopup = popup;
+          } else {
+            window.activeInfoPopup = null;
+          }
+        });
 
-    document.addEventListener('click', function(event) {
-      if (window.activeInfoPopup && !wrapper.contains(event.target)) {
-        window.activeInfoPopup.style.display = 'none';
-        window.activeInfoPopup = null;
-      }
-    });
-  })();
-", ns_toggle, ns_popup, ns_wrapper)))
+        closeBtn.addEventListener('click', function(event) {
+          event.stopPropagation();
+          popup.style.display = 'none';
+          window.activeInfoPopup = null;
+        });
+
+        document.addEventListener('click', function(event) {
+          if (window.activeInfoPopup && !wrapper.contains(event.target)) {
+            window.activeInfoPopup.style.display = 'none';
+            window.activeInfoPopup = null;
+          }
+        });
+      })();
+    ", ns_toggle, ns_popup, ns_wrapper, ns_close)))
   )
 }
-
 

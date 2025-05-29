@@ -23,7 +23,7 @@ library(gganimate)
 
 ```{r}
 # load library
-fao_emissions <- read_csv("/Users/npepper/MEDS/capstone/data/data-raw/full_emissions_fao_species.csv")
+fao_emissions <- read_csv("/Users/npepper/MEDS/capstone/emissions-dashboard/data-raw/full_emissions_fao_species.csv")
 ```
 
 ```{r}
@@ -74,7 +74,7 @@ top_flags <- fao_emissions |>
 top_flags <- fao_emissions |>
   filter(!flag %in% c("UNK", NA),
          year == 2024) |>
-  group_by(flag) |>
+  group_by(flag, year) |>
   summarize(sum_emissions = sum(total_co2_mt, na.rm = TRUE)) |>
   arrange(desc(sum_emissions)) |>
   slice_head(n = 10) |>
@@ -105,7 +105,8 @@ top_flags <- fao_emissions |>
   slice_head(n = 10) |>
   mutate(
     iso2 = tolower(countrycode(flag, origin = "iso3c", destination = "iso2c")),
-    country_name = countrycode(flag, origin = "iso3c", destination = "country.name"))
+    country_name = countrycode(flag, origin = "iso3c", destination = "country.name")
+  )
 
 # ---- Step 2: Plot ----
 ggplot(data = top_flags) +
@@ -256,95 +257,6 @@ ggplot(data = top_flags_eiu) +
 ```
 
 
-# Isscap group plots
-
-```{r}
-# ---- Step 1: Calculate Top 10 Countries by Emissions ----
-top_isscaap <- fao_emissions |>
-  filter(isscaap_group != "no_fao_species_catch_data",
-         isscaap_group != "Marine fishes not identified") |>
-  group_by(isscaap_group) |>
-  summarize(sum_emissions = sum(total_co2_mt, na.rm = TRUE)) |>
-  arrange(desc(sum_emissions)) |>
-  slice_head(n = 10) 
-
-# ---- Step 2: Plot ----
-ggplot(data = top_isscaap) +
-  geom_col(
-    aes(x = sum_emissions, y = reorder(isscaap_group, sum_emissions)),
-    fill = "#08C4E5"
-  )  +
-geom_text(
-  aes(x = sum_emissions + 0.09 * max(sum_emissions, na.rm = TRUE),
-      y = reorder(isscaap_group, sum_emissions),
-      label = paste0(comma(sum_emissions), " MT")),
-  color = "white",
-  family = "Roboto",
-  fontface = "bold",
-  size = 4) +
- theme_void() +
-theme(
-  legend.position = "none",
-  axis.title.x = element_blank(),
-  axis.text.y = element_text(color = "white",
-                             family = "Roboto",
-                             face = "bold",
-                             size = 14,
-                             hjust = 1,
-                             margin = margin(r = -10)),
-  panel.background = element_rect(fill = "#053762", color = NA),
-  plot.background = element_rect(fill = "#053762", color = NA)) +
-
-  expand_limits(
-    x = c(-0.05 * max(top_isscaap$sum_emissions),
-          1.2 * max(top_isscaap$sum_emissions))
-  )
-```
-
-
-
-```{r}
-
-species_emissions <- readRDS("data/top_isscaap.rds") |>
-  filter(year == 2016)
-  
-  
-    ggplot(data = top_isscaap) +
-      geom_col(aes(x = x_var,
-                   y = reorder(isscaap_group, sum_emissions)),
-               fill = "#08C4E5") +
-      # Add images just to the left of bars
-      geom_image(
-        aes(x = -0.05 * max_x,  # lock to left side
-            y = reorder(isscaap_group, sum_emissions),
-            image = image),
-        size = 0.05,  # screen-relative (0–1), so it scales with screen
-        by = "height"  # ensures size is relative to height of the plot area
-      ) +  # Adjust multiplier
-     
-      geom_text(aes(x = x_var + 0.09 * max_x,
-                    y = reorder(isscaap_group, sum_emissions),
-                    label = x_label),
-                color = "white",
-                size = 7) +
-      labs(title = "Annual CO₂ Emissions by ISSCAAP Group") +
-      theme_void() +
-      theme(
-        legend.position = "none",
-        title = element_text(color = "white",
-                             family = "Roboto",
-                             face = "bold",
-                             size = 24),
-        axis.title.x = element_blank(),
-        axis.text.y = element_text(color = "white",
-                                   size = 22,
-                                   hjust = 1,
-                                   margin = margin(r = -5)),
-        panel.background = element_rect(fill = "#053762", color = NA),
-        plot.background = element_rect(fill = "#053762", color = NA)
-      ) +
-      expand_limits(x = c(-0.1 * max_x, 1.2 * max_x))
-```
-
+# Animated flag
 
 

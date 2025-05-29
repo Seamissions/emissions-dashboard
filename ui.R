@@ -228,7 +228,7 @@ navbarPage(
                                   "Fishing Vessel Emissions"), 
                           
                           # Map description
-                          tags$p(style = "font-weight: 400; color: #20404F; margin-bottom: 5px;font-size: 12px;", 
+                          tags$p(style = "font-weight: 400; color: #20404F; margin-bottom: 5px;font-size: 14px;", 
                                  "This map features a novel dataset from Global Fishing Watch and emLab that models global fishing vessel emissions by combining Automatic Identification System (AIS, which acts like GPS tracking for ships) with satellite-based Synthetic Aperture Radar (SAR, which functions like radar from space). Together, these technologies allow us to detect both broadcasted and non-broadcasted fishing activity."), 
                           
                           # Horizontal separator
@@ -256,7 +256,7 @@ navbarPage(
                                     # Info icon
                                     infoPopup(
                                       id = "broadcasting_popup",
-                                      description = "The AIS-broadcasting layer is where Global Fishing Watch has classified apparent fishing effort using Automatic Identification System (AIS) data.",
+                                      description = "This global dataset maps fishing vessel CO₂ emissions modeled from vessels that broadcast their location using the Automatic Identification System (AIS). Vessels included in this dataset were classified as participating in apparent fishing effort based on their movement patterns. Emissions are aggregated annually in a global 1×1° latitude–longitude grid.",
                                       data_source = "Global Fishing Watch",
                                       learn_more = "https://globalfishingwatch.org/user-guide/#Activity%20-%20Fishing:~:text=methodology%20paper.-,Understanding%20apparent%20fishing%20effort%20using%20AIS%20and%20VMS%20data,-Automatic%20identification%20system"
                                     )
@@ -300,7 +300,7 @@ navbarPage(
                                 # Info icon
                                 infoPopup(
                                   id = "country_popup",
-                                  description = "A flag State acts as a vessel's nationality and has jurisdiction over the ship's administrative operations. No matter where the vessel goes, its flag State is responsible for policing it. You can filter the broadcasted emissions for the flag or country resonsible for the vessel. These flag states were identified by Global Fishing Watch.",
+                                  description = "A flag State represents a vessel’s country of registration and holds jurisdiction over its operations—regardless of where the vessel travels. This layer allows you to filter broadcasted emissions by the flag State responsible for each vessel.",
                                   data_source = "Global Fishing Watch",
                                   learn_more = "https://globalfishingwatch.org/user-guide/#Activity%20-%20Fishing:~:text=methodology%20paper.-,Understanding%20apparent%20fishing%20effort%20using%20AIS%20and%20VMS%20data,-Automatic%20identification%20system"
                                 ), # END infoPopup
@@ -353,7 +353,9 @@ navbarPage(
                                     # Info icon
                                     infoPopup(
                                       id = "non_broadcasting_popup",
-                                      description = "This layer shows vessels detected using Synthetic Aperture Radar (SAR), a satellite-based system that captures images using microwave pulses, allowing detection in all weather and lighting conditions. Vessel positions are identified from Copernicus Sentinel-1 imagery using a combination of classical detection techniques and machine learning.",
+                                      description = "This global dataset maps estimated CO₂ emissions from fishing vessels that do not broadcast their location using the Automatic Identification System (AIS). Instead, these vessels are detected using Synthetic Aperture Radar (SAR)—a satellite-based technology that captures images with microwave pulses, allowing for detection in any weather or lighting conditions.
+Vessel positions are derived from Copernicus Sentinel-1 imagery using a combination of traditional detection methods and machine learning. Vessels were classified as likely engaged in apparent fishing effort based on characteristics such as vessel size, proximity to regions with historical fishing activity, and other spatial indicators.
+Emissions are aggregated annually in a global 1×1° latitude–longitude grid.",
                                       data_source = "Global Fishing Watch",
                                       learn_more = "https://globalfishingwatch.org/user-guide/#Radar%20detections%20-%20Synthetic%20aperture%20radar:~:text=Detections-,Radar%20detections%20%2D%20Synthetic%20aperture%20radar,-Synthetic%20aperture%20radar"
                                     )
@@ -467,7 +469,7 @@ navbarPage(
                                     # Info icon
                                     infoPopup(
                                       id = "year_map_popup",
-                                      description = "Data displayed in the map grid is aggregated by year. Use the slider to select a year or click the play button to animate emissions trends over time.",
+                                      description = "Each grid cell in the emissions data displayed is aggregated by year. Use the slider to select a year or click the play button to animate emissions trends over time.",
                                       data_source = NULL,
                                       learn_more = NULL),
                                     
@@ -575,6 +577,7 @@ shiny::tabPanel("Compare Seafood Emissions",
                            div(style = "display: inline-block; margin-right: 20px;",
                                pickerInput("selected_country_input", "Select a Country:", choices = c("Select a country" = "", sort(unique(species_data$country_name))), selected = NULL, options = list(`live-search` = TRUE, `noneSelectedText` = "All Countries"))
                            ),
+                           
                            div(style = "display: inline-block;",
                                tags$h4(textOutput("selected_country_total"), style = "color: white; font-weight: bold; margin-top: 25px;")
                            )
@@ -583,28 +586,89 @@ shiny::tabPanel("Compare Seafood Emissions",
               )
           )
         ),
+        # ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+        # ---- Plot area -------------------------------------------------------------------------------------------------------------------------------------------------
+        # ------------------------------------------------------------------------------------------------------------------------------------------------------
         
         fluidRow(
           column(width = 12,
                  div(style = "background-color:#0B2232; margin: 30px 20px; overflow: visible !important;",
-                     div(id = "country_plot",
-                         tags$h4("Top Emitting Fishing Fleets", style = "color: #DA8D03; font-size: 25px; font-weight: bold; text-align: center;"),
-                         tags$h4("Annual CO₂ Emissions", style = "color: white; font-size: 25px; text-align: center;"),
+                     div(
+                       id = "country_plot",
+                       
+                       
+                       # ---- Top 10 Country Plots -----------------------------
+                       
+                       # Title and Info Icon on the same line
+                       
+                       div(
+                         style = "display: flex; justify-content: center; align-items: center; gap: 8px;",
+                         tags$h4(
+                           "Top Emitting Countries", 
+                           style = "color: #DA8D03; font-size: 25px; font-weight: bold; margin: 0;"
+                         ),
+                         infoPopup(
+                           id = "top_country_plot_popup",
+                           description = "These plots highlight the top 10 countries with the highest annual CO₂ emissions from fishing. Emissions are estimated by linking satellite-based emissions data from Global Fishing Watch with catch reports submitted to the Food and Agriculture Organization (FAO) of the United Nations.",
+                           data_source = NULL,
+                           learn_more = NULL
+                         )
+                       ),
+                       
+                       # Subtitle
+                       tags$h4(
+                         "CO₂ Emissions", 
+                         style = "color: white; font-size: 25px; text-align: center; margin-top: 10px;"
+                       ),
+                       
+                       # Output
                          div(style = "min-width: 1500px; min-height: 300px;",
                              plotOutput("country_plot_output", height = "60vh", width = "100%") |> withSpinner(type = 4, color = '#08C4E5')
                          )
                      ),
+                     
+                     # ---- Top 10 Species Groups Plots -----------------------------
+                     
                      shinyjs::hidden(
-                       div(id = "isscaap_plot",
-                           tags$h4("Top Emitting Species Groups", style = "color: #DA8D03; font-size: 25px; font-weight: bold; text-align: center;"),
-                           tags$h4("Annual CO₂ Emissions", style = "color: white; font-size: 25px; text-align: center;"),
-                           div(style = "min-width: 1500px; min-height: 300px;",
-                               plotOutput("isscaap_plot_output", height = "60vh", width = "100%") |> withSpinner(type = 4, color = '#08C4E5')
+                       div(
+                         id = "isscaap_plot",
+                         
+                         # Title and Info Icon on the same line
+                         div(
+                           style = "display: flex; justify-content: center; align-items: center; gap: 8px;",
+                           tags$h4(
+                             "Top Emitting Species Groups", 
+                             style = "color: #DA8D03; font-size: 25px; font-weight: bold; margin: 0;"
+                           ),
+                           infoPopup(
+                             id = "top_species_plot_popup",
+                             description = "These plots highlight the top 10 species groups with the highest annual CO₂ emissions from fishing. Emissions are estimated by linking satellite-based emissions data from Global Fishing Watch with catch reports submitted to the Food and Agriculture Organization (FAO) of the United Nations.
+Species are categorized using ISSCAAP (International Standard Statistical Classification of Aquatic Animals and Plants) groups, a system developed by the FAO to categorize species into standardized groups based on biological and ecological characteristics.",
+                             data_source = NULL,
+                             learn_more = NULL
                            )
+                         ),
+                         
+                         # Subtitle
+                         tags$h4(
+                           "CO₂ Emissions", 
+                           style = "color: white; font-size: 25px; text-align: center; margin-top: 10px;"
+                         ),
+                         
+                         # Plot Output
+                         div(
+                           style = "min-width: 1500px; min-height: 300px;",
+                           plotOutput("isscaap_plot_output", height = "60vh", width = "100%") |> 
+                             withSpinner(type = 4, color = '#08C4E5')
+                         )
                        )
                      ),
-                     div(id = "species_bar_plot_wrapper",
+                     
+                     # ---- Select a Country Plot -----------------------------
+                     
+                     div(id = "species_bar_plot_wrapper",  style = "display: flex; justify-content: center; align-items: center; gap: 8px;",
                          uiOutput("dynamic_country_header"),
+                       
                          shinyjs::hidden(
                            div(id = "species_bar_plot",
                                div(style = "min-width: 1600px; min-height: 300px;",
@@ -612,7 +676,7 @@ shiny::tabPanel("Compare Seafood Emissions",
                                )
                            )
                          )
-                     )
+                     ) # END wrapper div
                  )
           )
         )
@@ -660,7 +724,7 @@ shiny::tabPanel("Compare Seafood Emissions",
             tags$span("Select Year"),
             infoPopup(
               id = "year_plot_popup",
-              description = "Data displayed in the map grid is aggregated by year. Use the slider to select a year or click the play button to animate emissions trends over time.",
+              description = "Data displayed in these plots are aggregated by year. Use the slider to select a year.",
               data_source = NULL,
               learn_more = NULL
             ),

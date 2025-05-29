@@ -35,6 +35,7 @@ server <- function(input, output, session) {
   # ---- Emissions map ---------------------------------------------------------
   #-----------------------------------------------------------------------------
   
+  
   # ---- Initialize default states for map----
   first_time <- reactiveVal(TRUE)
   current_view <- reactiveVal(list(zoom = 3, location = c(0, 0)))

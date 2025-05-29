@@ -228,7 +228,7 @@ navbarPage(
                                   "Fishing Vessel Emissions"), 
                           
                           # Map description
-                          tags$p(style = "font-weight: 400; color: #20404F; margin-bottom: 5px;font-size: 15px;", 
+                          tags$p(style = "font-weight: 400; color: #20404F; margin-bottom: 5px;font-size: 14px;", 
                                  "This map features a novel dataset from Global Fishing Watch and emLab that models global fishing vessel emissions by combining Automatic Identification System (AIS, which acts like GPS tracking for ships) with satellite-based Synthetic Aperture Radar (SAR, which functions like radar from space). Together, these technologies allow us to detect both broadcasted and non-broadcasted fishing activity."), 
                           
                           # Horizontal separator
@@ -450,6 +450,7 @@ Emissions are aggregated annually in a global 1×1° latitude–longitude grid."
                       
                   
                       # ---- Emissions Map --------------------------------------------
+                     
                       mapdeckOutput("emissions_map", height = "100%"),
                       useShinyjs(),
                       uiOutput("loading_ui"),

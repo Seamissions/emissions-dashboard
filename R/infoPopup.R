@@ -43,32 +43,30 @@ infoPopup <- function(id, description, learn_more = NULL, data_source = NULL) {
       id = ns_wrapper,
       style = "position: relative; display: inline-block;",
       
-      actionLink(
-        inputId = ns_toggle,
-        label = tags$i(
-          class = "fas fa-info-circle",
-          style = "color:#08C4E5; font-size: 18px; cursor: pointer;"
-        )
+      tags$span(
+        id = ns_toggle,
+        class = "fas fa-info-circle",
+        style = "color:#08C4E5; font-size: 18px; cursor: pointer;"
       ),
       
       tags$div(
         id = ns_popup,
         style = "display: none;
-           position: fixed;
-           top: 50%%;
-           left: 50%%;
-           transform: translate(-50%%, -50%%);
-           z-index: 2000;
-           background-color: #f1f9fc;
-           color: #20404F;
-           padding: 30px;
-           border-radius: 8px;
-           border: 1px solid #08C4E5;
-           box-shadow: 0 2px 10px rgba(0,0,0,0.25);
-           width: 90vw;
-           max-width: 500px;
-           max-height: 70vh;
-           overflow-y: auto;",
+         position: fixed;
+         top: 50%;
+         left: 50%;
+         transform: translate(-50%, -50%);
+         z-index: 9000;
+         background-color: #f1f9fc;
+         color: #20404F;
+         padding: 30px 40px 30px 30px;
+         border-radius: 8px;
+         border: 1px solid #08C4E5;
+         box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+         width: 90vw;
+         max-width: 500px;
+         min-width: 200px;
+         overflow-y: auto;",
         
         # Floating Close Icon
         tags$div(
@@ -77,16 +75,16 @@ infoPopup <- function(id, description, learn_more = NULL, data_source = NULL) {
           tags$i(class = "fas fa-times", style = "color: #DA8D03; font-size: 16px;")
         ),
         
-        # Content wrapper to push text down
+        # Content
         tags$div(
-          style = "margin-top: 16px;",
           description_tag,
           data_source_tag,
           learn_more_tag
         )
       )
     ),
-
+    
+    # JavaScript
     # JavaScript
     tags$script(HTML(sprintf("
       (function() {
@@ -97,7 +95,7 @@ infoPopup <- function(id, description, learn_more = NULL, data_source = NULL) {
 
         toggle.addEventListener('click', function(event) {
           event.preventDefault();
-          event.stopPropagation();
+          event.stopImmediatePropagation();  // 💥 strongest form of click isolation
 
           if (window.activeInfoPopup && window.activeInfoPopup !== popup) {
             window.activeInfoPopup.style.display = 'none';
@@ -106,41 +104,24 @@ infoPopup <- function(id, description, learn_more = NULL, data_source = NULL) {
           const isVisible = popup.style.display === 'block';
           popup.style.display = isVisible ? 'none' : 'block';
 
-          if (!isVisible) {
-            const rect = popup.getBoundingClientRect();
-            const buffer = 10;
-
-            if (rect.right > window.innerWidth - buffer) {
-              popup.style.left = 'auto';
-              popup.style.right = '0px';
-            } else {
-              popup.style.left = '0px';
-              popup.style.right = 'auto';
-            }
-
-            if (rect.bottom > window.innerHeight - buffer) {
-              popup.style.top = 'auto';
-              popup.style.bottom = '25px';
-            } else {
-              popup.style.top = '25px';
-              popup.style.bottom = 'auto';
-            }
-
-            window.activeInfoPopup = popup;
-          } else {
-            window.activeInfoPopup = null;
-          }
+          window.activeInfoPopup = isVisible ? null : popup;
         });
 
         closeBtn.addEventListener('click', function(event) {
-          event.stopPropagation();
+          event.preventDefault();
+          event.stopImmediatePropagation();  // 💥 prevent click from bubbling to parent UI
           popup.style.display = 'none';
           window.activeInfoPopup = null;
         });
 
         document.addEventListener('click', function(event) {
-          if (window.activeInfoPopup && !wrapper.contains(event.target)) {
-            window.activeInfoPopup.style.display = 'none';
+          const clickedInsidePopup = wrapper.contains(event.target);
+          const clickedInfoIcon = event.target.closest('.fa-info-circle');
+
+          // Only close popup if user clicked somewhere else entirely
+          if (window.activeInfoPopup && !clickedInsidePopup && !clickedInfoIcon) {
+            event.stopImmediatePropagation();  // 💥 prevents triggering nearby map layer toggle
+            popup.style.display = 'none';
             window.activeInfoPopup = null;
           }
         });
@@ -148,4 +129,3 @@ infoPopup <- function(id, description, learn_more = NULL, data_source = NULL) {
     ", ns_toggle, ns_popup, ns_wrapper, ns_close)))
   )
 }
-

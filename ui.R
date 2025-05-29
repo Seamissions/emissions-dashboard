@@ -482,8 +482,7 @@ Vessel positions are derived from Copernicus Sentinel-1 imagery using a combinat
                                                 step = 1,
                                                 sep = "",
                                                 width = "100%",
-                                                ticks = TRUE,
-                                                animate = animationOptions(interval = 3000, loop = FALSE)) # END sliderInput (year)
+                                                ticks = TRUE) # END sliderInput (year) # animation was removed   animate = animationOptions(interval = 3000, loop = FALSE)
                       ) # END absolutePanel - year
                   ) # END map container
   ), # END emissions map tab

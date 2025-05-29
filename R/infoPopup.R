@@ -66,7 +66,9 @@ infoPopup <- function(id, description, learn_more = NULL, data_source = NULL) {
          width: 90vw;
          max-width: 500px;
          min-width: 200px;
+         max-height: 80vh;
          overflow-y: auto;",
+
         
         # Floating Close Icon
         tags$div(

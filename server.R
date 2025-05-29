@@ -318,6 +318,7 @@ server <- function(input, output, session) {
           tooltip = "zone",
           update_view = FALSE
         ) |>
+        
         add_path(
           data = fao_borders,
           layer_id = "fao_border_layer",
@@ -325,7 +326,16 @@ server <- function(input, output, session) {
           palette = fao_zone_color,
           stroke_width = 4,
           update_view = FALSE
-        ) 
+        ) |>
+        
+        add_text(
+          data = fao_labels,
+          layer_id = "fao_text_layer",
+          text = "zone",
+          fill_colour = "#FFFFFF",
+          size = 30,
+          billboard = TRUE,
+          update_view = FALSE)
       
       later::later(function() { loading(FALSE) }, delay = 0.2)
       

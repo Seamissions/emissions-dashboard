@@ -2,12 +2,13 @@
 #'
 #' @param id A unique string used to generate element IDs (must be unique per use)
 #' @param description A string of text to show inside the pop-up box
+#' @param interpretation Optional tips for interpreting the data or object being described
 #' @param learn_more Optional URL to include a "Learn more" link
 #' @param data_source Optional name of the data source to display
 #'
 #' @return A UI tagList containing the info icon and description popup
 
-infoPopup <- function(id, description, learn_more = NULL, data_source = NULL) {
+infoPopup <- function(id, description, interpretation = NULL, learn_more = NULL, data_source = NULL) {
   
   ns_wrapper <- paste0(id, "_wrapper")
   ns_toggle  <- paste0(id, "_toggle")
@@ -16,13 +17,20 @@ infoPopup <- function(id, description, learn_more = NULL, data_source = NULL) {
   
   # Description section
   description_tag <- tags$p(
-    tags$span("Description:", style = "font-weight: 500; margin-right: 4px;"),
+    tags$span("Description:", style = "font-weight: 600; margin-right: 4px; text-decoration: underline;"),
     tags$span(description, style = "font-weight: 400;")
   )
   
+  interpretation_tag <- if (!is.null(interpretation) && nzchar(interpretation)) {
+    tags$p(
+      tags$span("How to Interpret:", style = "font-weight: 600; margin-right: 4px; text-decoration: underline;"),
+      tags$span(interpretation, style = "font-weight: 400;")
+    )
+  } else NULL
+  
   data_source_tag <- if (!is.null(data_source) && nzchar(data_source)) {
     tags$p(
-      tags$span("Data Source:", style = "font-weight: 500; margin-right: 4px;"),
+      tags$span("Data Source:", style = "font-weight: 600; margin-right: 4px; text-decoration: underline;"),
       tags$span(data_source, style = "font-weight: 400;")
     )
   } else NULL
@@ -67,19 +75,21 @@ infoPopup <- function(id, description, learn_more = NULL, data_source = NULL) {
          max-width: 500px;
          min-width: 200px;
          max-height: 80vh;
-         overflow-y: auto;",
+         overflow-y: auto;
+        pointer-events: none;",
 
         
         # Floating Close Icon
         tags$div(
           id = ns_close,
-          style = "position: absolute; top: 8px; right: 12px; padding: 8px; margin: 5px; cursor: pointer;",
+          style = "position: absolute; top: 8px; right: 12px; padding: 8px; margin: 5px; cursor: pointer; pointer-events: auto;",  # 👈 ADD THIS
           tags$i(class = "fas fa-times", style = "color: #DA8D03; font-size: 16px;")
         ),
         
         # Content
         tags$div(
           description_tag,
+          interpretation_tag,
           data_source_tag,
           learn_more_tag
         )

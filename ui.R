@@ -228,7 +228,7 @@ navbarPage(
                                   "Fishing Vessel Emissions"), 
                           
                           # Map description
-                          tags$p(style = "font-weight: 400; color: #20404F; margin-bottom: 5px;font-size: 14px;", 
+                          tags$p(style = "font-weight: 400; color: #20404F; margin-bottom: 5px;font-size: 16px;", 
                                  "This map features a novel dataset from Global Fishing Watch and emLab that models global fishing vessel emissions by combining Automatic Identification System (AIS, which acts like GPS tracking for ships) with satellite-based Synthetic Aperture Radar (SAR, which functions like radar from space). Together, these technologies allow us to detect both broadcasted and non-broadcasted fishing activity."), 
                           
                           # Horizontal separator
@@ -256,7 +256,8 @@ navbarPage(
                                     # Info icon
                                     infoPopup(
                                       id = "broadcasting_popup",
-                                      description = "This global dataset maps fishing vessel CO₂ emissions modeled from vessels that broadcast their location using the Automatic Identification System (AIS). Vessels included in this dataset were classified as participating in apparent fishing effort based on their movement patterns. Emissions are aggregated annually in a global 1×1° latitude–longitude grid.",
+                                      description = "This global dataset maps fishing vessel CO₂ emissions modeled from vessels that broadcast their location using the Automatic Identification System (AIS). Vessels included in this dataset were classified as participating in apparent fishing effort based on their movement patterns.",
+                                      interpretation = "Emissions are aggregated annually in a global 1×1° latitude–longitude grid. Ligher colors mean higher CO₂ emissions.",
                                       data_source = "Global Fishing Watch",
                                       learn_more = "https://globalfishingwatch.org/user-guide/#Activity%20-%20Fishing:~:text=methodology%20paper.-,Understanding%20apparent%20fishing%20effort%20using%20AIS%20and%20VMS%20data,-Automatic%20identification%20system"
                                     )
@@ -354,8 +355,8 @@ navbarPage(
                                     infoPopup(
                                       id = "non_broadcasting_popup",
                                       description = "This global dataset maps estimated CO₂ emissions from fishing vessels that do not broadcast their location using the Automatic Identification System (AIS). Instead, these vessels are detected using Synthetic Aperture Radar (SAR)—a satellite-based technology that captures images with microwave pulses, allowing for detection in any weather or lighting conditions.
-Vessel positions are derived from Copernicus Sentinel-1 imagery using a combination of traditional detection methods and machine learning. Vessels were classified as likely engaged in apparent fishing effort based on characteristics such as vessel size, proximity to regions with historical fishing activity, and other spatial indicators.
-Emissions are aggregated annually in a global 1×1° latitude–longitude grid.",
+Vessel positions are derived from Copernicus Sentinel-1 imagery using a combination of traditional detection methods and machine learning. Vessels were classified as likely engaged in apparent fishing effort based on characteristics such as vessel size, proximity to regions with historical fishing activity, and other spatial indicators.",
+                                      interpretation = "Emissions are aggregated annually in a global 1×1° latitude–longitude grid. Ligher colors mean higher CO₂ emissions.",
                                       data_source = "Global Fishing Watch",
                                       learn_more = "https://globalfishingwatch.org/user-guide/#Radar%20detections%20-%20Synthetic%20aperture%20radar:~:text=Detections-,Radar%20detections%20%2D%20Synthetic%20aperture%20radar,-Synthetic%20aperture%20radar"
                                     )
@@ -450,7 +451,6 @@ Emissions are aggregated annually in a global 1×1° latitude–longitude grid."
                       
                   
                       # ---- Emissions Map --------------------------------------------
-                     
                       mapdeckOutput("emissions_map", height = "100%"),
                       useShinyjs(),
                       uiOutput("loading_ui"),
@@ -699,7 +699,10 @@ Species are categorized using ISSCAAP (International Standard Statistical Classi
             tags$span("Select Plot Unit"),
             infoPopup(
               id = "plot_unit_popup",
-              description = "Update this....",
+              description = "Total Emissions refers to the aggregated annual CO₂ emissions, measured in metric tons.
+Emissions per Unit Catch is a measure of emissions efficiency, calculated as the ratio of total annual CO₂ emissions to the total annual catch weight in metric tons.
+
+Higher values indicate that more emissions are required to land each ton of catch—reflecting lower efficiency. Lower values indicate greater efficiency, with fewer emissions per ton of seafood landed.",
               data_source = NULL,
               learn_more = NULL
             ),

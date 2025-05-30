@@ -49,29 +49,22 @@ server <- function(input, output, session) {
     summarise(total = sum(emissions_co2_mt, na.rm = TRUE)) |>
     pull(total)
   
-  # ---- Map Sidebar toggle logic ---------------------------------------
   observeEvent(input$toggle_sidebar_open_input, {
-    # Toggle the sidebar visibility
-    shinyjs::toggle("sidebar-panel")
+    shinyjs::hide("sidebar-panel", anim = TRUE, animType = "fade")
     
-    # Show the outside button and hide the inside button
-    shinyjs::toggle("toggle_sidebar_close_input", anim = TRUE,
-                    animType = "fade")
-    shinyjs::toggle("toggle_sidebar_open_input", anim = TRUE,
-                    animType = "fade")
+    shinyjs::hide("toggle_sidebar_open_input", anim = TRUE, animType = "fade")
+    shinyjs::hide("sidebar_toggle_background", anim = TRUE, animType = "fade")
+    shinyjs::show("toggle_sidebar_close_input", anim = TRUE, animType = "fade")
   })
   
+  
   observeEvent(input$toggle_sidebar_close_input, {
-    # Toggle the sidebar visibility
-    shinyjs::toggle("sidebar-panel", anim = TRUE,
-                    animType = "fade")
-    
-    # Show the inside button and hide the outside button
-    shinyjs::toggle("toggle_sidebar_open_input", anim = TRUE,
-                    animType = "fade")
-    shinyjs::toggle("toggle_sidebar_close_input", anim = TRUE,
-                    animType = "fade")
+    shinyjs::show("sidebar-panel", anim = TRUE, animType = "fade")
+    shinyjs::show("toggle_sidebar_open_input", anim = TRUE, animType = "fade")
+    shinyjs::show("sidebar_toggle_background", anim = TRUE, animType = "fade")
+    shinyjs::hide("toggle_sidebar_close_input", anim = TRUE, animType = "fade")
   })
+  
   
   # Auto minimize sidebar panel for small screens/mobile devices
   observe({
@@ -327,16 +320,16 @@ server <- function(input, output, session) {
           stroke_width = 4,
           update_view = FALSE
         ) 
-      
-      later::later(function() { loading(FALSE) }, delay = 0.2)
-      
+        
+    
+      later::later(function() { loading(FALSE) }, delay = 0.1)
     } else {
       mapdeck_update(map_id = "emissions_map") |>
         clear_polygon(layer_id = "fao_layer") |>
-        clear_path(layer_id = "fao_border_layer")|>
-        clear_text(layer_id = "fao_text_layer")
+        clear_path(layer_id = "fao_border_layer")
     }
   })
+  
   
   
   # ---- Track view so we don’t reset zoom/location ----
@@ -425,7 +418,24 @@ server <- function(input, output, session) {
   })
   
   # Control for species plot subtitle
-  output$plot_subtitle <- renderUI({
+  output$species_subtitle <- renderUI({
+    is_per_unit <- input$unit_plot_toggle_input == "per_unit"
+    
+    subtitle_text <- if (is_per_unit) {
+      "Emissions Efficiency (Metric Tons CO₂ / Metric Ton Catch)"
+    } else {
+      "Total Annual CO₂ Emissions (Metric Tons)"
+    }
+    
+    tags$h4(
+      subtitle_text,
+      style = "color: white; font-size: 25px; text-align: center; margin-top: 10px;"
+    )
+  })
+  
+  # Control for country plot subtitle
+  
+  output$country_subtitle <- renderUI({
     is_per_unit <- input$unit_plot_toggle_input == "per_unit"
     
     subtitle_text <- if (is_per_unit) {

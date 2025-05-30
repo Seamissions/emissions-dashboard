@@ -59,8 +59,7 @@ fao_borders <- st_cast(fao_regions, "MULTILINESTRING") |>
 
 # Color palette for FAO zones
 fao_zone_color <- grDevices::colorRamp(c("#CEECEB"))( (1:256)/256 )
-fao_labels <- sf::st_point_on_surface(fao_regions)
-fao_labels$zone <- as.character(fao_labels$zone)
+
 
 # ---- Seafood explorer data ----
 top_flags <- readRDS("data/top_flags.rds") |>

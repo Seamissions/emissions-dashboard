@@ -184,6 +184,34 @@ navbarPage(
                   # ---- Map Container ----
                   div(style = "position: relative; height: 90vh;",
                       
+                      # Wrapper around background + icon button
+                      div(style = "position: absolute; top: 40%; width: 40px; height: 50px; z-index: 1000;",
+                          
+                          # Background layer behind the sidebar button (below icon)
+                          div(id = "sidebar_toggle_background",
+                              style = "position: absolute;
+                                           top: 0px;
+                                           left: 310px;
+                                           width: 44px; height: 50px;
+                                           background-color: #F9F9F9;
+                                           border-top-right-radius: 6px;
+                                           border-bottom-right-radius: 6px;
+                                           z-index: 900;"),
+                          
+                          # Toggle sidebar close
+                          actionButton("toggle_sidebar_open_input",
+                                       label = NULL,
+                                       icon = icon("angle-left", style = "font-size: 25px; color: #DA8D03;margin-left: -15px;"),
+                                       style = "position: absolute;
+                                                    top: 0px;
+                                                    left: 310px;
+                                                    width: 40px;
+                                                    height: 50px;
+                                                    background-color: transparent;
+                                                    border: none;
+                                                    z-index: 1600;") # END action button 
+                      ), # divider
+                      
                       # ---- Sidebar Panel --------------------------------------------
                       div(id = "sidebar-panel",
                           style = "position: absolute;
@@ -191,39 +219,16 @@ navbarPage(
                            left: 0;
                            height: 100%;
                            overflow-y: auto;
+                           overflow-x: hidden;
                            width: 20%;
                            min-width: 310px;
+                           max-width: 320px;
                            min-height: 500px;
-                           max-width: 400px;
                            background-color: #f9f9f9;
                            padding: 15px;
                            border-right: 0px solid #ccc;
                            z-index: 1001;",
                           
-                          # Wrapper around background + icon button
-                          div(style = "position: absolute; top: 40%; right: -30px; width: 40px; height: 50px; z-index: 1000;",
-                              
-                              # Background layer behind the sidebar button (below icon)
-                              div(style = "position: absolute;
-                                           top: 0px; left: 0px;
-                                           width: 40px; height: 50px;
-                                           background-color: #F9F9F9;
-                                           border-radius: 6px;
-                                           z-index: 1000;"),
-                              
-                              # Actual icon button (higher z-index)
-                              actionButton("toggle_sidebar_open_input",
-                                           label = NULL,
-                                           icon = icon("angle-left", style = "font-size: 25px; color: #DA8D03;margin-left: -15px;"),
-                                           style = "position: absolute;
-                                                    top: 0px;
-                                                    left: 0px;
-                                                    width: 40px;
-                                                    height: 50px;
-                                                    background-color: transparent;
-                                                    border: none;
-                                                    z-index: 1001;")
-                                                    ),
                           
                           # Map title
                           tags$h3(style = "font-size: 24px; font-weight: 400; color: #20404F; margin-bottom: 5px;", 
@@ -442,14 +447,14 @@ Vessel positions are derived from Copernicus Sentinel-1 imagery using a combinat
                                                style = "font-size: 20px;  padding-right: 6px;"),
                                    style = "position: absolute;
                                      top: 40%;
-                                     left: -32px;
+                                     left: -31px;
                                      width: 40px;
                                      height: 50px;
                                      display: flex;
                                      background-color: #f9f9f9;
                                      border: none;
                                      display: none;
-                                     z-index: 1001"), # END actionButton for sidebar to close sidebar
+                                     z-index: 1051;"), # END actionButton for sidebar to close sidebar
                       
                   
                       # ---- Emissions Map --------------------------------------------
@@ -654,7 +659,7 @@ shiny::tabPanel("Compare Seafood Emissions",
                        ),
                        
                        # Subtitle
-                       uiOutput("plot_subtitle"),
+                       uiOutput("country_subtitle"),
                        
                        # Output
                          div(style = "min-width: 1500px; min-height: 300px;",
@@ -685,7 +690,7 @@ Species are categorized using ISSCAAP (International Standard Statistical Classi
                          ),
                          
                          # Plot Subtitle
-                         uiOutput("plot_subtitle"),
+                         uiOutput("species_subtitle"),
                          
                          # Plot Output
                          div(

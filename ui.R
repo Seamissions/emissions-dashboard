@@ -190,8 +190,10 @@ navbarPage(
                            top: 0;
                            left: 0;
                            height: 100%;
+                           overflow-y: auto;
                            width: 20%;
                            min-width: 310px;
+                           min-height: 500px;
                            max-width: 400px;
                            background-color: #f9f9f9;
                            padding: 15px;
@@ -501,36 +503,63 @@ shiny::tabPanel("Compare Seafood Emissions",
     overflow-y: auto !important;
   }
 ")),
+  
+  # set default for unit radio buttons
+  tags$script(HTML("
+  Shiny.addCustomMessageHandler('set_initial_unit', function(value) {
+    const el = document.querySelector('input[name=unit_plot_toggle_input][value=' + value + ']');
+    if (el) {
+      el.checked = true;
+      Shiny.setInputValue('unit_plot_toggle_input', value, { priority: 'event' });
+    }
+  });
+")),
+  
+  # Radio button styling
   tags$style(HTML("
-  /* Darken the circle border */
+  /* ---- Native radio input style ---- */
+  input[type='radio'][name='unit_plot_toggle_input'] {
+    accent-color: #08C4E5;  /* Orange border (Seamissions) */
+    width: 18px;
+    height: 18px;
+  }
+
+  input[type='radio'][name='unit_plot_toggle_input'] + label {
+    font-weight: 400;
+    color: #20404F;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  /* ---- Pretty checkbox/radio overrides ---- */
   .pretty.p-default input[type='radio'] ~ .state label:before {
-    border: 1px solid black !important;
+    border: 1px solid #DA8D03 !important; /* Orange border */
   }
 
-  /* Make the selected dot black */
   .pretty.p-default input[type='radio']:checked ~ .state label:after {
-    background-color: #08C4E5 !important;
+    background-color: #08C4E5 !important; /* Light blue fill */
   }
 
-  /* Add spacing between inline radio buttons */
   .pretty.p-default {
     margin-bottom: 8px;
     margin-top: 8px;
   }
-  
-     .plot-button {
-        background-color: #08C4E5 !important;
-        color: white !important;
-        border: none !important;
-      }
-      .plot-button-active {
-        background-color: #F9B928 !important;
-        color: black !important;
-      }
 
+  /* ---- Button classes for toggles ---- */
+  .plot-button {
+    background-color: #08C4E5 !important;
+    color: white !important;
+    border: none !important;
+  }
+
+  .plot-button-active {
+    background-color: #F9B928 !important;
+    color: black !important;
+  }
 ")),
+ 
   
-  
+ 
   
   # Main Content ----------------------------------------------------------------
   div(id = "plot_main_content",
@@ -549,13 +578,13 @@ shiny::tabPanel("Compare Seafood Emissions",
                  div(style = "text-align: center;",
                      div(style = "display: inline-block; margin: 10px;",
                          actionButton("compare_species_input",
-                                      tagList(icon("fish", style = "margin-right: 8px;"), "Compare Species"),
+                                      tagList(icon("fish", style = "margin-right: 8px;"), "Compare Top Species"),
                                       class = "btn btn-lg"
                          )
                      ),
                      div(style = "display: inline-block; margin: 10px;",
                          actionButton("compare_countries_input",
-                                      tagList(icon("earth-americas", style = "margin-right: 8px;"), "Compare Countries"),
+                                      tagList(icon("earth-americas", style = "margin-right: 8px;"), "Compare Top Countries"),
                                       class = "btn btn-lg"
                          )
                      ),
@@ -574,13 +603,22 @@ shiny::tabPanel("Compare Seafood Emissions",
               fluidRow(
                 column(width = 12,
                        div(style = "text-align: center;",
-                           div(style = "display: inline-block; margin-right: 20px;",
-                               pickerInput("selected_country_input", "Select a Country:", choices = c("Select a country" = "", sort(unique(species_data$country_name))), selected = NULL, options = list(`live-search` = TRUE, `noneSelectedText` = "All Countries"))
-                           ),
-                           
-                           div(style = "display: inline-block;",
-                               tags$h4(textOutput("selected_country_total"), style = "color: white; font-weight: bold; margin-top: 25px;")
+                           div(
+                             style = "display: inline-block; margin-right: 20px;",
+                             pickerInput(
+                               inputId = "selected_country_input",
+                               label = tags$span("Select a Country:", style = "color: white;font-size: 18px;"),
+                               choices = c("Select a country" = "", sort(unique(species_data$country_name))),
+                               selected = NULL,
+                               options = list(
+                                 `live-search` = TRUE,
+                                 `noneSelectedText` = "All Countries"
+                               )
+                             )
                            )
+                           
+                           
+                      
                        )
                 )
               )
@@ -616,10 +654,7 @@ shiny::tabPanel("Compare Seafood Emissions",
                        ),
                        
                        # Subtitle
-                       tags$h4(
-                         "CO₂ Emissions", 
-                         style = "color: white; font-size: 25px; text-align: center; margin-top: 10px;"
-                       ),
+                       uiOutput("plot_subtitle"),
                        
                        # Output
                          div(style = "min-width: 1500px; min-height: 300px;",
@@ -649,11 +684,8 @@ Species are categorized using ISSCAAP (International Standard Statistical Classi
                            )
                          ),
                          
-                         # Subtitle
-                         tags$h4(
-                           "CO₂ Emissions", 
-                           style = "color: white; font-size: 25px; text-align: center; margin-top: 10px;"
-                         ),
+                         # Plot Subtitle
+                         uiOutput("plot_subtitle"),
                          
                          # Plot Output
                          div(
@@ -666,7 +698,7 @@ Species are categorized using ISSCAAP (International Standard Statistical Classi
                      
                      # ---- Select a Country Plot -----------------------------
                      
-                     div(id = "species_bar_plot_wrapper",  style = "display: flex; justify-content: center; align-items: center; gap: 8px;",
+                     div(id = "species_bar_plot_wrapper",  style = "display: flex; flex-direction: column; align-items: center; gap: 8px;",
                          uiOutput("dynamic_country_header"),
                        
                          shinyjs::hidden(
@@ -688,33 +720,51 @@ Species are categorized using ISSCAAP (International Standard Statistical Classi
     div(style = "display: flex; justify-content: center; flex-wrap: wrap;",
         
         # ---- Plot Unit Toggle -----------------------------------------------
-        div(style = "z-index: 1000;
-              background-color: rgba(249, 249, 249, 0.9);
-              padding: 8px 16px;
-              border-radius: 8px;
-              width: 250px;
-              margin: 10px;",
-            
-            tags$span("Select Plot Unit"),
-            infoPopup(
-              id = "plot_unit_popup",
-              description = "Total Emissions refers to the aggregated annual CO₂ emissions, measured in metric tons.
-Emissions per Unit Catch is a measure of emissions efficiency, calculated as the ratio of total annual CO₂ emissions to the total annual catch weight in metric tons.
-
-Higher values indicate that more emissions are required to land each ton of catch—reflecting lower efficiency. Lower values indicate greater efficiency, with fewer emissions per ton of seafood landed.",
-              data_source = NULL,
-              learn_more = NULL
-            ),
-            
-            prettyRadioButtons(
-              inputId = "unit_plot_toggle_input",
-              label = NULL,
-              choices = c("Total Emissions" = "total", "Emissions Per Unit Catch" = "per_unit"),
-              selected = "total",
-              inline = FALSE,
-              status = "primary"
-            )
-        ), # END plot unit box
+        div(
+          style = "z-index: 1000;
+           background-color: rgba(249, 249, 249, 0.9);
+           padding: 8px 16px;
+           border-radius: 8px;
+           width: 250px;
+           margin: 10px;",
+          
+          tags$span("Select Plot Unit"),
+          
+          # Total emissions button
+          div(style = "display: flex; align-items: center; gap: 8px; margin-top: 10px;",
+              tags$input(type = "radio", name = "unit_plot_toggle_input", value = "total", id = "radio_total", checked = "checked"),
+              tags$label(`for` = "radio_total", "Total Emissions"),
+              infoPopup(
+                id = "total_emissions_popup",
+                description = "This plot shows total annual CO₂ emissions for all apparent fishing activity, summed for each country in the selected year. Emissions include both AIS-broadcasting vessels and estimated contributions from non-broadcasting vessels, which may be attributed to a country based on its flagged fleet's fishing effort and reported catch in the region. The top 10 highest-emitting fleets are shown here.",
+                interpretation = "Each bar represents the total CO₂ emissions (in metric tons) attributed to a country's fishing fleet for the selected year.",
+                data_source = "This dataset, developed by the Seamissions team, links fishing vessel emissions data from Global Fishing Watch with wild-caught seafood catch data from the Food and Agriculture Organization (FAO) of the United Nations.",
+              )
+          ),
+          
+          # Per unit catch button
+          div(style = "display: flex; align-items: center; gap: 8px; margin-top: 6px;",
+              tags$input(type = "radio", name = "unit_plot_toggle_input", value = "per_unit", id = "radio_per_unit"),
+              tags$label(`for` = "radio_per_unit", "Emissions Efficiency"),
+              infoPopup(
+                id = "catch_unit_emissions_popup",
+                description = "This plot shows total annual CO₂ emissions for all apparent fishing activity, summed for each country in the selected year. Emissions include both AIS-broadcasting vessels and estimated contributions from non-broadcasting vessels, which may be attributed to a country based on its flagged fleet's fishing effort and reported catch in the region. The top 10 highest-emitting fleets are shown here.",
+                interpretation = "Each bar represents emissions efficiency, calculated as the total annual CO₂ emissions per metric ton of annual reported catch for the selected year. Higher values mean less efficient catch rates, lower values mean more efficient catch rates. Since there are some ",
+                data_source = "This dataset, developed by the Seamissions team, links fishing vessel emissions data from Global Fishing Watch with wild-caught seafood catch data from the Food and Agriculture Organization (FAO) of the United Nations."
+              )
+              
+          ),
+          
+          # Save selection to Shiny input
+          tags$script(HTML("
+    document.querySelectorAll('input[name=unit_plot_toggle_input]').forEach(el => {
+      el.addEventListener('change', (e) => {
+        Shiny.setInputValue('unit_plot_toggle_input', e.target.value, { priority: 'event' });
+      });
+    });
+  "))
+        ),
+        
         
         # ---- Year Selector ---------------------------------------------------
         div(style = "z-index: 1000;

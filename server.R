@@ -326,16 +326,7 @@ server <- function(input, output, session) {
           palette = fao_zone_color,
           stroke_width = 4,
           update_view = FALSE
-        ) |>
-        
-        add_text(
-          data = fao_labels,
-          layer_id = "fao_text_layer",
-          text = "zone",
-          fill_colour = "#FFFFFF",
-          size = 30,
-          billboard = TRUE,
-          update_view = FALSE)
+        ) 
       
       later::later(function() { loading(FALSE) }, delay = 0.2)
       
@@ -398,6 +389,13 @@ server <- function(input, output, session) {
   ")
   })
   
+  # Preload default input value on app start
+  observe({
+    if (is.null(input$unit_plot_toggle_input)) {
+      session$sendCustomMessage("set_initial_unit", "total")
+    }
+  })
+  
   observeEvent(input$compare_countries_input, {
     shinyjs::show("country_plot")
     shinyjs::hide("isscaap_plot")
@@ -426,6 +424,22 @@ server <- function(input, output, session) {
   ")
   })
   
+  # Control for species plot subtitle
+  output$plot_subtitle <- renderUI({
+    is_per_unit <- input$unit_plot_toggle_input == "per_unit"
+    
+    subtitle_text <- if (is_per_unit) {
+      "Emissions Efficiency (Metric Tons CO₂ / Metric Ton Catch)"
+    } else {
+      "Total Annual CO₂ Emissions (Metric Tons)"
+    }
+    
+    tags$h4(
+      subtitle_text,
+      style = "color: white; font-size: 25px; text-align: center; margin-top: 10px;"
+    )
+  })
+  
   
   # --- Plot comparing countries ----
   output$country_plot_output <- renderPlot({
@@ -445,7 +459,8 @@ server <- function(input, output, session) {
     }
     
     x_label <- if (isTRUE(show_per_unit)) {
-      paste0(comma(filtered_flags$emissions_per_ton))
+      formatC(filtered_flags$emissions_per_ton, format = "f", digits = 2)
+      
     } else {
       paste0(comma(filtered_flags$sum_emissions))
     }
@@ -493,13 +508,13 @@ server <- function(input, output, session) {
                color = "white",
                linewidth = 0.5) +
       geom_col(aes(x = x_var,
-                   y = reorder(country_name, sum_emissions)),
+                   y = reorder(country_name, x_var)),
                fill = "#08C4E5") +
       ggflags::geom_flag(aes(x = 0,
-                             y = reorder(country_name, sum_emissions),
+                             y = reorder(country_name, x_var),
                              country = iso2), size = 15) +
       geom_text(aes(x = x_var + 0.15 * max_x,
-                    y = reorder(country_name, sum_emissions),
+                    y = reorder(country_name, x_var),
                     label = x_label),
                 color = "white",
                 size = 7) +
@@ -531,10 +546,11 @@ server <- function(input, output, session) {
     }
     
     x_label <- if (isTRUE(show_per_unit)) {
-      paste0(comma(filtered_isscaap$emissions_per_ton))
+      formatC(filtered_isscaap$emissions_per_ton, format = "f", digits = 2)
     } else {
       paste0(comma(filtered_isscaap$sum_emissions))
     }
+    
     
     # x_var is already set above correctly
     max_x <- max(x_var, na.rm = TRUE)
@@ -564,18 +580,18 @@ server <- function(input, output, session) {
                  linewidth = 0.3) +
       
       geom_col(aes(x = x_var,
-                   y = reorder(isscaap_group, sum_emissions)),
+                   y = reorder(isscaap_group, x_var)),
                fill = "#08C4E5") +
       
       # Add image aligned under the bar
       geom_image(aes(
         x = 0,
-        y = reorder(isscaap_group, sum_emissions),
+        y = reorder(isscaap_group, x_var),
         image = image
       ), size = .12, asp = 1) +  # Adjust size/asp as needed
       
       geom_text(aes(x = x_var + 0.12 * max_x,
-                    y = reorder(isscaap_group, sum_emissions),
+                    y = reorder(isscaap_group, x_var),
                     label = x_label),
                 color = "white",
                 size = 7) +
@@ -735,18 +751,18 @@ server <- function(input, output, session) {
     # ---- ggplot ----
     ggplot(data = filtered_select_country) +
       geom_vline(xintercept = x_breaks, linetype = "dotted", color = "#AAAAAA", linewidth = 0.3) +
-      geom_col(aes(x = x_var, y = reorder(isscaap_group, sum_emissions)), fill = "#08C4E5") +
+      geom_col(aes(x = x_var, y = reorder(isscaap_group, x_var)), fill = "#08C4E5") +
       
       # Dynamically sized image icons
       geom_image(
-        aes(x = 0, y = reorder(isscaap_group, sum_emissions), image = image),
+        aes(x = 0, y = reorder(isscaap_group, x_var), image = image),
         size = image_size,
         asp = 1
       ) +
       
       geom_text(
         aes(x = x_var + 0.15 * max_x,
-            y = reorder(isscaap_group, sum_emissions),
+            y = reorder(isscaap_group,  x_var),
             label = x_label),
         color = "white",
         size = 7
@@ -778,18 +794,6 @@ server <- function(input, output, session) {
       ) +
       expand_limits(x = c(-0.05 * max_x, 1.5 * max_x))
   }, res = 100)
-  
-  # ---- Emissions total text ----
-  output$selected_country_total <- renderText({
-    req(input$selected_country_input)
-    
-    total <- species_data |>
-      filter(country_name == input$selected_country_input) |>
-      summarize(total = sum(sum_emissions, na.rm = TRUE)) |>
-      pull(total)
-    
-    paste0(format(round(total, 2), big.mark = ","), " MT CO₂")
-  })
   
   
   

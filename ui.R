@@ -976,15 +976,15 @@ tabPanel("Learn More",
                       src   = "images/logos/emlab-logo-color-clear.svg",
                       style = "height: auto; max-height: 85px; width: auto;  margin-left: 30px; margin-top: 15px; margin-bottom: 15px"
                     ),
-                    tags$h5(tags$u("Environmental Markets Lab (emLab)"),
+                    tags$h5(tags$u("Environmental Markets Lab"),
                             style = "margin-bottom: 30px;  margin-left: 30px"),
                     tags$p(
                       style = "font-weight: normal; color: #0B2232; margin-bottom: 15px; margin-left: 30px",
-                      "A think-and-do tank for market-based approaches to environmental challenges. They are an interdisciplinary team of scientists based at the University of California Santa Barbara that conducts cutting-edge, data-driven research on the power, limitations, and design of market-based approaches to tackle the world's most pressing environmental problems."
+                      "The Environmental Markets Lab (emLab) is a think-and-do tank dedicated to market-based solutions for environmental challenges. Based at the University of California, Santa Barbara, this interdisciplinary team of scientists conducts cutting-edge, data-driven research on the power, limitations, and design of market-driven approaches to address the world's most pressing environmental problems."
                     ),
                     tags$p(
                       style = "font-weight: normal; color: #0B2232; margin-bottom: 20px; margin-left: 30px",
-                      "In collaboration with implementing partners, they aim to better align environmental objectives and economic incentives in support of sustainable livelihoods and a resilient planet."
+                      "In collaboration with implementation partners, they work to better align environmental objectives with economic incentives, supporting sustainable livelihoods and a resilient planet."
                     ),
                     
                     # Global Fishing Watch section
@@ -996,15 +996,14 @@ tabPanel("Learn More",
                             style = "margin-bottom: 30px;  margin-left: 30px"),
                     tags$p(
                       style = "font-weight: normal; color: #0B2232; margin-bottom: 15px; margin-left: 30px",
-                      "Global Fishing Watch seeks to advance ocean governance through increased transparency of human activity at sea, enabling scientific research and driving transformation in ocean management by creating and publicly sharing map visualizations, data, and analysis tools."
+                      "Global Fishing Watch (GFW) is an independent, international nonprofit organization dedicated to advancing ocean governance. By publicly sharing map visualizations, data, and analysis tools, they help increase transparency of human activity at sea, enabling scientific research, and driving transformation in ocean management."
                     ),
                     tags$p(
                       style = "font-weight: normal; color: #0B2232; margin-bottom: 20px; margin-left: 30px",
-                      "Global Fishing Watch was founded in 2015 through a collaboration between three partners: ",
+                      "Established as a nonprofit organization in 2017, Global Fishing Watch was originally founded in 2015 through a collaboration between three partners: ",
                       tags$strong("Oceana,"), " an international ocean conservation organization; ",
-                      tags$strong("SkyTruth,"), " a technology firm that uses satellite imagery and data to protect the environment; and ",
-                      tags$strong("Google,"), " whose tools and contributions help process big data. ",
-                      "In 2017, Global Fishing Watch was established as an independent, international nonprofit organization."
+                      tags$strong(" SkyTruth,"), " a technology firm that uses satellite imagery and data to protect the environment; and ",
+                      tags$strong(" Google,"), " whose tools and contributions help process big data. "
                     )
                   ) # END div
            )

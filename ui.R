@@ -1,8 +1,25 @@
-# ------------------------------------------------------------------------------------------------------------------
-#     ui.R 
-# ------------------------------------------------------------------------------------------------------------------
+# =============================================================================
+# Name:           ui.R
+# Description:    User interface definition for the Seamissions Explorer Shiny app.
+#                 Constructs the layout, panels, and visual elements for navigation,
+#                 map exploration, data visualization, and interpretive content. 
+#                 Integrates custom styling, component inputs, and responsive design
+#                 to guide user interaction across desktop and mobile devices.
+# 
+# Inputs:         theme.R                #  Custom color palette and visual theme
+#                 global.R               #  Preloaded data and logic available app-wide
+#                 infoPopup.R            #  Reusable UI component for info tooltips
+#                 www/ (images, CSS)     #  Supporting assets for icons, logos, and styling
+# 
+# Outputs:        Renders the full UI for all app tabs, including maps, plots,
+#                 tooltips, filters, and info sections
+# 
+# Notes:          This file defines the layout structure and all visible elements
+#                 seen by users. It uses Shiny modules, `navbarPage`, `fluidRow`,
+#                 `absolutePanel`, and custom JavaScript/CSS for interactive behavior.
+# =============================================================================
 
-
+# 
 source("theme.R")
 
 ui <- 
@@ -143,7 +160,6 @@ navbarPage(
                           
                           tags$img(src = "images/logos/emlab-logo-color.png",
                                    style = "height: 85px;"),
-                          
                           tags$img(src = "images/logos/gfw-logo.png",
                                    style = "height: 80px;")
                       ),

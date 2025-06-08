@@ -1,22 +1,33 @@
-# --------------------------------------------------------------------------------
-# ---- server --------------------------------------------------------------------
-# --------------------------------------------------------------------------------
+# =============================================================================
+# Name:           server.R
+# Description:    Server-side logic for the Seamissions Explorer Shiny app.
+#                 Handles all reactive expressions, data filtering, map and plot
+#                 rendering, dynamic UI responses, and custom JavaScript-based
+#                 UI toggles.
+# =============================================================================
 
 
+# Initialize the server
 server <- function(input, output, session) {
   
-  # ---- Set up buttons ------------------------------------------------------
+# =============================================================================
+# Landing Tab
+# =============================================================================
   
+
+  # ---- Tab navigation button logic for explore map card ----
   observe({
     shinyjs::onclick("explore_map_card", {
       updateNavbarPage(session, "navbarPage", selected = "Emissions Map")
     })
     
-    shinyjs::onclick("explore_seafood_card", {
-      updateNavbarPage(session, "navbarPage", selected = "Compare Seafood Emissions")
+  # ---- Tab navigation button logic for seafood emissions card ----
+  shinyjs::onclick("explore_seafood_card", {
+    updateNavbarPage(session, "navbarPage", selected = "Compare Seafood Emissions")
     })
-    
   })
+
+  # ---- Tab navigation button logic for learn more link ----
   observe({
     shinyjs::onclick("learn_more_link", {
       updateNavbarPage(session, "navbarPage", selected = "Learn More")
@@ -24,137 +35,22 @@ server <- function(input, output, session) {
     
   })
   
-  observe({
-    shinyjs::onclick("learn_more_link2", {
-      updateNavbarPage(session, "navbarPage", selected = "Learn More")
-    })
-    
-  })
+# ==============================================================================
+# Emissions Map Tab
+# ==============================================================================
   
   # ----------------------------------------------------------------------------
-  # ---- Emissions map ---------------------------------------------------------
-  #-----------------------------------------------------------------------------
+  # Map initialization: Reactive values to manage application state 
+  # ----------------------------------------------------------------------------
   
-  
-  # ---- Initialize default states for map----
+  # Track if its the first time rendering map
   first_time <- reactiveVal(TRUE)
+  
+  # Track zoom/location
   current_view <- reactiveVal(list(zoom = 3, location = c(0, 0)))
+  
+  # Loading symbol
   loading <- reactiveVal(TRUE)
-  nb_emissions <- readRDS("data/nb_emissions.rds") |>
-    mutate(tooltip_text = paste0(scales::comma(round(emissions_co2_mt, 0)), " MT CO₂"))
-  
-  # Pre-calculate total emissions for the initial year (max year)
-  initial_total_broadcasting <- broadcasting_emissions |>
-    filter(country_name == "All Countries", year == max(year, na.rm = TRUE)) |>
-    summarise(total = sum(emissions_co2_mt, na.rm = TRUE)) |>
-    pull(total)
-  
-  observeEvent(input$toggle_sidebar_open_input, {
-    shinyjs::hide("sidebar-panel", anim = TRUE, animType = "fade")
-    
-    shinyjs::hide("toggle_sidebar_open_input", anim = TRUE, animType = "fade")
-    shinyjs::hide("sidebar_toggle_background", anim = TRUE, animType = "fade")
-    shinyjs::show("toggle_sidebar_close_input", anim = TRUE, animType = "fade")
-  })
-  
-  
-  observeEvent(input$toggle_sidebar_close_input, {
-    shinyjs::show("sidebar-panel", anim = TRUE, animType = "fade")
-    shinyjs::show("toggle_sidebar_open_input", anim = TRUE, animType = "fade")
-    shinyjs::show("sidebar_toggle_background", anim = TRUE, animType = "fade")
-    shinyjs::hide("toggle_sidebar_close_input", anim = TRUE, animType = "fade")
-  })
-  
-  
-  # Auto minimize sidebar panel for small screens/mobile devices
-  observe({
-    req(input$minimize_sidebar_on_mobile)
-    req(input$navbarPage == "Emissions Map")
-    shinyjs::hide("sidebar-panel")
-    shinyjs::show("toggle_sidebar_close_input")
-    shinyjs::hide("toggle_sidebar_open_input")
-  })
-  
-  
-  # ---- Initialize the map on first render ----
-  observe({
-    if (first_time() && input$navbarPage == "Emissions Map") {
-      
-      # Trigger the material switch to be on for broadcasting layer
-      updateMaterialSwitch(session, "show_broadcasting_input", value = TRUE)
-      
-      # Add "All Countries" layer on first render
-      mapdeck_update(map_id = "emissions_map") |>
-        add_polygon(
-          data = broadcasting_emissions |> filter(country_name == "All Countries", year == max(year, na.rm = TRUE)),
-          layer_id = "all_countries",
-          fill_colour = "palette",
-    #      palette = blue_palette,
-          fill_opacity = 1,
-          tooltip = "tooltip_text",
-          auto_highlight = TRUE,
-          highlight_colour = "#F8FDFF50",
-          update_view = FALSE
-        )
-      
-      # Update the broadcasting total emissions box
-      output$total_broadcasting_text <- renderText({
-        paste0(format(round(initial_total_broadcasting, 2), big.mark = ","), " MT CO₂")
-      })
-      
-      # After the initial render, set first_time to FALSE to prevent re-running
-      first_time(FALSE)
-    }
-  })
-  
-  # ---- Toggle legends visibility and total emissions ----
-  observe({
-    shinyjs::toggle("broadcasting_legend", condition = input$show_broadcasting_input)
-    shinyjs::toggle("broadcasting_total", condition = input$show_broadcasting_input)
-  })
-  
-  observe({
-    shinyjs::toggle("non_broadcasting_legend", condition = input$show_non_broadcasting_input)
-    shinyjs::toggle("non_broadcasting_total", condition = input$show_non_broadcasting_input)
-  })
-  
-  # ---- Reset total emissions on tab switch ----
-  observe({
-    if (input$navbarPage == "Emissions Map") {
-      if (input$show_broadcasting_input) {
-        output$total_broadcasting <- renderText({
-          total <- broadcasting_total()
-          paste0(format(round(total, 2), big.mark = ","), " Mt CO2")
-        })
-      }
-      if (input$show_non_broadcasting_input) {
-        output$total_non_broadcasting <- renderText({
-          nb_emissions <- nb_emissions |> filter(emissions_co2_mt >= 200, year == input$year_slider_input_map)
-          total <- sum(nb_emissions$emissions_co2_mt, na.rm = TRUE)
-          paste0(format(round(total, 2), big.mark = ","), " Mt CO2")
-        })
-      }
-    }
-  })
-  
-  # ---- Toggle visibility of country select input ----
-  observeEvent(input$show_broadcasting_input, {
-    shinyjs::toggle("country_select_input", condition = input$show_broadcasting_input)
-    if (!input$show_broadcasting_input) {
-      updateSelectInput(session, "country_select_input", selected = "")
-      mapdeck_update(map_id = "emissions_map") |>
-        clear_polygon(layer_id = "all_countries") |>
-        clear_polygon(layer_id = "country_layer")
-    }
-  }, priority = 10)
-  
-  # ---- Filter emissions by country and year ----
-  country_filtered <- reactive({
-    req(input$country_select_input, input$year_slider_input_map)
-    broadcasting_emissions |>
-      filter(country_name == input$country_select_input, year == input$year_slider_input_map)
-  })
-  
   
   # ---- Define Loading symbol ----
   output$loading_ui <- renderUI({
@@ -169,6 +65,147 @@ server <- function(input, output, session) {
         color: #08C4E5;",
         icon("spinner", class = "fa-spin", style = "font-size: 60px; margin-bottom: 10px;"))
     }
+  })
+  
+  # ---- Track view so we don’t reset zoom/location ----
+  observe({
+    input$emissions_map_view_state_input
+    isolate({
+      view <- input$emissions_map_view_state_input
+      if (!is.null(view)) {
+        current_view(list(
+          zoom = view$zoom,
+          location = c(view$longitude, view$latitude)
+        ))
+      }
+    }) # END isolate
+  }) # END observe
+  
+  
+  # ----------------------------------------------------------------------------
+  # Prepare data
+  # ----------------------------------------------------------------------------
+  
+  # Load non-broadcasting emissions
+  nb_emissions <- readRDS("data/nb_emissions.rds") |>
+    
+  # add tooltip for emissions on hover
+  mutate(tooltip_text = paste0(scales::comma(round(emissions_co2_mt, 0)), " MT CO₂"))
+  
+  
+  # ----------------------------------------------------------------------------
+  # Define sidebar behavior
+  # ----------------------------------------------------------------------------
+  
+  # Open sidebar behavior
+  observeEvent(input$toggle_sidebar_open_input, {
+    shinyjs::hide("sidebar-panel", anim = TRUE, animType = "fade")
+    shinyjs::hide("toggle_sidebar_open_input", anim = TRUE, animType = "fade")
+    shinyjs::hide("sidebar_toggle_background", anim = TRUE, animType = "fade")
+    shinyjs::show("toggle_sidebar_close_input", anim = TRUE, animType = "fade")
+  })
+  
+  # Close sidebar behavior
+  observeEvent(input$toggle_sidebar_close_input, {
+    shinyjs::show("sidebar-panel", anim = TRUE, animType = "fade")
+    shinyjs::show("toggle_sidebar_open_input", anim = TRUE, animType = "fade")
+    shinyjs::show("sidebar_toggle_background", anim = TRUE, animType = "fade")
+    shinyjs::hide("toggle_sidebar_close_input", anim = TRUE, animType = "fade")
+  })
+  
+  
+  # ----------------------------------------------------------------------------
+  # Initial render setup for map
+  # ----------------------------------------------------------------------------
+  
+  observe({
+    if (first_time() && input$navbarPage == "Emissions Map") {
+      
+      # Toggle broadcasting materialSwitch on by default
+      updateMaterialSwitch(session, "show_broadcasting_input", value = TRUE)
+      
+      # Display broadcasting layer ("all_countries") by default
+      mapdeck_update(map_id = "emissions_map") |>
+        add_polygon(
+          data = broadcasting_emissions |> filter(country_name == "All Countries",
+                                                  # filter to most recent year
+                                                  year == max(year, na.rm = TRUE)),
+          layer_id = "all_countries",
+          fill_colour = "palette",
+          fill_opacity = 1,
+          tooltip = "tooltip_text",
+          auto_highlight = TRUE,
+          highlight_colour = "#F8FDFF50",
+          update_view = FALSE)
+      
+      # After the initial render, set first_time to FALSE to prevent re-running
+      first_time(FALSE)
+    }
+  })
+  
+  
+  # ----------------------------------------------------------------------------
+  # Sidebar legend & layer controls for map
+  # ----------------------------------------------------------------------------
+  
+  # ---- Toggle legend/palette visibility for broadcasting emissions ----
+  observe({
+    shinyjs::toggle("broadcasting_legend", condition = input$show_broadcasting_input)
+    shinyjs::toggle("broadcasting_total", condition = input$show_broadcasting_input)
+  })
+  
+  # ---- Toggle legend/palette visibility for broadcasting emissions ----
+  observe({
+    shinyjs::toggle("non_broadcasting_legend", condition = input$show_non_broadcasting_input)
+    shinyjs::toggle("non_broadcasting_total", condition = input$show_non_broadcasting_input)
+  })
+  
+  # ---- Dynamically update total emissions displays ----
+  observe({
+    req(input$year_slider_input_map)
+    
+    # Broadcasting emissions total
+    if (input$show_broadcasting_input) {
+      output$total_broadcasting <- renderText({
+        total <- broadcasting_total()
+        paste0(format(round(total, 2), big.mark = ","), " Mt CO2")
+      })
+    }
+    
+    # Non-broadcasting emissions total
+    if (input$show_non_broadcasting_input) {
+      output$total_non_broadcasting <- renderText({
+        nb_total <- nb_emissions |>
+          filter(emissions_co2_mt >= 200, year == input$year_slider_input_map) |>
+          summarise(total = sum(emissions_co2_mt, na.rm = TRUE)) |>
+          pull(total)
+        paste0(format(round(nb_total, 2), big.mark = ","), " Mt CO2")
+      })
+    }
+  })
+  
+  
+  # ----------------------------------------------------------------------------
+  # Visibility and filter controls for broadcasting emissions
+  # ----------------------------------------------------------------------------
+  
+  # ---- Toggle visibility of country select input, if input is changed ----
+  observeEvent(input$show_broadcasting_input, {
+    shinyjs::toggle("country_select_input",
+                    condition = input$show_broadcasting_input)
+    if (!input$show_broadcasting_input) {
+      updateSelectInput(session, "country_select_input", selected = "")
+      mapdeck_update(map_id = "emissions_map") |>
+        clear_polygon(layer_id = "all_countries") |>
+        clear_polygon(layer_id = "country_layer")
+    }
+  }, priority = 10)
+  
+  # ---- Filter broadcasting emissions by country and year ----
+  country_filtered <- reactive({
+    req(input$country_select_input, input$year_slider_input_map)
+    broadcasting_emissions |>
+      filter(country_name == input$country_select_input, year == input$year_slider_input_map)
   })
   
   # ---- All countries & country emissions layers ----
@@ -215,27 +252,6 @@ server <- function(input, output, session) {
     later::later(function() { loading(FALSE) }, delay = 0.2)
   })
   
-  # ---- Non-broadcasting emissions layer ----
-  observe({
-    mapdeck_update(map_id = "emissions_map") |>
-      clear_polygon(layer_id = "non_broadcasting_layer")
-    if (input$show_non_broadcasting_input) {
-      loading(TRUE)
-      nb_emissions <- nb_emissions |> filter(emissions_co2_mt >= 200, year == input$year_slider_input_map)
-      mapdeck_update(map_id = "emissions_map") |>
-        add_polygon(
-          layer_id = "non_broadcasting_layer",
-          data = nb_emissions,
-          fill_colour = "palette",
-          fill_opacity = 0.1,
-          tooltip = "tooltip_text",
-          auto_highlight = TRUE,
-          highlight_colour = "#F8FDFF50",
-          update_view = FALSE
-        )
-      later::later(function() { loading(FALSE) }, delay = 0.2)
-    }
-  })
   
   # ---- Calculate total emissions for the selected year and country ----
   broadcasting_total <- reactive({
@@ -284,18 +300,35 @@ server <- function(input, output, session) {
   })
   
   
-  # ---- Initialize emissions map ----
-  output$emissions_map <- renderMapdeck({
-    loading(TRUE)
-    later::later(function() { loading(FALSE) }, delay = 0.)
-    mapdeck(
-      token = MAPBOX_TOKEN,
-      style = mapdeck_style("dark"),
-      zoom = 2,
-      location = c(-10, 20)
-    )
+  # ----------------------------------------------------------------------------
+  # Visibility and filter controls for non-broadcasting emissions
+  # ----------------------------------------------------------------------------
+  
+  # ---- Toggle visibility of non-broadcasting emissions layer ----
+  observe({
+    mapdeck_update(map_id = "emissions_map") |>
+      clear_polygon(layer_id = "non_broadcasting_layer")
+    if (input$show_non_broadcasting_input) {
+      loading(TRUE)
+      nb_emissions <- nb_emissions |> filter(emissions_co2_mt >= 200, year == input$year_slider_input_map)
+      mapdeck_update(map_id = "emissions_map") |>
+        add_polygon(
+          layer_id = "non_broadcasting_layer",
+          data = nb_emissions,
+          fill_colour = "palette",
+          fill_opacity = 0.1,
+          tooltip = "tooltip_text",
+          auto_highlight = TRUE,
+          highlight_colour = "#F8FDFF50",
+          update_view = FALSE
+        )
+      later::later(function() { loading(FALSE) }, delay = 0.2)
+    }
   })
   
+  # ----------------------------------------------------------------------------
+  # Visibility and filter controls for FAO major fishing regions
+  # ----------------------------------------------------------------------------
   
   # ---- FAO Zones layer ----
   observe({
@@ -320,9 +353,9 @@ server <- function(input, output, session) {
           stroke_width = 4,
           update_view = FALSE
         ) 
-        
-    
-      later::later(function() { loading(FALSE) }, delay = 0.1)
+      
+      later::later(function() { loading(FALSE) }, delay = 0.01)
+      
     } else {
       mapdeck_update(map_id = "emissions_map") |>
         clear_polygon(layer_id = "fao_layer") |>
@@ -330,32 +363,26 @@ server <- function(input, output, session) {
     }
   })
   
+  # ----------------------------------------------------------------------------
+  # Initialize & render emissions map
+  # ----------------------------------------------------------------------------
   
-  
-  # ---- Track view so we don’t reset zoom/location ----
-  observe({
-    input$emissions_map_view_state_input
-    isolate({
-      view <- input$emissions_map_view_state_input
-      if (!is.null(view)) {
-        current_view(list(
-          zoom = view$zoom,
-          location = c(view$longitude, view$latitude)
-        ))
-      }
-    }) # END isolate
-  }) # END observe
-  
-  
-  
-  
+  output$emissions_map <- renderMapdeck({
+    loading(TRUE)
+    later::later(function() { loading(FALSE) }, delay = 0.)
+    mapdeck(
+      token = MAPBOX_TOKEN,
+      style = mapdeck_style("dark"),
+      zoom = 2,
+      location = c(-10, 20)
+    )
+  })
   
   # END Emissions Map
   
-  
-  # ----------------------------------------------------------------------------
-  # ---- Compare emissions plots ------------------------------------------------
-  # ----------------------------------------------------------------------------
+# ==============================================================================
+# Compare Emissions Tab
+# ==============================================================================
   
   useShinyjs()
   
@@ -634,7 +661,6 @@ server <- function(input, output, session) {
   
   
   # --- Plot for selected country ISSCAAP groups -------------------------------
-  
   output$dynamic_country_header <- renderUI({
     if (is.null(input$selected_country_input) || input$selected_country_input == "" || input$selected_country_input == "All Countries") {
       div(style = "width: 100%; text-align: center;",
@@ -805,9 +831,6 @@ server <- function(input, output, session) {
       expand_limits(x = c(-0.05 * max_x, 1.5 * max_x))
   }, res = 100)
   
-  
-  
-
 # END Seafood Emissions Explorer
 
 } # END server function

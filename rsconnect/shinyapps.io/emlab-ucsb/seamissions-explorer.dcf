@@ -5,6 +5,6 @@ account: emlab-ucsb
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 14843948
-bundleId: 10365671
+bundleId: 10367284
 url: https://emlab-ucsb.shinyapps.io/seamissions-explorer/
 version: 1

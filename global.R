@@ -1,13 +1,32 @@
-# --------------------------------------------------------------------------------
-# ---- Global --------------------------------------------------------------------
-# --------------------------------------------------------------------------------
+# =============================================================================
+# Name:           global.R
+# Description:    Global setup file for the Seamissions Explorer Shiny app. 
+#                 Loads essential libraries, initializes shared resources, 
+#                 and prepares spatial and emissions datasets used throughout 
+#                 the app. Centralizes code that does not need to be re-run 
+#                 for each user session to improve performance and maintainability.
+# 
+# Inputs:         config.R                #  App-wide configuration settings
+#                 infoPopup.R             #  Reusable UI component for info tooltips
+#                 World_Fao_Zones.shp     #  FAO Major Fishing Region shapefile
+#                 species_data.rds        #  Emissions by species/country/year
+#                 top_flags.rds           #  Pre-filtered top emitting flags data
+#
+# Outputs:        Load logic and variables from a global scope among concurrent app users
+# 
+# Notes:          Reduce redundant code and increase the app's speed by re-using
+#                 logic and variables from a global scope among concurrent app users.
+#                 This file should only contain objects and expressions that do not 
+#                 rely on user input and are safe to share across sessions.
+# 
+# =============================================================================
 
+
+# Set up environment ----------------------------------------------------------
 
 # ---- Source config file storing tokens ----
 source("R/config.R")
-source("R/infoPopup.R")
-sf::sf_use_s2(FALSE)
-
+source("R/infoPopup.R") 
 
 # ---- Load libraries ----
 library(shiny)
@@ -17,25 +36,26 @@ library(shinyjs)
 library(shinyBS) 
 library(shinycssloaders)
 library(bs4Dash)
-library(later) # to delay loader
-library(gganimate)
+library(later)
 library(tidyverse)
 library(mapdeck)
 library(markdown)
-library(geojsonsf)
 library(here)
 library(sf)
-library(viridis)
 library(RColorBrewer) # for colors
 library(bslib) # for theme colors
 library(scales)  # for commas in labels
 library(rsconnect)
-library(pryr)
 library(ggflags)
 library(ggimage)
 library(magick)
 
-# ---- Load & prep data ---------------------------------------------------------------
+# ---- Define color palettes -------------------------------------------------
+blue_palette <- colorRamp(c("#20404F", "#4C9EA6", "#67D6E0", "#76F3FF", "#A9F2FF", "#DAF3FF", "#F6F8FF"))((1:256) / 256)
+orange_palette <- colorRamp(c("#7A5100", "#B97700", "#FFB300", "#FFD54F", "#FFEB99", "#FFF5CC", "#FFFEF2"))((1:256) / 256)
+
+
+# Import & prep data -----------------------------------------------------------------
 
 # ---- Emissions map data ----
 
@@ -81,23 +101,17 @@ top_isscaap <- species_data |>
       "Miscellaneous demersal fishes",
       "Miscellaneous diadromous fishes",
       "Miscellaneous marine crustaceans",
-      "Miscellaneous marine molluscs"
-    )
-  ) |>
+      "Miscellaneous marine molluscs")) |>
  
   group_by(isscaap_group, year, image) |>
   summarize(
     sum_emissions = sum(sum_emissions, na.rm = TRUE),
     total_catch = sum(total_catch, na.rm = TRUE),
     emissions_per_ton = sum_emissions / total_catch,
-    .groups = "drop"
-  ) |>
+    .groups = "drop") |>
+  
   group_by(year) |>
   arrange(desc(sum_emissions), .by_group = TRUE) |>
   slice_head(n = 10) |>
   ungroup()
-
-# ---- Define color palettes -------------------------------------------------
-blue_palette <- colorRamp(c("#20404F", "#4C9EA6", "#67D6E0", "#76F3FF", "#A9F2FF", "#DAF3FF", "#F6F8FF"))((1:256) / 256)
-orange_palette <- colorRamp(c("#7A5100", "#B97700", "#FFB300", "#FFD54F", "#FFEB99", "#FFF5CC", "#FFFEF2"))((1:256) / 256)
 

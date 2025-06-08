@@ -51,5 +51,5 @@ emissions-dashboard
 - Carmen Hoyt (https://github.com/ceh58)
 - Joshua Mull (https://github.com/llumj)
 - Nicole Pepper(https://github.com/nicolelpepper)
-- Stephen Carrol (https://github.com/stephenccodes)
+- Stephen Carroll (https://github.com/stephenccodes)
 

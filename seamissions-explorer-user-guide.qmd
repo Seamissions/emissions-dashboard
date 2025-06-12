@@ -15,8 +15,17 @@ The Seamissions Explorer Dashboard is a tool to explore fishing vessel emissions
 
 #### Launch the app: https://emlab-ucsb.shinyapps.io/seamissions-explorer/
 
-
 ## Getting Started
+
+When you open the app, you'll land on the Home tab, which provides a brief overview of the dashboard's purpose and quick links to it's two main tools:
+1) Fishing Vessel Emissions Map
+2) Compare Seafood Emissions Tool
+
+The top navigation bar includes four tabs:
+1) Home - Dashboard overview
+2) Fishing Vessel Emissions Map - Explore a global map of CO₂ emissions from large-scale fishing vessels, powered by a novel dataset from Global Fishing Watch and emLab.
+3) Compare Seafood Emissions - Use this tool to compare CO₂ emissions by country and seafood category, combining Global Fishing Watch activity data with FAO catch statistics.
+4) Learn More - Provides information about the the project, data sources, methods, and key limitations.
 
 ## Fishing Vessel Emissions Map Tool
  

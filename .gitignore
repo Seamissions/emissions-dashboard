@@ -9,3 +9,6 @@
 
 # config file storing tokens
 /R/config.R
+
+# rsconnect
+/rsconnect/

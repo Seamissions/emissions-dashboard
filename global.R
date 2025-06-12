@@ -57,6 +57,9 @@ orange_palette <- colorRamp(c("#7A5100", "#B97700", "#FFB300", "#FFD54F", "#FFEB
 
 # Import & prep data -----------------------------------------------------------------
 
+# Disable S2 geometry to avoid self-intersection errors
+sf::sf_use_s2(FALSE)
+
 # ---- Emissions map data ----
 
 # Load emissions data

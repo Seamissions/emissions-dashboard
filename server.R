@@ -4,6 +4,9 @@
 #                 Handles all reactive expressions, data filtering, map and plot
 #                 rendering, dynamic UI responses, and custom JavaScript-based
 #                 UI toggles.
+# Inputs:         np_emissions.rds                #  This dataset is loaded using a "lazy loading" strategy in the server script
+                                                  #  to optimize performance and reduce processing time during map initialization.
+#
 # =============================================================================
 
 
@@ -91,6 +94,17 @@ server <- function(input, output, session) {
     
   # add tooltip for emissions on hover
   mutate(tooltip_text = paste0(scales::comma(round(emissions_co2_mt, 0)), " MT CO₂"))
+
+  # Pre-calculate total broadcasting emissions for latest year (no inputs required)
+  initial_total_broadcasting <- broadcasting_emissions |>
+    filter(country_name == "All Countries", year == max(year, na.rm = TRUE)) |>
+    summarise(total = sum(emissions_co2_mt, na.rm = TRUE)) |>
+    pull(total)
+  
+  # Immediately set the broadcasting total UI value on first load
+  output$total_broadcasting_text <- renderText({
+    paste0(format(round(initial_total_broadcasting, 2), big.mark = ","), " MT CO₂")
+  })
   
   
   # ----------------------------------------------------------------------------
@@ -159,6 +173,8 @@ server <- function(input, output, session) {
     shinyjs::toggle("non_broadcasting_legend", condition = input$show_non_broadcasting_input)
     shinyjs::toggle("non_broadcasting_total", condition = input$show_non_broadcasting_input)
   })
+  
+  
   
   # ---- Dynamically update total emissions displays ----
   observe({

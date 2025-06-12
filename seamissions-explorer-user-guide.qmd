@@ -1,0 +1,28 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+editor: 
+  markdown: 
+    wrap: sentence
+---
+
+# Dashboard User Guide
+
+
+The Seamissions Explorer Dashboard is a tool to explore fishing vessel emissions for the global seafood industry. The dashboard links CO2 emissions estimates from Global Fishing Watch's novel vessel emissions dataset with seafood catch data from the United Nationa
+
+
+#### Launch the app: https://emlab-ucsb.shinyapps.io/seamissions-explorer/
+
+
+## Getting Started
+
+## Fishing Vessel Emissions Map Tool
+ 
+ 
+## Compare Seafood Emissions Tool
+
+### How to Use:
+
+- Select Year:

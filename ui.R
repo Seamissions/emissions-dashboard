@@ -659,7 +659,7 @@ shiny::tabPanel("Compare Seafood Emissions",
                              pickerInput(
                                inputId = "selected_country_input",
                                label = tags$span("Select a Country:", style = "color: white;font-size: 18px;"),
-                               choices = c("Select a country" = "", sort(unique(species_data$country_name))),
+                               choices = c("Select a country" = "", sort(unique(seafood_emissions_data$country_name))),
                                selected = NULL,
                                options = list(
                                  `live-search` = TRUE,

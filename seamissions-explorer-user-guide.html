@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>seamissions-explorer-user-guide</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="seamissions-explorer-user-guide_files/libs/clipboard/clipboard.min.js"></script>
+<script src="seamissions-explorer-user-guide_files/libs/quarto-html/quarto.js"></script>
+<script src="seamissions-explorer-user-guide_files/libs/quarto-html/popper.min.js"></script>
+<script src="seamissions-explorer-user-guide_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="seamissions-explorer-user-guide_files/libs/quarto-html/anchor.min.js"></script>
+<link href="seamissions-explorer-user-guide_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="seamissions-explorer-user-guide_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="seamissions-explorer-user-guide_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="seamissions-explorer-user-guide_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="seamissions-explorer-user-guide_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+
+
+<section id="seamissions-explorer-user-guide" class="level1">
+<h1>Seamissions Explorer User Guide</h1>
+<p>The Seamissions Explorer dashboard is a tool to explore fishing vessel emissions for the global seafood industry. The dashboard links CO2 emissions estimates from Global Fishing Watch’s novel vessel emissions dataset with seafood catch report data from the United Nation Food and Agriculture Organization (FAO).</p>
+<section id="launch-the-app-httpsemlab-ucsb.shinyapps.ioseamissions-explorer" class="level4">
+<h4 class="anchored" data-anchor-id="launch-the-app-httpsemlab-ucsb.shinyapps.ioseamissions-explorer">Launch the app: <a href="https://emlab-ucsb.shinyapps.io/seamissions-explorer/" class="uri">https://emlab-ucsb.shinyapps.io/seamissions-explorer/</a></h4>
+</section>
+<section id="getting-started" class="level2">
+<h2 class="anchored" data-anchor-id="getting-started">Getting Started</h2>
+<p>When you open the app, you’ll land on the Home tab, which provides a brief overview of the dashboard’s purpose and quick links to it’s two main tools: 1) Fishing Vessel Emissions Map 2) Compare Seafood Emissions Tool</p>
+<p>The top navigation bar includes four tabs: 1) Home - Dashboard overview 2) Fishing Vessel Emissions Map - Explore a global map of CO₂ emissions from large-scale fishing vessels, powered by a novel dataset from Global Fishing Watch and emLab. 3) Compare Seafood Emissions - Use this tool to compare CO₂ emissions by country and seafood category, combining Global Fishing Watch activity data with FAO catch statistics. 4) Learn More - Provides information about the the project, data sources, methods, and key limitations.</p>
+</section>
+<section id="fishing-vessel-emissions-map-tool" class="level2">
+<h2 class="anchored" data-anchor-id="fishing-vessel-emissions-map-tool">1. Fishing Vessel Emissions Map Tool</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="www/images/user-guide-photos/map-components.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Fishing Vessel Emissions Map Components</figcaption><p></p>
+</figure>
+</div>
+<p>The Fishing Vessel Emissions Map is designed to help users explore where emissions from global fishing vessels are concentrated, with the ability to filter by year, country, and vessel type. The tool is comprised of three primary sections:</p>
+<section id="the-map-panel" class="level3">
+<h3 class="anchored" data-anchor-id="the-map-panel">1.1 The Map Panel:</h3>
+<p>This is the main visualization area where fishing vessel emissions data are displayed spatially on a global web map powered by Mapbox.</p>
+<p><strong>How to use:</strong></p>
+<ul>
+<li><strong>Scroll in or out</strong> by scrolling with your mouse on a desktop or by pinching the screen on a mobile device.</li>
+<li><strong>Pan around</strong> on the map by clicking and dragging your cursor on your desktop or using your finger to press and drag on a mobile device.</li>
+<li><strong>Hover</strong> over a layer to get more information on the tooltip or select an object using your finger on a mobile device.</li>
+<li><strong>Visualize layers</strong> using the sidebar menu. Depending on user selections, the map will show either global emissions, country-specific data, or emissions from non-broadcasting (dark fleet) vessels.</li>
+</ul>
+<p><strong>How to interpret:</strong></p>
+<ul>
+<li>The color scale represents CO₂ emissions in metric tons, lighter colors are areas with higher CO₂ concentrations.</li>
+<li>Information on the layers and visualization options can be found by clicking on the corresponding blue “i” info icons.</li>
+</ul>
+</section>
+<section id="the-sidebar-panel" class="level3">
+<h3 class="anchored" data-anchor-id="the-sidebar-panel">1.2 The Sidebar Panel:</h3>
+<p>This is the main control panel that lets you customize which layers are visualized on the map.</p>
+<p><strong>How to use:</strong></p>
+<ul>
+<li><p><strong>Toggle layers</strong> on and off using the switches. Click on a switch to turn the layer on – this will toggle the switch to the right and turn it blue if it is activated. Click it again to turn it off – this will toggle the switch to the left and turn it grey when it is inactive. The <code>Broadcasted Emissions</code> layer is turned on by default.</p>
+<p>The map contains the following layers:</p>
+<ul>
+<li><strong>Broadcasted Emissions</strong>: Fishing vessel emissions modeled from vessels that broadcast their location using Automatic Identification System (AIS) technology, aggregated to 1x1 degree pixels.</li>
+<li><strong>Non-Broadcasted Emissions</strong>: Fishing vessel emissions modeled from vessels that do not broadcast their location using AIS technology and instead are detected using satellite-based technology, aggregated to 1x1 degree pixels.</li>
+<li><strong>FAO Major Fishing Areas</strong>: Standardized ocean regions to facilitate global monitoring and reporting of marine fisheries.</li>
+</ul></li>
+<li><p><strong>Info icons</strong> click on the blue “i”s to get more information on the layer and how to interpret.</p></li>
+<li><p><strong>Select a country</strong> when the <code>Broadcasted Emissions</code> layer is toggled on, you can filter the layer to a specific flag (country) that the broadcasting vessels are flagged to.</p></li>
+</ul>
+<p><strong>How to interpret:</strong></p>
+<ul>
+<li>Information on the layers and visualization options can be found by clicking on the corresponding blue “i” info icons.</li>
+</ul>
+</section>
+<section id="the-year-filter" class="level3">
+<h3 class="anchored" data-anchor-id="the-year-filter">1.3 The Year Filter:</h3>
+<p>This panel is what determines which year the map is filtered to.</p>
+<p><strong>How to use:</strong></p>
+<ul>
+<li><strong>Adjust the year</strong> using the horizontal slider. Drag the handle left or right to select the desired year. This will filter all visible layers.</li>
+</ul>
+<p><strong>How to interpret:</strong></p>
+<ul>
+<li>Each 1x1 degree pixel (grid cell) for the emissions data is aggregated by year.</li>
+</ul>
+</section>
+</section>
+<section id="compare-seafood-emissions-tool" class="level2">
+<h2 class="anchored" data-anchor-id="compare-seafood-emissions-tool">2. Compare Seafood Emissions Tool</h2>
+<p><img src="www/images/user-guide-photos/plot-components.png" class="img-fluid" alt="Compare Seafood Emissions Plot Components"> The Compare Seafood Emissions tool is designed to help users explore how emissions from different seafood sources vary by country, species, and production volume. It enables side-by-side comparisons to better understand the carbon intensity of different fisheries and seafood types. The tool uses the data set that the Seamissions team created by linking emissions data from Global Fishing Watch with seafood catch report data from the FAO.</p>
+<p>The tool is comprised of three primary sections:</p>
+<section id="the-plot-panel" class="level3">
+<h3 class="anchored" data-anchor-id="the-plot-panel">2.1 The Plot Panel:</h3>
+<p>This is the main visualization area where seafood catch emissions data are displayed as bar plots.</p>
+<p><strong>How to Use:</strong></p>
+<ul>
+<li><strong>Explore emissions</strong> use the controls above the plot to choose your comparison type, year, and unit of measurement.</li>
+</ul>
+</section>
+<section id="how-to-interpret" class="level3">
+<h3 class="anchored" data-anchor-id="how-to-interpret">How to Interpret:</h3>
+<ul>
+<li>Each bar represents either total emissions or emissions per ton of seafood catch.</li>
+<li>Plot units are shown in metric tons of CO₂ emissions, either total annual emissions or emissions efficiency (emissions per unit catch) depending on the selected unit.</li>
+</ul>
+</section>
+<section id="select-a-comparison" class="level3">
+<h3 class="anchored" data-anchor-id="select-a-comparison">2.2 Select a Comparison:</h3>
+<p>This section allows you to choose the type of emissions comparison you’d like to view.</p>
+<p><strong>How to Use:</strong></p>
+<ul>
+<li><p><strong>Select a Comparison</strong> by clicking on one of the action buttons.</p>
+<p>Available comparison plots:</p>
+<ul>
+<li><strong>Compare Top Countries</strong>: Displays the top 10 countries with the highest total fishing emissions for the selected year.</li>
+<li><strong>Compare Top Species</strong>: Displays the top 10 species groups contributing the most to global fishing emissions.</li>
+<li><strong>Select a Country</strong>: Displays all species groups reported by a selected country.</li>
+</ul></li>
+</ul>
+<p><strong>How to interpret:</strong></p>
+<ul>
+<li>These options help highlight the largest contributors to fishing emissions, either by country or species group.</li>
+</ul>
+</section>
+<section id="year-filter-and-unit-toggle" class="level3">
+<h3 class="anchored" data-anchor-id="year-filter-and-unit-toggle">2.3 Year Filter and Unit Toggle</h3>
+<p>This section includes tools to adjust the year of analysis and choose the emissions unit for comparison.</p>
+<p><strong>How to Use:</strong></p>
+<ul>
+<li><strong>Select plot unit</strong> by clicking on the desired unit. Unit options:
+<ul>
+<li><strong>Total Emissions</strong>: Displays the total annual CO₂ emissions.</li>
+<li><strong>Emissions Efficiency</strong>: Displays emissions per metric ton of seafood caught.</li>
+</ul></li>
+<li><strong>Adjust the year</strong> using the horizontal slider. Drag the handle left or right to select the desired year. This will filter the plot to the selected year.</li>
+</ul>
+<p><strong>How to Interpret:</strong></p>
+<ul>
+<li><strong>Total emissions</strong>: Bar width reflects the total metric tons of CO₂ emissions from fishing vessels, including both broadcasting and non-broadcasting emissions.</li>
+<li><strong>Emissions efficiency</strong>: Bar width reflects emissions per metric ton of catch.
+<ul>
+<li>Higher values indicate less efficient fleets (more CO₂ used per ton caught).</li>
+<li>Lower values indicate more efficient fleets (less CO₂ used per ton caught).</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="learn-more" class="level2">
+<h2 class="anchored" data-anchor-id="learn-more">Learn More</h2>
+<p>Navigate to the learn more tab to learn more about our project, the data behind it, and its intended use.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

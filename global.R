@@ -9,7 +9,7 @@
 # Inputs:         config.R                #  App-wide configuration settings
 #                 infoPopup.R             #  Reusable UI component for info tooltips
 #                 World_Fao_Zones.shp     #  FAO Major Fishing Region shapefile
-#                 species_data.rds        #  Emissions by species/country/year
+#                 seafood_emissions_data.rds        #  Emissions by species/country/year
 #                 top_flags.rds           #  Pre-filtered top emitting flags data
 #
 # Outputs:        Load logic and variables from a global scope among concurrent app users
@@ -92,10 +92,10 @@ top_flags <- readRDS("data/top_flags.rds") |>
   ungroup()
 
 # --- Read in species data ----
-species_data <- readRDS("data/species_data.rds")
+seafood_emissions_data <- readRDS("data/seafood_emissions_data.rds")
 
 # --- Prep top isscaap data ----
-top_isscaap <- species_data |>
+top_isscaap <- seafood_emissions_data |>
   filter(
     !isscaap_group %in% c(
       "Miscellaneous aquatic invertebrates",

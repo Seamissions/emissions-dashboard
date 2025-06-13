@@ -781,7 +781,7 @@ server <- function(input, output, session) {
     req(input$selected_country_input)
     
     # Filter data to `selected_country_input` and `year_slider_input`
-    filtered_data <- species_data |>
+    filtered_data <- seafood_emissions_data |>
       filter(
         country_name == input$selected_country_input,
         year == input$year_slider_input_plot
@@ -800,7 +800,7 @@ server <- function(input, output, session) {
     show_per_unit <- input$unit_plot_toggle_input == "per_unit"
     
     # Filter for selected country/year
-    filtered_select_country <- species_data |>
+    filtered_select_country <- seafood_emissions_data |>
       filter(
         country_name == input$selected_country_input,
         year == input$year_slider_input_plot

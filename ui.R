@@ -853,332 +853,349 @@ Species are categorized using ISSCAAP (International Standard Statistical Classi
   
 
 # =================================================================================================================================================================================================
-# Learn more tab
+# Learn More page
 # =================================================================================================================================================================================================
 
+# Establish CSS settings for the Learn More page
+tags$head(
+  tags$style(HTML("
+    /* Default (inactive) tab styling */
+    .nav-tabs > li > a {
+      color: #da8d03 !important;  /* gold text */
+      border: 1px solid #da8d03 !important;
+      background: transparent !important;
+      font-weight: 500;
+      font-size: 18px;
+      padding: 4px 12px; 
+      border-radius: 3px 3px 3px 3px !important;
+      margin-right: 6px;
+      margin-bottom: 3px !important;
+      transition: background 0.2s, color 0.2s;
+    }
+    /* Remove background on hover (inactive) */
+    .nav-tabs > li:not(.active) > a:hover {
+      background: rgba(218, 141, 3, 1) !important;
+      color: #0b2232 !important;
+    }
+    /* Active (clicked) tab styling */
+    .nav-tabs > li.active > a,
+    .nav-tabs > li.active > a:focus,
+    .nav-tabs > li.active > a:hover,
+    .nav-tabs > li > a.active,
+    .nav-tabs > li > a:focus,
+    .nav-tabs > li > a[aria-selected='true'] {
+      background: #FFC233 !important;
+      color: #0b2232 !important;          /* dark blue text */
+      border: 1px solid #FFC233 !important;
+      font-weight: 600;
+    }
+    /* Adjust tab bar background  */
+    .nav-tabs {
+      background: #0B2232 !important; 
+      border-bottom: 0px;
+      margin-bottom: 10px;
+      padding-left: 8px;
+    }
+   
+    }
+  "))
+),
+
+
+
+
 tabPanel("Learn More",
-         # ---- Hero Section ----
+         
+         # ------------------------------------------------------------------------------------------------------------------
+         # ---- Hero Section ------------------------------------------------------------------------------------------------
+         # ------------------------------------------------------------------------------------------------------------------
          div(style = "position: relative;
-               min-height: 200px;
-               width: 100%;
-               padding-left: 0px !important;
-               background-image: url('images/ocean-banner.png');
-               background-size: cover;
-               background-position: center;
-               background-attachment: fixed;
-               text-align: center;
-               color: #e8fffd;",
+                    min-height: 200px;
+                    width: 100%;
+                    padding-left: 0px !important;
+                    background-image: url('images/ocean-banner.png');
+                    background-size: cover;
+                    background-position: center;
+                    background-attachment: fixed;
+                    text-align: center;
+                    color: #e8fffd;",
              
              # Overlay
              div(style = "position: absolute; 
-                   top: 0; left: 0; right: 0; bottom: 0;
-                   background-color: rgba(0, 0, 0, 0.5);
-                   z-index: 1;"),
-             
+                          top: 0; left: 0; right: 0; bottom: 0;
+                          background-color: rgba(0, 0, 0, 0.5);
+                          z-index: 1;"),
              
              # Hero Text
              div(style = "position: relative; z-index: 2;
-                    padding-top: 60px; padding-left: 40px; padding-right: 40px;",
+                         padding-top: 60px; padding-left: 40px; padding-right: 40px;",
                  
                  h1("Learn More",
-                    style = "font-weight: 600 !important;"),
-                 
-                 
+                    style = "font-weight: 600 !important;")
              ) # END div
          ),
          
-         # ---- Page content ----
-         
-         fluidRow(
-           column(12,
-                  div(
-                    style = "padding: 30px; text-align: left; color: white;",
-                    
-                    tags$h4(tags$strong("Key Considerations"),
-                            style = "margin-bottom: 30px;  margin-left: 30px"),
-                    
-                    fluidRow(
-                      column(
-                        width = 12,
-                        tags$p(
-                          style = "font-weight: normal; margin-left: 30px; color: white; margin-bottom: 10px",
-                          "This dashboard is intended to be an educational and exploratory tool, not a basis for scientific conclusions. All results should be interpreted with care due to some key limitations:"
+         # ------------------------------------------------------------------------------------------------------------------
+         # ---- Tabs Section ------------------------------------------------------------------------------------------------
+         # ------------------------------------------------------------------------------------------------------------------
+         tabsetPanel(
+           type = "tabs",
+           
+           # ---- Key Considerations Tab ----
+           tabPanel("Key Considerations",
+                    div(
+                      style = "padding: 30px; text-align: left; color: white;",
+                      tags$h4(tags$strong("Key Considerations"), style = "margin-bottom: 30px; margin-left: 30px"),
+                      tags$p(style = "font-weight: normal; margin-left: 30px; color: white; margin-bottom: 10px",
+                             "This dashboard is intended to be an educational and exploratory tool, not a basis for scientific conclusions. All results should be interpreted with care due to some key limitations:"
+                      ),
+                      tags$ul(
+                        tags$li(
+                          style = "margin-left: 35px; margin-bottom: 10px",
+                          tags$u("Ambiguity in catch location and reporting"),
+                          " –  stemming from the usage of “flags of convenience” as well as underreporting and inconsistencies between the FAO region where the fish were caught versus the country where landings were reported."
+                        ), 
+                        tags$li(
+                          style = "margin-left: 35px; margin-bottom: 10px",
+                          tags$u("Proportional emissions allocation by catch"),
+                          " – assuming that within an FAO region, non-broadcasting emissions are proportional across", tags$em("all"), " fisheries and countries", tags$em("by catch.")
+                        ),
+                        tags$li(
+                          style = "margin-left: 35px; margin-bottom: 10px",
+                          tags$u("Dependence on harmonized datasets with different formats and assumptions"),
+                          " – including the integration of FAO catch records and GFW’s fishing vessel emissions dataset, which originate from distinct sources with differing scopes, structures, and assumptions."
                         )
                       )
-                    ),
-                    
-                    tags$ul(
-                      tags$li(
-                        style = "margin-left: 35px; margin-bottom: 10px",
-                        tags$u("Ambiguity in catch location and reporting"),
-                        " –  stemming from the usage of “flags of convenience” as well as underreporting and inconsistencies between the FAO region where the fish were caught versus the country where landings were reported."
-                      ), 
-                      tags$li(
-                        style = "margin-left: 35px; margin-bottom: 10px",
-                        tags$u("Proportional emissions allocation by catch"
-                        ),
-                        " – assuming that within an FAO region, non-broadcasting emissions are proportional across", tags$em("all"), " fisheries and countries", tags$em("by catch.")
+                    )
+           ),
+           
+           # ---- Background Tab ----
+           tabPanel("Background",
+                    div(
+                      style = "padding: 30px; text-align: left; color: white;",
+                      tags$h4(tags$strong("Background"), style = "margin-bottom: 30px; margin-left: 30px"),
+                      tags$p(style = "font-weight: normal; text-align: left; color: white; margin: 30px;", 
+                             "Global fisheries are heavily reliant on fossil fuels, contributing significantly to the rise in global greenhouse gas emissions driving climate change. While satellite technology is commonly used to monitor land-based emissions (and ocean-based emissions of shipping vessels), studies primarily estimating ocean-based emissions in the fishing sector remain limited. In collaboration with the Environmental Markets Lab (emLab) and Global Fishing Watch, this project leverages novel, high-resolution satellite-based datasets to provide precise insights into the emissions associated with global fisheries. We develop a reproducible, extensible, and open-source data processing pipeline to connect emissions data with seafood production data, along with an interactive dashboard to explore the resulting dataset.",
+                             tags$br(), tags$br(),
+                             "Please visit our GitHub to learn more about this project.",
+                             tags$br(),
+                             tags$a(href = "https://github.com/Seamissions", target = "_blank", "https://github.com/Seamissions"))
+                    )
+           ),
+           
+           # ---- Who We Are Tab ----
+           tabPanel("Who We Are",
+                    div(
+                      style = "padding: 30px; color: white;",
+                      tags$h4(strong("Who We Are"), style = "margin-bottom: 30px; margin-left: 30px"),
+                      tags$p(
+                        style = "font-weight: normal; color: white; margin-bottom: 20px; margin-left: 30px",
+                        "We are a team of environmental data scientists working to quantify and demystify the emissions contributed through commercial fishing fleets."
                       ),
-                      tags$li(
-                        style = "margin-left: 35px; margin-bottom: 10px",
-                        tags$u("Dependence on harmonized datasets with different formats and assumptions"),
-                        " – including the integration of FAO catch records and GFW’s fishing vessel emissions dataset, which originate from distinct sources with differing scopes, structures, and assumptions."
+                      
+                      tags$p(
+                        style = "font-weight: normal; margin-top: 15px; margin-left: 30px; color: white",
+                        tags$strong("Carmen Hoyt:"), " ",
+                        tags$a(href = "https://bren.ucsb.edu/people/carmen-hoyt", target = "_blank", "Bren Profile"), " | ",
+                        tags$a(href = "https://github.com/orgs/Seamissions/people/ceh58", target = "_blank", "Github"), " | ",
+                        tags$a(href = "https://www.linkedin.com/in/carmen-hoyt-952272153/", target = "_blank", "LinkedIn"), " | ",
+                        tags$a(href = "https://ceh58.github.io/", target = "_blank", "Website")
+                      ),
+                      
+                      tags$p(
+                        style = "font-weight: normal; margin-top: 10px; margin-left: 30px; color: white",
+                        tags$strong("Josh Mull:"), " ",
+                        tags$a(href = "https://bren.ucsb.edu/people/joshua-mull", target = "_blank", "Bren Profile"), " | ",
+                        tags$a(href = "https://github.com/orgs/Seamissions/people/llumj", target = "_blank", "Github"), " | ",
+                        tags$a(href = "https://www.linkedin.com/in/joshua-mull-046a7832b/", target = "_blank", "LinkedIn"), " | ",
+                        tags$a(href = "https://llumj.github.io/", target = "_blank", "Website")
+                      ),
+                      
+                      tags$p(
+                        style = "font-weight: normal;margin-top: 10px; margin-left: 30px; color: white",
+                        tags$strong("Nicole Pepper:"), " ",
+                        tags$a(href = "https://bren.ucsb.edu/people/nicole-pepper", target = "_blank", "Bren Profile"), " | ",
+                        tags$a(href = "https://github.com/orgs/Seamissions/people/nicolelpepper", target = "_blank", "Github"), " | ",
+                        tags$a(href = "https://www.linkedin.com/in/nicole-pepper/", target = "_blank", "LinkedIn"), " | ",
+                        tags$a(href = "https://nicolelpepper.github.io/", target = "_blank", "Website")
+                      ),
+                      
+                      tags$p(
+                        style = "font-weight: normal; margin-top: 10px; margin-left: 30px; color: white",
+                        tags$strong("Stephen Carroll:"), " ",
+                        tags$a(href = "https://bren.ucsb.edu/people/stephen-carroll", target = "_blank", "Bren Profile"), " | ",
+                        tags$a(href = "https://github.com/orgs/Seamissions/people/stephenccodes", target = "_blank", "Github"), " | ",
+                        tags$a(href = "https://www.linkedin.com/in/stephen-carroll-754b5191/", target = "_blank", "LinkedIn"), " | ",
+                        tags$a(href = "https://stephenccodes.github.io/", target = "_blank", "Website")
                       )
                     )
-                  ) # END div
-           )
+           ),
            
-         ), # END fluidrow 'Key Considerations'
-         
-         fluidRow(
-           column(
-             width = 12,
-             div(style = "padding: 30px; text-align: left; color: white;",
-                 tags$h4(strong("Background"),
-                         style = "margin-bottom: 30px;  margin-left: 30px"),
-                 tags$p(style = "font-weight: normal; text-align: left; color: white; margin: 30px;", 
-                        "Global fisheries are heavily reliant on fossil fuels, contributing significantly to the rise in global greenhouse gas emissions driving climate change. While satellite technology is commonly used to monitor land-based emissions (and ocean-based emissions of shipping vessels), studies primarily estimating ocean-based emissions in the fishing sector remain limited. In collaboration with the Environmental Markets Lab (emLab) and Global Fishing Watch, this project leverages novel, high-resolution satellite-based datasets to provide precise insights into the emissions associated with global fisheries. We develop a reproducible, extensible, and open-source data processing pipeline to connect emissions data with seafood production data, along with an interactive dashboard to explore the resulting dataset.",
-                        tags$br(),
-                        tags$br(),
-                        "Please visit our GitHub to learn more about this project.",
-                        tags$br(),
-                        tags$a(href = "https://github.com/Seamissions", target = "_blank", "https://github.com/Seamissions"))  
-             ) # END div
-           )
-           
-         ), # END fluidrow 'Background'
-         
-         fluidRow(
-           column(
-             width = 12,
-             div(
-               style = "padding: 30px; color: white;",
-               tags$h4(strong("Who We Are"),
-                       style = "margin-bottom: 30px;  margin-left: 30px"),
-               
-               tags$p(
-                 style = "font-weight: normal; color: white; margin-bottom: 20px;  margin-left: 30px",
-                 "We are a team of environmental data scientists working to quantify and demystify the emissions contributed through commercial fishing fleets."
-               ),
-               
-               tags$p(
-                 style = "font-weight: normal; margin-top: 15px; margin-left: 30px; color: white",
-                 tags$strong("Carmen Hoyt:"), " ",
-                 tags$a(href = "https://bren.ucsb.edu/people/carmen-hoyt", target = "_blank", "Bren Profile"), " | ",
-                 tags$a(href = "https://github.com/orgs/Seamissions/people/ceh58", target = "_blank", "Github"), " | ",
-                 tags$a(href = "https://www.linkedin.com/in/carmen-hoyt-952272153/", target = "_blank", "LinkedIn"), " | ",
-                 tags$a(href = "https://ceh58.github.io/", target = "_blank", "Website")
-               ),
-               
-               tags$p(
-                 style = "font-weight: normal; margin-top: 10px; margin-left: 30px; color: white",
-                 tags$strong("Josh Mull:"), " ",
-                 tags$a(href = "https://bren.ucsb.edu/people/joshua-mull", target = "_blank", "Bren Profile"), " | ",
-                 tags$a(href = "https://github.com/orgs/Seamissions/people/llumj", target = "_blank", "Github"), " | ",
-                 tags$a(href = "https://www.linkedin.com/in/joshua-mull-046a7832b/", target = "_blank", "LinkedIn"), " | ",
-                 tags$a(href = "https://llumj.github.io/", target = "_blank", "Website")
-               ),
-               
-               tags$p(
-                 style = "font-weight: normal;margin-top: 10px; margin-left: 30px; color: white",
-                 tags$strong("Nicole Pepper:"), " ",
-                 tags$a(href = "https://bren.ucsb.edu/people/nicole-pepper", target = "_blank", "Bren Profile"), " | ",
-                 tags$a(href = "https://github.com/orgs/Seamissions/people/nicolelpepper", target = "_blank", "Github"), " | ",
-                 tags$a(href = "https://www.linkedin.com/in/nicole-pepper/", target = "_blank", "LinkedIn"), " | ",
-                 tags$a(href = "https://nicolelpepper.github.io/", target = "_blank", "Website")
-               ),
-               
-               tags$p(
-                 style = "font-weight: normal; margin-top: 10px; margin-left: 30px; color: white",
-                 tags$strong("Stephen Carroll:"), " ",
-                 tags$a(href = "https://bren.ucsb.edu/people/stephen-carroll", target = "_blank", "Bren Profile"), " | ",
-                 tags$a(href = "https://github.com/orgs/Seamissions/people/stephenccodes", target = "_blank", "Github"), " | ",
-                 tags$a(href = "https://www.linkedin.com/in/stephen-carroll-754b5191/", target = "_blank", "LinkedIn"), " | ",
-                 tags$a(href = "https://stephenccodes.github.io/", target = "_blank", "Website")
-               )
-             ) # END div
-           )
-           
-         ), # END fluidrow 'Who we are'
-         
-         fluidRow(
-           column(12,
-                  div(
-                    style = "font-weight:bold; background-color: white; padding: 30px; color: #0B2232;",
-                    
-                    tags$h4(strong("Our Partners"),
-                            style = "margin-bottom: 10px;  margin-left: 30px"),
-                    
-                    # emLab section
-                    tags$img(
-                      src   = "images/logos/emlab-logo-color-clear.svg",
-                      style = "height: auto; max-height: 85px; width: auto;  margin-left: 30px; margin-top: 15px; margin-bottom: 15px"
-                    ),
-                    tags$h5(tags$u("Environmental Markets Lab"),
-                            style = "margin-bottom: 30px;  margin-left: 30px"),
-                    tags$p(
-                      style = "font-weight: normal; color: #0B2232; margin-bottom: 15px; margin-left: 30px",
-                      "The Environmental Markets Lab (emLab) is a think-and-do tank dedicated to market-based solutions for environmental challenges. Based at the University of California, Santa Barbara, this interdisciplinary team of scientists conducts cutting-edge, data-driven research on the power, limitations, and design of market-driven approaches to address the world's most pressing environmental problems."
-                    ),
-                    tags$p(
-                      style = "font-weight: normal; color: #0B2232; margin-bottom: 20px; margin-left: 30px",
-                      "In collaboration with implementation partners, they work to better align environmental objectives with economic incentives, supporting sustainable livelihoods and a resilient planet."
-                    ),
-                    
-                    # Global Fishing Watch section
-                    tags$img(
-                      src   = "images/logos/gfw-logo-black-clear.svg",
-                      style = "height: auto; max-height: 85px; width: auto;  margin-left: 30px; margin-bottom: 15px"
-                    ),
-                    tags$h5(tags$u("Global Fishing Watch"),
-                            style = "margin-bottom: 30px;  margin-left: 30px"),
-                    tags$p(
-                      style = "font-weight: normal; color: #0B2232; margin-bottom: 15px; margin-left: 30px",
-                      "Global Fishing Watch (GFW) is an independent, international nonprofit organization dedicated to advancing ocean governance. By publicly sharing map visualizations, data, and analysis tools, they help increase transparency of human activity at sea, enabling scientific research, and driving transformation in ocean management."
-                    ),
-                    tags$p(
-                      style = "font-weight: normal; color: #0B2232; margin-bottom: 20px; margin-left: 30px",
-                      "Established as a nonprofit organization in 2017, Global Fishing Watch was originally founded in 2015 through a collaboration between three partners: ",
-                      tags$strong("Oceana,"), " an international ocean conservation organization; ",
-                      tags$strong(" SkyTruth,"), " a technology firm that uses satellite imagery and data to protect the environment; and ",
-                      tags$strong(" Google,"), " whose tools and contributions help process big data. "
+           # ---- Our Partners Tab ----
+           tabPanel("Our Partners",
+                    div(
+                      style = "font-weight:bold; background-color: white; padding: 30px; color: #0B2232;",
+                      tags$h4(strong("Our Partners"), style = "margin-bottom: 10px; margin-left: 30px"),
+                      
+                      # emLab section
+                      tags$img(
+                        src   = "images/logos/emlab-logo-color-clear.svg",
+                        style = "height: auto; max-height: 85px; width: auto;  margin-left: 30px; margin-top: 15px; margin-bottom: 15px"
+                      ),
+                      tags$h5(tags$u("Environmental Markets Lab"),
+                              style = "margin-bottom: 30px; margin-left: 30px"),
+                      tags$p(
+                        style = "font-weight: normal; color: #0B2232; margin-bottom: 15px; margin-left: 30px",
+                        "The Environmental Markets Lab (emLab) is a think-and-do tank dedicated to market-based solutions for environmental challenges. Based at the University of California, Santa Barbara, this interdisciplinary team of scientists conducts cutting-edge, data-driven research on the power, limitations, and design of market-driven approaches to address the world's most pressing environmental problems."
+                      ),
+                      tags$p(
+                        style = "font-weight: normal; color: #0B2232; margin-bottom: 20px; margin-left: 30px",
+                        "In collaboration with implementation partners, they work to better align environmental objectives with economic incentives, supporting sustainable livelihoods and a resilient planet."
+                      ),
+                      
+                      # Global Fishing Watch section
+                      tags$img(
+                        src   = "images/logos/gfw-logo-black-clear.svg",
+                        style = "height: auto; max-height: 85px; width: auto;  margin-left: 30px; margin-bottom: 15px"
+                      ),
+                      tags$h5(tags$u("Global Fishing Watch"),
+                              style = "margin-bottom: 30px; margin-left: 30px"),
+                      tags$p(
+                        style = "font-weight: normal; color: #0B2232; margin-bottom: 15px; margin-left: 30px",
+                        "Global Fishing Watch (GFW) is an independent, international nonprofit organization dedicated to advancing ocean governance. By publicly sharing map visualizations, data, and analysis tools, they help increase transparency of human activity at sea, enabling scientific research, and driving transformation in ocean management."
+                      ),
+                      tags$p(
+                        style = "font-weight: normal; color: #0B2232; margin-bottom: 20px; margin-left: 30px",
+                        "Established as a nonprofit organization in 2017, Global Fishing Watch was originally founded in 2015 through a collaboration between three partners: ",
+                        tags$strong("Oceana,"), " an international ocean conservation organization; ",
+                        tags$strong(" SkyTruth,"), " a technology firm that uses satellite imagery and data to protect the environment; and ",
+                        tags$strong(" Google,"), " whose tools and contributions help process big data. "
+                      )
                     )
-                  ) # END div
-           )
+           ),
            
-         ), # END fluidrow 'Our partners'
-         
-         fluidRow(
-           column(12,
-                  div(style = "font-weight:normal; padding: 30px; color: white;",
-                      h4(strong("Methods"),
-                         style = "margin-bottom: 30px;  margin-left: 30px"),
+           # ---- Methods Tab ----
+           tabPanel("Methods",
+                    div(
+                      style = "font-weight:normal; padding: 30px; color: white;",
+                      h4(strong("Methods"), style = "margin-bottom: 30px; margin-left: 30px"),
                       tags$p(
                         style = "font-weight: normal; color: white; margin: 30px;",
                         "Our team developed a structured process that can handle large amounts of emissions data provided by emLab from vessels with tracking signals (broadcasting) and those without (non-broadcasting).",
-                        tags$br(),
-                        tags$br(),
+                        tags$br(), tags$br(),
                         "For each FAO region, the total annual",
-                        tags$strong("broadcasting"),"emissions are calculated for each country. The same steps are taken for ",
+                        tags$strong("broadcasting"), "emissions are calculated for each country. The same steps are taken for ",
                         tags$strong("non-broadcasting"), "emissions, which are then proportionally distributed to all fisheries that report catch in that region.",
-                        tags$br(),
-                        tags$br(),
+                        tags$br(), tags$br(),
                         "Results are double-checked to ensure that all emissions were accounted for, allowing for minimal rounding error. This gives us a transparent, reproducible way to estimate fishing-related emissions at a global scale, helping to better understand the climate impact of seafood production.",
-                        tags$br(),
-                        tags$br(),
+                        tags$br(), tags$br(),
                         "For a more detailed look into our methods, please visit the ",
                         tags$a(href = "https://github.com/Seamissions", target = "_blank", "Seamissions GitHub."),
-                        tags$br(),
-                        tags$br(),
+                        tags$br(), tags$br(),
                         "Information on how GFW and emLab produced the data we used in our project can be found ",
                         tags$a(href = "https://emlab-ucsb.github.io/ocean-ghg/", target = "_blank", "here.")
-                      ),
-                  ) # END div
-           )
-           
-         ), # END fluidrow 'Methods'
-         
-         fluidRow(
-           column(12,
-                  div(style = "padding: 30px; color: white;",
-                      h4(strong("Emissions Map How-To"),
-                         style = "margin-bottom: 30px;  margin-left: 30px"),
-                      tags$p(style = "font-weight: normal; color: white; margin: 30px;",
-                             "Use the panel on the left-hand side to select ",
-                             tags$strong("Broadcasted"), "emissions, ",
-                             tags$strong("Non-Broadcasted"), "emissions, or both. Emissions can be viewed for ",
-                             "individual", " or ", 
-                             tags$strong("all countries"), "at once. The button to display ",
-                             tags$strong("FAO regions"), "on the map is located here as well.",
-                             tags$br(),
-                             tags$br(),
-                             "To explore the emissions for a specific ",
-                             tags$strong("year"), " use the ",
-                             tags$strong("slider box"), " on the lower- right side of the map."
-                      ),  
-                  ) # END div
-           )
-           
-         ), # END fluidrow 'Emissions Map How-To'
-         
-         fluidRow(
-           column(12,
-                  div(
-                    style = "padding: 30px; margin-bottom: 40px; color: white;",
-                    
-                    tags$h4(tags$strong("Glossary"),
-                            style = "margin-bottom: 30px;  margin-left: 30px"),
-                    
-                    tags$ul(
-                      tags$li(
-                        style = "list-style-type: none; padding-left: 0; margin-bottom: 15px; color: white;",
-                        tags$u("AIS (Automatic Identification System)"), tags$br(),
-                        "A satellite-based tracking system used by large vessels to broadcast their location and movement. It helps monitor shipping activity, but many fishing vessels do not use it."
-                      ),
-                      tags$li(
-                        style = "list-style-type: none; padding-left: 0;  margin-bottom: 15px; color: white;",
-                        tags$u("Broadcasting Vessels"), tags$br(),
-                        "Fishing vessels that transmit their location via AIS, making their movements and emissions trackable."
-                      ),
-                      tags$li(
-                        style = "list-style-type: none; padding-left: 0;  margin-bottom: 15px; color: white;",
-                        tags$u("FAO (Food and Agriculture Organization)"), tags$br(),
-                        "A UN agency that collects official fisheries and aquaculture data from countries around the world."
-                      ),
-                      tags$li(
-                        style = "list-style-type: none; padding-left: 0;  margin-bottom: 15px; color: white;",
-                        tags$u("FAO Catch Data"), tags$br(),
-                        "Country-reported records of fish and seafood harvested, often used as a global baseline for fisheries research."
-                      ), 
-                      tags$li(
-                        style = "list-style-type: none; padding-left: 0;  margin-bottom: 15px; color: white;",
-                        tags$u("Fishery"), tags$br(),
-                        "The activity, industry, or location associated with catching or rearing fish."
-                      ),
-                      tags$li(
-                        style = "list-style-type: none; padding-left: 0;  margin-bottom: 15px; color: white;",
-                        tags$u("Flag (of a vessel)"), tags$br(),
-                        "The country under which a fishing vessel is registered. Some vessels use “flags of convenience”, flags associated with different countries to flout regulation or take advantage of favorable legislation."
-                      ),
-                      tags$li(
-                        style = "list-style-type: none; padding-left: 0;  margin-bottom: 15px; color: white;",
-                        tags$u("Flag of Convenience"), tags$br(),
-                        "When a vessel registers under a country different from its home country, often to take advantage of looser regulations."
-                      ),
-                      tags$li(
-                        style = "list-style-type: none; padding-left: 0;  margin-bottom: 15px; color: white;",
-                        tags$u("GHG (Greenhouse Gas)"), tags$br(),
-                        "Gases that trap heat in the atmosphere and contribute to climate change. This project tracks emissions like CO₂, CH₄, and N₂O."
-                      ),
-                      tags$li(
-                        style = "list-style-type: none; padding-left: 0;  margin-bottom: 15px; color: white;",
-                        tags$u("Global Fishing Watch (GFW)"), tags$br(),
-                        "A nonprofit that uses satellite and machine learning data to monitor fishing activities globally."
-                      ),
-                      tags$li(
-                        style = "list-style-type: none; padding-left: 0;  margin-bottom: 15px; color: white;",
-                        tags$u("ISSCAAP (International Standard Statistical Classification of Aquatic Animals and Plants)"), tags$br(),
-                        "A classification system used by the FAO to group aquatic species for reporting purposes."
-                      ),
-                      tags$li(
-                        style = "list-style-type: none; padding-left: 0;  margin-bottom: 15px; color: white;",
-                        tags$u("Non-Broadcasting Vessels"), tags$br(),
-                        "Fishing vessels that do not transmit AIS signals. Their emissions are harder to track and are estimated using satellite radar."
-                      ),
-                      tags$li(
-                        style = "list-style-type: none; padding-left: 0;  margin-bottom: 15px; color: white;",
-                        tags$u("Pipeline"), tags$br(),
-                        "A series of connected data processing steps that clean, merge, and analyze raw data. The emissions pipeline in this project combines emissions and catch data."
-                      ),
-                      tags$li(
-                        style = "list-style-type: none; padding-left: 0;  margin-bottom: 15px; color: white;",
-                        tags$u("SAU (Sea Around Us)"), tags$br(),
-                        "A project that reconstructs missing or underreported fisheries data to give a more complete picture of global fish harvests."
                       )
                     )
-                  ) # END div
+           ),
+           
+           # ---- Emissions Map How-To Tab ----
+           tabPanel("Map How-To",
+                    div(
+                      style = "padding: 30px; color: white;",
+                      h4(strong("Emissions Map How-To"), style = "margin-bottom: 30px; margin-left: 30px"),
+                      tags$p(
+                        style = "font-weight: normal; color: white; margin: 30px;",
+                        "Use the panel on the left-hand side to select ",
+                        tags$b(tags$i("Broadcasted")), "emissions, ",
+                        tags$b(tags$i("Non-Broadcasted")), "emissions, or both.",
+                        tags$br(), tags$br(),
+                        "Emissions can be viewed for ",
+                        "individual", " or ", 
+                        tags$b(tags$i("all countries")), "at once. The button to display ",
+                        tags$b(tags$i("FAO regions")), "on the map is located here as well.",
+                        tags$br(), tags$br(),
+                        "To explore the emissions for a specific ",
+                        tags$b(tags$i("year")), " use the ",
+                        tags$b(tags$i("slider box")), " on the lower- right side of the map."
+                      )
+                    )
+           ),
+           
+           # ---- Glossary Tab ----
+           tabPanel("Glossary",
+                    div(
+                      style = "padding: 30px; margin-bottom: 40px; color: white;",
+                      tags$h4(tags$strong("Glossary"), style = "margin-bottom: 30px; margin-left: 30px"),
+                      tags$ul(
+                        tags$li(
+                          style = "list-style-type: none; padding-left: 0; margin-bottom: 15px; color: white;",
+                          tags$u("AIS (Automatic Identification System)"), tags$br(),
+                          "A satellite-based tracking system used by large vessels to broadcast their location and movement. It helps monitor shipping activity, but many fishing vessels do not use it."
+                        ),
+                        tags$li(
+                          style = "list-style-type: none; padding-left: 0;  margin-bottom: 15px; color: white;",
+                          tags$u("Broadcasting Vessels"), tags$br(),
+                          "Fishing vessels that transmit their location via AIS, making their movements and emissions trackable."
+                        ),
+                        tags$li(
+                          style = "list-style-type: none; padding-left: 0;  margin-bottom: 15px; color: white;",
+                          tags$u("FAO (Food and Agriculture Organization)"), tags$br(),
+                          "A UN agency that collects official fisheries and aquaculture data from countries around the world."
+                        ),
+                        tags$li(
+                          style = "list-style-type: none; padding-left: 0;  margin-bottom: 15px; color: white;",
+                          tags$u("FAO Catch Data"), tags$br(),
+                          "Country-reported records of fish and seafood harvested, often used as a global baseline for fisheries research."
+                        ), 
+                        tags$li(
+                          style = "list-style-type: none; padding-left: 0;  margin-bottom: 15px; color: white;",
+                          tags$u("Fishery"), tags$br(),
+                          "The activity, industry, or location associated with catching or rearing fish."
+                        ),
+                        tags$li(
+                          style = "list-style-type: none; padding-left: 0;  margin-bottom: 15px; color: white;",
+                          tags$u("Flag (of a vessel)"), tags$br(),
+                          "The country under which a fishing vessel is registered. Some vessels use “flags of convenience”, flags associated with different countries to flout regulation or take advantage of favorable legislation."
+                        ),
+                        tags$li(
+                          style = "list-style-type: none; padding-left: 0;  margin-bottom: 15px; color: white;",
+                          tags$u("Flag of Convenience"), tags$br(),
+                          "When a vessel registers under a country different from its home country, often to take advantage of looser regulations."
+                        ),
+                        tags$li(
+                          style = "list-style-type: none; padding-left: 0;  margin-bottom: 15px; color: white;",
+                          tags$u("GHG (Greenhouse Gas)"), tags$br(),
+                          "Gases that trap heat in the atmosphere and contribute to climate change. This project tracks emissions like CO₂, CH₄, and N₂O."
+                        ),
+                        tags$li(
+                          style = "list-style-type: none; padding-left: 0;  margin-bottom: 15px; color: white;",
+                          tags$u("Global Fishing Watch (GFW)"), tags$br(),
+                          "A nonprofit that uses satellite and machine learning data to monitor fishing activities globally."
+                        ),
+                        tags$li(
+                          style = "list-style-type: none; padding-left: 0;  margin-bottom: 15px; color: white;",
+                          tags$u("ISSCAAP (International Standard Statistical Classification of Aquatic Animals and Plants)"), tags$br(),
+                          "A classification system used by the FAO to group aquatic species for reporting purposes."
+                        ),
+                        tags$li(
+                          style = "list-style-type: none; padding-left: 0;  margin-bottom: 15px; color: white;",
+                          tags$u("Non-Broadcasting Vessels"), tags$br(),
+                          "Fishing vessels that do not transmit AIS signals. Their emissions are harder to track and are estimated using satellite radar."
+                        ),
+                        tags$li(
+                          style = "list-style-type: none; padding-left: 0;  margin-bottom: 15px; color: white;",
+                          tags$u("Pipeline"), tags$br(),
+                          "A series of connected data processing steps that clean, merge, and analyze raw data. The emissions pipeline in this project combines emissions and catch data."
+                        ),
+                        tags$li(
+                          style = "list-style-type: none; padding-left: 0;  margin-bottom: 15px; color: white;",
+                          tags$u("SAU (Sea Around Us)"), tags$br(),
+                          "A project that reconstructs missing or underreported fisheries data to give a more complete picture of global fish harvests."
+                        )
+                      )
+                    )
            )
-         ) # END fluidrow 'Glossary'
+         ) # END tabsetPanel
          
   ) # END tabPanel (Learn More Page)
   

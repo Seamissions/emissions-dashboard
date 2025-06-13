@@ -24,7 +24,7 @@ The top navigation bar includes four tabs: 1) Home - Dashboard overview 2) Fishi
 
 ## 1. Fishing Vessel Emissions Map Tool
 
-![Fishing Vessel Emissions Map Components](www/images/user-guide-photos/map-components.png)
+![Fishing Vessel Emissions Map Components](images/map-components.png)
 
 The Fishing Vessel Emissions Map is designed to help users explore where emissions from global fishing vessels are concentrated, with the ability to filter by year, country, and vessel type.
 The tool is comprised of three primary sections:
@@ -79,7 +79,7 @@ This panel is what determines which year the map is filtered to.
 -   Each 1x1 degree pixel (grid cell) for the emissions data is aggregated by year. 
 
 ## 2. Compare Seafood Emissions Tool
-![Compare Seafood Emissions Plot Components](www/images/user-guide-photos/plot-components.png)
+![Compare Seafood Emissions Plot Components](images/plot-components.png)
 The Compare Seafood Emissions tool is designed to help users explore how emissions from different seafood sources vary by country, species, and production volume. It enables side-by-side comparisons to better understand the carbon intensity of different fisheries and seafood types. The tool uses the data set that the Seamissions team created by linking emissions data from Global Fishing Watch with seafood catch report data from the FAO.
 
 The tool is comprised of three primary sections:

@@ -335,7 +335,7 @@ shiny::tabPanel("Home",
                 font-size: 15px; font-weight: regular; color: #053762;
                 margin-bottom: 10px; width: 100%;",
                                   tags$span("200"),
-                                  textOutput("total_broadcasting", inline = TRUE)
+                                  textOutput("max_broadcasting", inline = TRUE)
                                 ),
                                 
                                 # Label text
@@ -367,8 +367,13 @@ shiny::tabPanel("Home",
                                 tags$div(
                                   textOutput("low_emissions_warning"),
                                   style = "color: #81818F;
-                                          margin-top: 10px;") # END div (low emissions warning text)
+                                          margin-top: 10px;"), # END div (low emissions warning text)
                                 
+                                # Add total broadcasting emissions
+                                div(style = "display: flex; align-items: center; font-size: 15; gap: 8px; color: #053762;",
+                                    tags$p("Total Broadcasted Emissions:", style = "margin: 10px;"),
+                                    textOutput("total_broadcasting", inline = FALSE))
+
                             ) # END div (broadcasting_legend)
                           ), # END hidden (broadcasting emissions legend and text)
                           
@@ -435,8 +440,14 @@ Vessel positions are derived from Copernicus Sentinel-1 imagery using a combinat
                  font-size: 15px; font-weight: regular; color: #053762;
                  margin-bottom: 10px; width: 100%;",
                                   tags$span("200"),
-                                  textOutput("total_non_broadcasting", inline = TRUE)
-                                ) # END div for legend max value
+                                  textOutput("max_non_broadcasting", inline = TRUE)
+                                ), # END div for legend max value
+                                
+                                # Add total broadcasting emissions
+                                div(style = "display: flex; align-items: center; font-size: 15; gap: 8px; color: #053762;",
+                                    tags$p("Total Broadcasted Emissions:", style = "margin: 10px;"),
+                                    textOutput("total_non_broadcasting", inline = FALSE))
+                                
                             ) # END div for non-broadcasting legend
                           ), # END hidden
                           
@@ -889,6 +900,30 @@ tabPanel("Learn More",
          
          # ---- Page content ----
          
+         
+         # User Guide Section
+         fluidRow(
+           column(12,
+                  div(
+                    style = "padding: 30px; color: white;",
+                    h4(
+                      strong("Seamissions Explorer User Guide"),
+                      style = "margin-bottom: 30px; margin-left: 30px;"
+                    ),
+                    tags$p(
+                      style = "margin: 30px; font-weight: normal; color: white;",
+                      "Please check out our ",
+                      tags$a(
+                        href = "https://seamissions.github.io/emissions-dashboard/seamissions-explorer-user-guide.html",
+                        target = "_blank",
+                        "User Guide"
+                      ),
+                      " for instructions on how to use the dashboard."
+                    )
+                  ) # END div
+           ) # END column
+         ), # END fluidRow 'User Guide'
+         
          fluidRow(
            column(12,
                   div(
@@ -1078,28 +1113,6 @@ tabPanel("Learn More",
            
          ), # END fluidrow 'Methods'
          
-         fluidRow(
-           column(12,
-                  div(style = "padding: 30px; color: white;",
-                      h4(strong("Emissions Map How-To"),
-                         style = "margin-bottom: 30px;  margin-left: 30px"),
-                      tags$p(style = "font-weight: normal; color: white; margin: 30px;",
-                             "Use the panel on the left-hand side to select ",
-                             tags$strong("Broadcasted"), "emissions, ",
-                             tags$strong("Non-Broadcasted"), "emissions, or both. Emissions can be viewed for ",
-                             "individual", " or ", 
-                             tags$strong("all countries"), "at once. The button to display ",
-                             tags$strong("FAO regions"), "on the map is located here as well.",
-                             tags$br(),
-                             tags$br(),
-                             "To explore the emissions for a specific ",
-                             tags$strong("year"), " use the ",
-                             tags$strong("slider box"), " on the lower- right side of the map."
-                      ),  
-                  ) # END div
-           )
-           
-         ), # END fluidrow 'Emissions Map How-To'
          
          fluidRow(
            column(12,

@@ -1,7 +1,17 @@
 ---
-output: html_document
-editor_options: 
-  chunk_output_type: console
+title: "Seamissions Explorer User Guide"
+format: 
+  html:
+    theme: cosmo           # Bootstrap theme (e.g., cosmo, flatly, minty)
+    toc: true              # Show a floating table of contents
+    toc-depth: 3           # Max header depth in TOC
+    toc-location: left     # Options: left, right, or none
+    number-sections: true  # Add section numbering
+    fig-align: center      # Center all figures by default
+    fig-width: 6
+    fig-height: 4
+    code-fold: false       # Don't collapse code by default
+    css: custom.css        # Optional: add your own styling
 editor: 
   markdown: 
     wrap: sentence

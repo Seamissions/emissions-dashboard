@@ -90,6 +90,8 @@ fao_zone_color <- grDevices::colorRamp(c("#CEECEB"))( (1:256)/256 )
 
 
 # ---- Seafood explorer data ----
+
+# ---- Read in top flags (countries) ----
 top_flags <- readRDS("data/top_flags.rds") |>
   group_by(year) |>
   arrange(desc(sum_emissions), .by_group = TRUE) |>
@@ -99,27 +101,7 @@ top_flags <- readRDS("data/top_flags.rds") |>
 # --- Read in species data ----
 seafood_emissions_data <- readRDS("data/seafood_emissions_data.rds")
 
-# --- Prep top isscaap data ----
-top_isscaap <- seafood_emissions_data |>
-  filter(
-    !isscaap_group %in% c(
-      "Miscellaneous aquatic invertebrates",
-      "Miscellaneous coastal fishes",
-      "Miscellaneous pelagic fishes",
-      "Miscellaneous demersal fishes",
-      "Miscellaneous diadromous fishes",
-      "Miscellaneous marine crustaceans",
-      "Miscellaneous marine molluscs")) |>
- 
-  group_by(isscaap_group, year, image) |>
-  summarize(
-    sum_emissions = sum(sum_emissions, na.rm = TRUE),
-    total_catch = sum(total_catch, na.rm = TRUE),
-    emissions_per_ton = sum_emissions / total_catch,
-    .groups = "drop") |>
-  
-  group_by(year) |>
-  arrange(desc(sum_emissions), .by_group = TRUE) |>
-  slice_head(n = 10) |>
-  ungroup()
+# --- Read in top isscaap ----
+top_isscaap <-readRDS("data/top_isscaap.rds")
+
 

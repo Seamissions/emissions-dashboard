@@ -5,7 +5,7 @@
 #                 rendering, dynamic UI responses, and custom JavaScript-based
 #                 UI toggles.
 # Inputs:         np_emissions.rds                #  This dataset is loaded using a "lazy loading" strategy in the server script
-                                                  #  to optimize performance and reduce processing time during map initialization.
+#  to optimize performance and reduce processing time during map initialization.
 #
 # =============================================================================
 
@@ -13,23 +13,23 @@
 # Initialize the server
 server <- function(input, output, session) {
   
-# =============================================================================
-# Landing Tab
-# =============================================================================
+  # =============================================================================
+  # Landing Tab
+  # =============================================================================
   
-
+  
   # ---- Tab navigation button logic for explore map card ----
   observe({
     shinyjs::onclick("explore_map_card", {
       updateNavbarPage(session, "navbarPage", selected = "Emissions Map")
     })
     
-  # ---- Tab navigation button logic for seafood emissions card ----
-  shinyjs::onclick("explore_seafood_card", {
-    updateNavbarPage(session, "navbarPage", selected = "Compare Seafood Emissions")
+    # ---- Tab navigation button logic for seafood emissions card ----
+    shinyjs::onclick("explore_seafood_card", {
+      updateNavbarPage(session, "navbarPage", selected = "Compare Seafood Emissions")
     })
   })
-
+  
   # ---- Tab navigation button logic for learn more link ----
   observe({
     shinyjs::onclick("learn_more_link", {
@@ -38,9 +38,9 @@ server <- function(input, output, session) {
     
   })
   
-# ==============================================================================
-# Emissions Map Tab
-# ==============================================================================
+  # ==============================================================================
+  # Emissions Map Tab
+  # ==============================================================================
   
   # ----------------------------------------------------------------------------
   # Map initialization: Reactive values to manage application state 
@@ -92,9 +92,9 @@ server <- function(input, output, session) {
   # Load non-broadcasting emissions
   nb_emissions <- readRDS("data/nb_emissions.rds") |>
     
-  # add tooltip for emissions on hover
-  mutate(tooltip_text = paste0(scales::comma(round(emissions_co2_mt, 0)), " MT CO₂"))
-
+    # add tooltip for emissions on hover
+    mutate(tooltip_text = paste0(scales::comma(round(emissions_co2_mt, 0)), " MT CO₂"))
+  
   # Pre-calculate total broadcasting emissions for latest year (no inputs required)
   initial_total_broadcasting <- broadcasting_emissions |>
     filter(country_name == "All Countries", year == max(year, na.rm = TRUE)) |>
@@ -105,7 +105,6 @@ server <- function(input, output, session) {
   output$total_broadcasting_text <- renderText({
     paste0(format(round(initial_total_broadcasting, 2), big.mark = ","), " MT CO₂")
   })
-  
   
   
   # ----------------------------------------------------------------------------
@@ -158,7 +157,6 @@ server <- function(input, output, session) {
     }
   })
   
-  
   # ----------------------------------------------------------------------------
   # Sidebar legend & layer controls for map
   # ----------------------------------------------------------------------------
@@ -177,61 +175,29 @@ server <- function(input, output, session) {
   
   
   
-  # ---- Dynamically update max emissions displays for legend ----
+  # ---- Dynamically update total emissions displays ----
   observe({
-    req(input$year_slider_input_map, input$country_select_input)
+    req(input$year_slider_input_map)
     
-    # ---- Broadcasting Layer ----
+    # Broadcasting emissions total
     if (input$show_broadcasting_input) {
-      
-      # Max value
-      output$max_broadcasting <- renderText({
-        max_broadcasting <- broadcasting_emissions_summary |>
-          filter(
-            year == input$year_slider_input_map,
-            country_name == input$country_select_input
-          ) |>
-          pull(max_emissions)
-        
-        paste0(format(max_broadcasting, big.mark = ","), " Mt CO2")
-      })
-      
-      # Total value
       output$total_broadcasting <- renderText({
-        total_broadcasting <- broadcasting_emissions_summary |>
-          filter(
-            year == input$year_slider_input_map,
-            country_name == input$country_select_input
-          ) |>
-          pull(total_emissions)
-        
-        paste0(format(total_broadcasting, big.mark = ","), " Mt CO2")
+        total <- broadcasting_total()
+        paste0(format(round(total, 2), big.mark = ","), " Mt CO2")
       })
     }
     
-    # ---- Non-Broadcasting Layer ----
+    # Non-broadcasting emissions total
     if (input$show_non_broadcasting_input) {
-      
-      # Max value
-      output$max_non_broadcasting <- renderText({
-        max_non_broadcasting <- nb_emissions_summary |>
-          filter(year == input$year_slider_input_map) |>
-          pull(max_emissions)
-        
-        paste0(format(max_non_broadcasting, big.mark = ","), " Mt CO2")
-      })
-      
-      # Total value
       output$total_non_broadcasting <- renderText({
-        total_non_broadcasting <- nb_emissions_summary |>
-          filter(year == input$year_slider_input_map) |>
-          pull(total_emissions)
-        
-        paste0(format(total_non_broadcasting, big.mark = ","), " Mt CO2")
+        nb_total <- nb_emissions |>
+          filter(emissions_co2_mt >= 200, year == input$year_slider_input_map) |>
+          summarise(total = sum(emissions_co2_mt, na.rm = TRUE)) |>
+          pull(total)
+        paste0(format(round(nb_total, 2), big.mark = ","), " Mt CO2")
       })
     }
   })
-  
   
   
   # ----------------------------------------------------------------------------
@@ -429,9 +395,9 @@ server <- function(input, output, session) {
   
   # END Emissions Map
   
-# ==============================================================================
-# Compare Emissions Tab
-# ==============================================================================
+  # ==============================================================================
+  # Compare Emissions Tab
+  # ==============================================================================
   
   useShinyjs()
   
@@ -498,9 +464,9 @@ server <- function(input, output, session) {
     )
   })
   
-# ------------------------------------------------------------------------------
-# Country/flag emissions plot controls
-# ------------------------------------------------------------------------------
+  # ------------------------------------------------------------------------------
+  # Country/flag emissions plot controls
+  # ------------------------------------------------------------------------------
   
   # Country emissions plot controls
   observeEvent(input$compare_countries_input, {
@@ -523,7 +489,7 @@ server <- function(input, output, session) {
     
     # Requires input from unit toggle
     req(input$unit_plot_toggle_input)
-  
+    
     # Define subtitle based on input from `unit_plot_toggle_input`
     is_per_unit <- input$unit_plot_toggle_input == "per_unit"
     subtitle_text <- if (is_per_unit) {
@@ -539,9 +505,9 @@ server <- function(input, output, session) {
     )
   })
   
-# ------------------------------------------------------------------------------
-# Select a country emissions plot controls
-# ------------------------------------------------------------------------------
+  # ------------------------------------------------------------------------------
+  # Select a country emissions plot controls
+  # ------------------------------------------------------------------------------
   
   
   # Select a country emissions plot controls
@@ -560,9 +526,9 @@ server <- function(input, output, session) {
   ")
   })
   
-# ------------------------------------------------------------------------------
-# ISSCAAP species emissions plot
-# -----------------------------------------------------------------------------
+  # ------------------------------------------------------------------------------
+  # ISSCAAP species emissions plot
+  # -----------------------------------------------------------------------------
   output$isscaap_plot_output <- renderPlot({
     
     # Requires input from unit toggle
@@ -574,7 +540,7 @@ server <- function(input, output, session) {
     # Filter based on year input
     filtered_isscaap <- top_isscaap |>
       filter(year == input$year_slider_input_plot)
-
+    
     # Add dynamic labels based on `unit_plot_toggle_input`
     x_var <- if (isTRUE(show_per_unit)) {
       filtered_isscaap$emissions_per_ton
@@ -609,9 +575,9 @@ server <- function(input, output, session) {
       x_breaks <- seq(0, max_x_axis, by = 1)
       x_labels <- x_breaks
     }
-      
+    
     # ---- Create Emissions by Species ISSCAAP Group Plot  ----
-      ggplot(data = filtered_isscaap) +
+    ggplot(data = filtered_isscaap) +
       
       geom_vline(xintercept = x_breaks,
                  linetype = "dotted",
@@ -805,6 +771,7 @@ server <- function(input, output, session) {
     }
   })
   
+  
   # ---- Dynamic UI with height based on row count ----
   output$species_bar_plot_ui <- renderUI({
     
@@ -945,12 +912,11 @@ server <- function(input, output, session) {
       expand_limits(x = c(-0.05 * max_x, 1.5 * max_x))
   }, res = 100)
   
-# END Seafood Emissions Explorer
-
+  # END Seafood Emissions Explorer
+  
 } # END server function
 
 
 
 
 
-        

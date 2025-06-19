@@ -177,31 +177,35 @@ server <- function(input, output, session) {
   
   
   
-# ---- Dynamically update max emissions displays for legend ----
+  # ---- Dynamically update max emissions displays for legend ----
   observe({
-    req(input$year_slider_input_map)
+    req(input$year_slider_input_map, input$country_select_input)
     
     # ---- Broadcasting Layer ----
     if (input$show_broadcasting_input) {
       
       # Max value
       output$max_broadcasting <- renderText({
-        max_broadcasting <- broadcasting_emissions |>
-          filter(year == input$year_slider_input_map) |>
-          summarise(max_val = max(emissions_co2_mt, na.rm = TRUE)) |>
-          pull(max_val)
+        max_broadcasting <- broadcasting_emissions_summary |>
+          filter(
+            year == input$year_slider_input_map,
+            country_name == input$country_select_input
+          ) |>
+          pull(max_emissions)
         
-        paste0(format(round(max_broadcasting, 2), big.mark = ","), " Mt CO2")
+        paste0(format(max_broadcasting, big.mark = ","), " Mt CO2")
       })
       
       # Total value
       output$total_broadcasting <- renderText({
-        total_broadcasting <- broadcasting_emissions |>
-          filter(year == input$year_slider_input_map) |>
-          summarise(total_val = sum(emissions_co2_mt, na.rm = TRUE)) |>
-          pull(total_val)
+        total_broadcasting <- broadcasting_emissions_summary |>
+          filter(
+            year == input$year_slider_input_map,
+            country_name == input$country_select_input
+          ) |>
+          pull(total_emissions)
         
-        paste0(format(round(total_broadcasting, 2), big.mark = ","), " Mt CO2")
+        paste0(format(total_broadcasting, big.mark = ","), " Mt CO2")
       })
     }
     
@@ -210,22 +214,20 @@ server <- function(input, output, session) {
       
       # Max value
       output$max_non_broadcasting <- renderText({
-        max_non_broadcasting <- nb_emissions |>
-          filter(emissions_co2_mt >= 200, year == input$year_slider_input_map) |>
-          summarise(max_val = max(emissions_co2_mt, na.rm = TRUE)) |>
-          pull(max_val)
+        max_non_broadcasting <- nb_emissions_summary |>
+          filter(year == input$year_slider_input_map) |>
+          pull(max_emissions)
         
-        paste0(format(round(max_non_broadcasting, 2), big.mark = ","), " Mt CO2")
+        paste0(format(max_non_broadcasting, big.mark = ","), " Mt CO2")
       })
       
       # Total value
       output$total_non_broadcasting <- renderText({
-        total_non_broadcasting <- nb_emissions |>
-          filter(emissions_co2_mt >= 200, year == input$year_slider_input_map) |>
-          summarise(total_val = sum(emissions_co2_mt, na.rm = TRUE)) |>
-          pull(total_val)
+        total_non_broadcasting <- nb_emissions_summary |>
+          filter(year == input$year_slider_input_map) |>
+          pull(total_emissions)
         
-        paste0(format(round(total_non_broadcasting, 2), big.mark = ","), " Mt CO2")
+        paste0(format(total_non_broadcasting, big.mark = ","), " Mt CO2")
       })
     }
   })

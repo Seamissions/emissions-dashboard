@@ -67,6 +67,11 @@ broadcasting_emissions <- readRDS("data/broadcasting_emissions.rds") |>
   filter(emissions_co2_mt >= 200) |>
   mutate(tooltip_text = paste0(scales::comma(round(emissions_co2_mt, 0)), " MT CO₂"))
 
+
+# Load emissions data
+broadcasting_emissions_summary <- readRDS("data/broadcasting_emissions_summary.rds") 
+nb_emissions_summary <- readRDS("data/nb_emissions_summary.rds") 
+
 # Precompute values used in UI
 year_min <- min(broadcasting_emissions$year, na.rm = TRUE)
 year_max <- max(broadcasting_emissions$year, na.rm = TRUE)

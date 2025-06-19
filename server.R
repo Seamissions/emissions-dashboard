@@ -111,6 +111,7 @@ server <- function(input, output, session) {
   # Define sidebar behavior
   # ----------------------------------------------------------------------------
   
+  
   # Open sidebar behavior
   observeEvent(input$toggle_sidebar_open_input, {
     shinyjs::hide("sidebar-panel", anim = TRUE, animType = "fade")

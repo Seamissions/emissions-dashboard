@@ -42,9 +42,9 @@ library(mapdeck)
 library(markdown)
 library(here)
 library(sf)
-library(RColorBrewer) # for colors
-library(bslib) # for theme colors
-library(scales)  # for commas in labels
+library(RColorBrewer)
+library(bslib)
+library(scales)
 library(rsconnect)
 library(ggflags)
 library(ggimage)

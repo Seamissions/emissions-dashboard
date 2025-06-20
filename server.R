@@ -51,8 +51,21 @@ server <- function(input, output, session) {
   first_time <- reactiveVal(TRUE)
   current_view <- reactiveVal(list(zoom = 3, location = c(0, 0)))
   loading <- reactiveVal(TRUE)
-  nb_emissions <- readRDS("data/nb_emissions.rds") |>
-    mutate(tooltip_text = paste0(scales::comma(round(emissions_co2_mt, 0)), " MT CO₂"))
+  
+  
+  # Initialize nb_emissions
+  nb_emissions <- reactiveVal(NULL)
+  
+  # Lazy load nb_emissions on Emissions Map Page
+  observeEvent(input$navbarPage, {
+    if (input$navbarPage == "Emissions Map" && is.null(nb_emissions())) {
+      message("Loading nb_emissions.rds...")
+      loaded_data <- readRDS("data/nb_emissions.rds") |>
+        mutate(tooltip_text = paste0(scales::comma(round(emissions_co2_mt, 0)), " MT CO₂"))
+      nb_emissions(loaded_data)
+    }
+  })
+  
   
   # Pre-calculate total emissions for the initial year (max year)
   initial_total_broadcasting <- broadcasting_emissions |>
@@ -130,23 +143,25 @@ server <- function(input, output, session) {
   })
   
   # ---- Reset total emissions on tab switch ----
-  observe({
-    if (input$navbarPage == "Emissions Map") {
-      if (input$show_broadcasting_input) {
-        output$total_broadcasting <- renderText({
-          total <- broadcasting_total()
-          paste0(format(round(total, 2), big.mark = ","), " Mt CO2")
-        })
-      }
-      if (input$show_non_broadcasting_input) {
-        output$total_non_broadcasting <- renderText({
-          nb_emissions <- nb_emissions |> filter(emissions_co2_mt >= 200, year == input$year_slider_input_map)
-          total <- sum(nb_emissions$emissions_co2_mt, na.rm = TRUE)
-          paste0(format(round(total, 2), big.mark = ","), " Mt CO2")
-        })
-      }
-    }
+  output$total_broadcasting <- renderText({
+    req(input$navbarPage == "Emissions Map", input$show_broadcasting_input)
+    
+    total <- broadcasting_total()
+    paste0(format(round(total, 2), big.mark = ","), " Mt CO2")
   })
+  
+  # ---- Total non-broadcasting emissions text ----
+  output$total_non_broadcasting <- renderText({
+    req(input$navbarPage == "Emissions Map", input$show_non_broadcasting_input)
+    req(nb_emissions())  # wait until nb_emissions is loaded
+    
+    filtered <- nb_emissions() |>
+      filter(emissions_co2_mt >= 200, year == input$year_slider_input_map)
+    
+    total <- sum(filtered$emissions_co2_mt, na.rm = TRUE)
+    paste0(format(round(total, 2), big.mark = ","), " Mt CO2")
+  })
+  
   
   # ---- Toggle visibility of country select input ----
   observeEvent(input$show_broadcasting_input, {
@@ -228,25 +243,31 @@ server <- function(input, output, session) {
   
   # ---- Non-broadcasting emissions layer ----
   observe({
+    req(input$show_non_broadcasting_input, nb_emissions())  # Only proceed if toggle is on and data is loaded
+    
     mapdeck_update(map_id = "emissions_map") |>
       clear_polygon(layer_id = "non_broadcasting_layer")
-    if (input$show_non_broadcasting_input) {
-      loading(TRUE)
-      nb_emissions <- nb_emissions |> filter(emissions_co2_mt >= 200, year == input$year_slider_input_map)
-      mapdeck_update(map_id = "emissions_map") |>
-        add_polygon(
-          layer_id = "non_broadcasting_layer",
-          data = nb_emissions,
-          fill_colour = "palette",
-          fill_opacity = 0.1,
-          tooltip = "tooltip_text",
-          auto_highlight = TRUE,
-          highlight_colour = "#F8FDFF50",
-          update_view = FALSE
-        )
-      later::later(function() { loading(FALSE) }, delay = 0.2)
-    }
+    
+    loading(TRUE)
+    
+    filtered_nb <- nb_emissions() |>
+      filter(emissions_co2_mt >= 200, year == input$year_slider_input_map)
+    
+    mapdeck_update(map_id = "emissions_map") |>
+      add_polygon(
+        layer_id = "non_broadcasting_layer",
+        data = filtered_nb,
+        fill_colour = "palette",
+        fill_opacity = 0.1,
+        tooltip = "tooltip_text",
+        auto_highlight = TRUE,
+        highlight_colour = "#F8FDFF50",
+        update_view = FALSE
+      )
+    
+    later::later(function() { loading(FALSE) }, delay = 0.2)
   })
+  
   
   # ---- Calculate total emissions for the selected year and country ----
   broadcasting_total <- reactive({

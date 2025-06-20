@@ -82,7 +82,8 @@ fao_regions <- st_read("data/fao_region_shapefile/World_Fao_Zones.shp") |>
   st_transform(4326) |>
   st_make_valid()
 
-fao_borders <- st_cast(fao_regions, "MULTILINESTRING") |>
+fao_borders <- st_cast(fao_regions,
+                       "MULTILINESTRING") |>
   st_make_valid()
 
 # Color palette for FAO zones

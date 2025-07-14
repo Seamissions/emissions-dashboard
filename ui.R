@@ -335,12 +335,8 @@ navbarPage(
                                 ), # END infoPopup
                                 
                                 # Country select dropdown
-                                pickerInput(inputId = "country_select_input",
-                                            label = NULL,
-                                            choices = c("All Countries", sort(unique(broadcasting_emissions$country_name[broadcasting_emissions$country_name != "All Countries"]))),
-                                            selected = "All Countries",
-                                            options = list(`live-search` = TRUE,
-                                                           `noneSelectedText` = "All Countries")), # END pickerInput (country select)
+                                uiOutput("country_picker_ui"),
+                                
                                 
                                 # Add no data warning (when a country for a selected year has no emissions)
                                 tags$div(

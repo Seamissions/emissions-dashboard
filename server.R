@@ -315,6 +315,19 @@ server <- function(input, output, session) {
     }
   })
   
+  # ---- Prep country select input ----
+  output$country_picker_ui <- renderUI({
+    req(broadcasting_emissions)
+    
+    pickerInput(
+      inputId = "country_select_input",
+      label = NULL,
+      choices = c("All Countries", sort(unique(broadcasting_emissions$country_name[broadcasting_emissions$country_name != "All Countries"]))),
+      selected = "All Countries",
+      options = list(`live-search` = TRUE, `noneSelectedText` = "All Countries")
+    )
+  })
+  
   
   # ---- Initialize emissions map ----
   output$emissions_map <- renderMapdeck({

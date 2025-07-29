@@ -1,11 +1,10 @@
 *UCSB MEDS 2025* - *Seamissions Capstone Team*
 
 # Seafood Emissions Dashboard
-**Link to Shiny App:** [https://emlab-ucsb.shinyapps.io/emissions-dashboard/](https://emlab-ucsb.shinyapps.io/emissions-dashboard/)
 
 <img src="www/images/full-map-preview.png" width="800"/>
 
-**Link to dashboard:** [https://emlab-ucsb.shinyapps.io/emissions-dashboard/](https://emlab-ucsb.shinyapps.io/emissions-dashboard/)
+**Link to Seamissions Explorer Dashboard:** [https://emlab-ucsb.shinyapps.io/emissions-dashboard/](https://emlab-ucsb.shinyapps.io/emissions-dashboard/)
 
 ## About this repository:
 This repository stores files for the interactive Seafood Emissions Dashboard that visualizes emissions related to global fishing fleets. It is a Shiny App Dashboard designed in R Studio. This app is designed in partnership with Global Fishing Watch (GFW) and the Environmental Markets Lab (EmLab). The app contains two primary tools:

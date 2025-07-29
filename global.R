@@ -27,6 +27,11 @@
 # ---- Source config file storing tokens ----
 source("R/config.R")
 source("R/infoPopup.R") 
+options(repos = c(
+  jimjam = "https://jimjam-slam.r-universe.dev",
+  CRAN = "https://cloud.r-project.org"
+))
+
 
 # ---- Load libraries ----
 library(shiny)
@@ -49,6 +54,7 @@ library(rsconnect)
 library(ggflags)
 library(ggimage)
 library(magick)
+
 
 # ---- Define color palettes -------------------------------------------------
 blue_palette <- colorRamp(c("#20404F", "#4C9EA6", "#67D6E0", "#76F3FF", "#A9F2FF", "#DAF3FF", "#F6F8FF"))((1:256) / 256)
@@ -90,7 +96,7 @@ fao_borders <- st_cast(fao_regions,
 fao_zone_color <- grDevices::colorRamp(c("#CEECEB"))( (1:256)/256 )
 
 
-# ---- Seafood explorer data ----
+# ---- Seafood explorer data ---------------------------------
 
 # ---- Read in top flags (countries) ----
 top_flags <- readRDS("data/top_flags.rds") |>

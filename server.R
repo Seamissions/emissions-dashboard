@@ -242,28 +242,35 @@ server <- function(input, output, session) {
   })
   
   # ---- Non-broadcasting emissions layer ----
+  # ---- Non-broadcasting emissions layer ----
   observe({
-    req(input$show_non_broadcasting_input, nb_emissions())  # Only proceed if toggle is on and data is loaded
-    
-    mapdeck_update(map_id = "emissions_map") |>
-      clear_polygon(layer_id = "non_broadcasting_layer")
-    
+    req(input$show_non_broadcasting_input, nb_emissions())  # Ensure toggle is on and data is loaded
     loading(TRUE)
     
-    filtered_nb <- nb_emissions() |>
-      filter(emissions_co2_mt >= 200, year == input$year_slider_input_map)
-    
-    mapdeck_update(map_id = "emissions_map") |>
-      add_polygon(
-        layer_id = "non_broadcasting_layer",
-        data = filtered_nb,
-        fill_colour = "palette",
-        fill_opacity = 0.1,
-        tooltip = "tooltip_text",
-        auto_highlight = TRUE,
-        highlight_colour = "#F8FDFF50",
-        update_view = FALSE
-      )
+    tryCatch({
+      # Clear any existing non-broadcasting polygons
+      mapdeck_update(map_id = "emissions_map") |>
+        clear_polygon(layer_id = "non_broadcasting_layer")
+      
+      # Filter the data
+      filtered_nb <- nb_emissions() |>
+        filter(emissions_co2_mt >= 200, year == input$year_slider_input_map)
+      
+      # Add the new layer
+      mapdeck_update(map_id = "emissions_map") |>
+        add_polygon(
+          layer_id = "non_broadcasting_layer",
+          data = filtered_nb,
+          fill_colour = "palette",
+          fill_opacity = 0.1,
+          tooltip = "tooltip_text",
+          auto_highlight = TRUE,
+          highlight_colour = "#F8FDFF50",
+          update_view = FALSE
+        )
+    }, error = function(e) {
+      message("⚠️ Non-broadcasting layer update failed: ", e$message)
+    })
     
     later::later(function() { loading(FALSE) }, delay = 0.2)
   })

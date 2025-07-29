@@ -102,6 +102,7 @@ server <- function(input, output, session) {
   
   # ---- Initialize the map on first render ----
   observe({
+    req(input$navbarPage)
     if (first_time() && input$navbarPage == "Emissions Map") {
       
       # Trigger the material switch to be on for broadcasting layer

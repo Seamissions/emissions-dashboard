@@ -108,7 +108,20 @@ top_flags <- readRDS("data/top_flags.rds") |>
 # --- Read in species data ----
 seafood_emissions_data <- readRDS("data/seafood_emissions_data.rds")
 
-# --- Read in top isscaap ----
-top_isscaap <-readRDS("data/top_isscaap.rds")
+top_isscaap <- seafood_emissions_data |>
+  group_by(year, isscaap_group, image) |>
+  summarise(
+    sum_emissions = sum(sum_emissions, na.rm = TRUE),
+    total_catch = sum(total_catch, na.rm = TRUE),
+    emissions_per_ton = mean(emissions_per_ton, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  group_by(year) |>
+  arrange(desc(sum_emissions), .by_group = TRUE) |>
+  slice_head(n = 10) |>
+  ungroup()
+
+
+
 
 

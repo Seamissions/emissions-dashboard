@@ -599,8 +599,7 @@ server <- function(input, output, session) {
     filtered_isscaap <- top_isscaap |>
       filter(year == input$year_slider_input_plot)
     
-    
-    
+
     x_var <- if (isTRUE(show_per_unit)) {
       filtered_isscaap$emissions_per_ton
     } else {
@@ -633,6 +632,13 @@ server <- function(input, output, session) {
       x_breaks <- seq(0, max_x_axis, by = 1)
       x_labels <- x_breaks
     }
+    
+    # use default image if image doesn't match or exist
+    filtered_isscaap <- filtered_isscaap |>
+      mutate(
+        image = ifelse(is.na(image) | image == "" | !grepl("\\.png$", image),
+                       "www/images/default_image.png", image)
+      )
     
     # ---- Create plot -------------------------------------------
     ggplot(data = filtered_isscaap) +

@@ -242,23 +242,18 @@ server <- function(input, output, session) {
     later::later(function() { loading(FALSE) }, delay = 0.2)
   })
   
-  # ---- Non-broadcasting emissions layer ----
-  # ---- Non-broadcasting emissions layer ----
-  observe({
-    req(input$show_non_broadcasting_input, nb_emissions())  # Ensure toggle is on and data is loaded
-    loading(TRUE)
+  # ---- Toggle non-broadcasting emissions layer on/off ----
+  observeEvent(input$show_non_broadcasting_input, {
+    req(nb_emissions())  # Make sure data is loaded
     
-    tryCatch({
-      # Clear any existing non-broadcasting polygons
-      mapdeck_update(map_id = "emissions_map") |>
-        clear_polygon(layer_id = "non_broadcasting_layer")
+    if (isTRUE(input$show_non_broadcasting_input)) {
+      loading(TRUE)
       
-      # Filter the data
       filtered_nb <- nb_emissions() |>
         filter(emissions_co2_mt >= 200, year == input$year_slider_input_map)
       
-      # Add the new layer
       mapdeck_update(map_id = "emissions_map") |>
+        clear_polygon(layer_id = "non_broadcasting_layer") |>
         add_polygon(
           layer_id = "non_broadcasting_layer",
           data = filtered_nb,
@@ -269,12 +264,16 @@ server <- function(input, output, session) {
           highlight_colour = "#F8FDFF50",
           update_view = FALSE
         )
-    }, error = function(e) {
-      message("⚠️ Non-broadcasting layer update failed: ", e$message)
-    })
-    
-    later::later(function() { loading(FALSE) }, delay = 0.2)
+      
+      later::later(function() { loading(FALSE) }, delay = 0.2)
+      
+    } else {
+      # If switch is OFF, just clear the layer
+      mapdeck_update(map_id = "emissions_map") |>
+        clear_polygon(layer_id = "non_broadcasting_layer")
+    }
   })
+  
   
   
   # ---- Calculate total emissions for the selected year and country ----
